@@ -14,7 +14,7 @@ title = "Buezwqwg的博客"
 [params.author]
   name = "Blowfish"
   image = "img/blowfish_logo.png"
-  headline = "吾之霸业令尔辈绝望"
+  headline = ""
   # bio = "一个强大、轻量级的 Hugo 主题。"
   links = [
     { x-twitter = "https://twitter.com/burufugu" },

@@ -4,7 +4,6 @@ date: 2024-09-23
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]
 series_order: 3
-weight: 3
 math: mathjax
 ---
 {{< katex >}}

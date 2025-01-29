@@ -13,17 +13,18 @@ def read_markdown_file(file_path):
 def process_markdown(content):
     """处理Markdown内容：读取文章标题、升级标题、替换数学公式"""
     updated_lines = []
-    inline_math_pattern = r'(?<!\$)\$(?!\$)(.*?)\$(?!\$)'
+    # 更新正则表达式，仅匹配单个$的情况，忽略$$
+    inline_math_pattern = r'(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)'
 
     # 读取并处理文章标题
     article_title = content[0].strip().lstrip('# ').replace(' ', '_')
-    
+
     for line in content:
         # 升级标题
         if line.startswith('#'):
             line = '#' + line
 
-        # 替换内联数学公式
+        # 替换内联数学公式，将$替换为\\( 和 \\)
         line = re.sub(inline_math_pattern, lambda m: r'\\(' + m.group(1) + r'\\)', line)
 
         updated_lines.append(line)
@@ -36,16 +37,16 @@ def save_updated_content(content, output_path):
         file.write(content)
 
 if __name__ == "__main__":
-    file_path = 'E:\OneDrive\Github Pages\Buezwqwg\content\docs\EMCS_Engineering Chemistry & Materials Science\MCMS5.FurtherOnStressStrain\index.md'  # 指定原文件路径
+    file_path = r"E:\OneDrive\Github Pages\Buezwqwg_Hugo\content\docs\Electrical Fundamentals\EF4.ElectricPotential\index.md"  # 指定原文件路径
     output_path = file_path  # 指定输出文件路径
-    
+
     # 读取文件内容
     content = read_markdown_file(file_path)
-    
+
     if content:
         # 处理标题升级、数学公式替换
         updated_content = process_markdown(content)
-        
+
         # 保存更新后的内容
         save_updated_content(updated_content, output_path)
         print("内容已更新并保存到:", output_path)

@@ -1,6 +1,6 @@
 ---
 title: "Docs"
-description: "Learn how to use Blowfish and its features."
+description: ""
 cascade:
   showDate: true
   showAuthor: false
@@ -8,6 +8,5 @@ cascade:
 ---
 
 
-Simple, yet powerful. Learn how to use Blowfish and its features.
 
 
