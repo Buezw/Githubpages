@@ -37,7 +37,7 @@ def save_updated_content(content, output_path):
         file.write(content)
 
 if __name__ == "__main__":
-    file_path = r"E:\OneDrive\Github Pages\Buezwqwg_Hugo\content\docs\Electrical Fundamentals\EF4.ElectricPotential\index.md"  # 指定原文件路径
+    file_path = r"E:\OneDrive\Github Pages\Hugo_blowfish_githubpages\content\docs\UofT\26W\Circuit Analysis\CA1.DCCircuitAnalysis\index.md"  # 指定原文件路径
     output_path = file_path  # 指定输出文件路径
 
     # 读取文件内容

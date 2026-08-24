@@ -1,0 +1,256 @@
+{{ define "main" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ .Site.Title }}</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('/img/afterlife.png') no-repeat center center fixed;
+      background-size: cover;
+      background-color: #000;
+      color: #fff;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    a {
+      color: #0ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .wrapper {
+      width: 100vw;
+      aspect-ratio: 16/9;
+      max-height: 100vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      position: relative;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 40px 0 20px;
+      height: 50px;
+    }
+
+    .top-nav a {
+      margin-left: 20px;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+
+    .avatar {
+      position: absolute;
+      top: 20px;
+      left: 70px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      object-fit: cover;
+    }
+
+    .main-section {
+      display: flex;
+      gap: 30px;
+      padding: 0 30px;
+      margin-top: 260px;
+      flex-grow: 1;
+      align-items: stretch;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      max-width: 320px;
+    }
+
+    .profile-info h3 {
+      margin: 10px 0 5px;
+      font-size: 1.2rem;
+    }
+
+    .profile-info p {
+      margin: 10px 0;
+    }
+
+    .profile-links div {
+      margin: 10px 0;
+      font-size: 0.95rem;
+    }
+
+    .recent-articles {
+      flex: 3;
+      display: flex;
+      transform: translateY(-45px);
+      flex-direction: column;
+    }
+
+    .recent-articles h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .recent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      flex-grow: 1;
+    }
+
+    .recent-card {
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .recent-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.85) saturate(1);
+      transition: 0.3s ease;
+    }
+
+    .recent-card .content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3); /* ✅ 更淡一点 */
+      backdrop-filter: blur(4px);
+      color: #eee;
+      transition: background 0.3s;
+    }
+
+    .recent-card:hover .content {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .recent-card .content .title {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .recent-card .content .meta {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 0.5rem;
+    }
+
+    .recent-card .content .tags {
+      margin-top: 0.5rem;
+    }
+
+    .recent-card .content .tags .tag {
+      display: inline-block;
+      margin-right: 0.5rem;
+      padding: 2px 6px;
+      border: 1px solid #0ff;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #0ff;
+    }
+
+    .btn-show-more {
+      display: block;
+      margin: 2rem auto;
+      padding: 8px 16px;
+      border: 1px solid #0ff;
+      border-radius: 4px;
+      background: transparent;
+      color: #0ff;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+  </style>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="top-nav">
+      <a href="#">GitHub</a>
+      <a href="mailto:you@example.com">Email</a>
+      <a href="#">博客</a>
+      <a href="#">切换模式</a>
+    </div>
+
+    <img src="/avatar.png" alt="avatar" class="avatar" />
+
+    <div class="main-section">
+      <!-- 左边栏 -->
+      <div class="left-panel">
+        <div class="profile-info">
+          <h3>Buezwqwg</h3>
+          <p>University of Toronto</p>
+          <p>The Edward S. Rogers Sr. Department of Electrical & Computer Engineering</p>
+        </div>
+        <div class="profile-links">
+          <div><i class="fas fa-envelope"></i> <a href="mailto:you@example.com">Email</a></div>
+          <div><i class="fab fa-github"></i> <a href="https://github.com/yourusername">GitHub</a></div>
+          <div><i class="fas fa-flask"></i> <a href="https://www.researchgate.net/profile/YourName">ResearchGate</a></div>
+          <div><i class="fas fa-graduation-cap"></i> <a href="https://scholar.google.com/citations?user=xxxx">Google Scholar</a></div>
+          <div><i class="fas fa-id-card"></i> <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a></div>
+        </div>
+      </div>
+
+      <!-- 右侧文章卡片 -->
+      <div class="recent-articles">
+        <h2>Recent Articles</h2>
+        <div class="recent-grid">
+          {{ range first 10 (where .Site.RegularPages "Section" "in" site.Params.mainSections) }}
+          <a href="{{ .RelPermalink }}">
+            <div class="recent-card">
+              {{ $img := .Resources.GetMatch "feature*" }}
+              <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}/img/featured.svg{{ end }}" alt="{{ .Title }}">
+              <div class="content">
+                <div class="title">{{ .Title }}</div>
+                <div class="meta">{{ .Date.Format "Jan 02 2006" }} · {{ .WordCount }} words</div>
+                <div class="tags">
+                  {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+          </a>
+          {{ end }}
+        </div>
+        <a href="/docs" class="btn-show-more">Show More</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{ end }}

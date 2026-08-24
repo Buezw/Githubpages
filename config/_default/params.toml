@@ -14,7 +14,7 @@ enableCodeCopy = false
 
 replyByEmail = false
 
-mainSections = ["docs","blogs"]
+mainSections = ["docs"]
 # robots = ""
 
 disableImageOptimization = false
@@ -39,14 +39,14 @@ smartTOCHideUnfocusedChildren = false
   showScrollToTop = true
 
 [homepage]
-  layout = "background" # valid options: page, profile, hero, card, background, custom
+  layout = "custom" # valid options: page, profile, hero, card, background, custom
   homepageImage = "img/afterlife.png" # used in: hero, and card
   showRecent = true
   showRecentItems = 6
   showMoreLink = true
   showMoreLinkDest = "docs"
   cardView = true
-  cardViewScreenWidth = false
+  cardViewScreenWidth = true
   layoutBackgroundBlur = true # only used when layout equals background
 
 [article]
@@ -78,6 +78,10 @@ smartTOCHideUnfocusedChildren = false
   showWordCount = true
   # sharingLinks = [ "linkedin", "twitter", "bluesky", "reddit", "whatsapp", "telegram", "pinterest", "facebook", "email"]
   showZenMode = false
+
+[params]
+mainSections = ["docs"]
+
 [list]
   showHero = true
   heroStyle = "background" # valid options: basic, big, background, thumbAndBackground

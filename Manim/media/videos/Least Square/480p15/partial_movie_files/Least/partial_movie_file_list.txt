@@ -1,4 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:E:/OneDrive/Github Pages/Buezwqwg_Hugo/Manim/media/videos/Least Square/480p15/partial_movie_files/Least/1185818338_3864370868_223132457.mp4'
-file 'file:E:/OneDrive/Github Pages/Buezwqwg_Hugo/Manim/media/videos/Least Square/480p15/partial_movie_files/Least/624642324_1157584983_1043535615.mp4'
-file 'file:E:/OneDrive/Github Pages/Buezwqwg_Hugo/Manim/media/videos/Least Square/480p15/partial_movie_files/Least/624642324_784179552_1718340171.mp4'

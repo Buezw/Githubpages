@@ -1,0 +1,10 @@
+{
+    "frontMatter.framework.id": "hugo",
+    "frontMatter.content.publicFolder": "static",
+    "frontMatter.preview.host": "http://localhost:1313",
+    "frontMatter.content.pageFolders": [
+        {
+            "path": "[[workspace]]/content/docs/Dive Into Deep Learning/D2L_Chapter4MultilayerPerceptron/WeierstrassApproximation"
+        }
+    ]
+}

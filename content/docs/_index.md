@@ -2,7 +2,7 @@
 title: "Docs"
 description: ""
 cascade:
-  showDate: true
+  showDate: false
   showAuthor: false
   invertPagination: true
 ---
