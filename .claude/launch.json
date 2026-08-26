@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "hugo-dev",
-      "runtimeExecutable": "hugo",
+      "runtimeExecutable": "tools/hugo-0.133.1/hugo.exe",
       "runtimeArgs": ["server", "-D", "--port", "1313"],
       "port": 1313
     },
