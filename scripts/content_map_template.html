@@ -1,0 +1,1697 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内容地图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #E4E7DE;
+    --bg-elevated: #EEF0E7;
+    --surface: #F7F8F2;
+    --surface-hover: #EBEEE1;
+    --border: #C9CDBC;
+    --border-soft: #D9DCCE;
+    --ink: #262A20;
+    --ink-soft: #565D4C;
+    --ink-faint: #8B9180;
+    --accent: #2E5C74;
+    --accent-soft: #DCE7EA;
+    --accent-ink: #14384A;
+    --stamp-gold: #8F661F;
+    --stamp-gold-soft: #EBDFC2;
+    --stamp-red: #9B3D2C;
+    --stamp-red-soft: #EFDAD3;
+    --good: #3E7A4C;
+    --good-soft: #DCEADF;
+    --code-bg: #DEE2D3;
+    --shadow: 0 1px 2px rgba(38,42,32,0.06), 0 6px 20px -8px rgba(38,42,32,0.18);
+    --radius: 3px;
+    --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif;
+    --font-body: 'Public Sans', -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1D17;
+      --bg-elevated: #23261D;
+      --surface: #262A20;
+      --surface-hover: #2E3226;
+      --border: #3A3F30;
+      --border-soft: #32362A;
+      --ink: #E7E8DE;
+      --ink-soft: #ADB39E;
+      --ink-faint: #767C68;
+      --accent: #7BB2C9;
+      --accent-soft: #223842;
+      --accent-ink: #CDE7F0;
+      --stamp-gold: #D2A054;
+      --stamp-gold-soft: #3A3120;
+      --stamp-red: #DE9484;
+      --stamp-red-soft: #3C2620;
+      --good: #7FBD8E;
+      --good-soft: #223A29;
+      --code-bg: #20241A;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1D17;
+    --bg-elevated: #23261D;
+    --surface: #262A20;
+    --surface-hover: #2E3226;
+    --border: #3A3F30;
+    --border-soft: #32362A;
+    --ink: #E7E8DE;
+    --ink-soft: #ADB39E;
+    --ink-faint: #767C68;
+    --accent: #7BB2C9;
+    --accent-soft: #223842;
+    --accent-ink: #CDE7F0;
+    --stamp-gold: #D2A054;
+    --stamp-gold-soft: #3A3120;
+    --stamp-red: #DE9484;
+    --stamp-red-soft: #3C2620;
+    --good: #7FBD8E;
+    --good-soft: #223A29;
+    --code-bg: #20241A;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.45);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); color: var(--accent-ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  button { font: inherit; }
+  code { font-family: var(--font-mono); }
+
+  .app {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 100vh;
+  }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; max-height: 46vh; }
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    background: var(--bg-elevated);
+    border-right: 1px solid var(--border);
+    padding: 22px 16px 24px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .brand-mark {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 560;
+    font-size: 21px;
+    letter-spacing: -0.01em;
+  }
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
+  }
+  .brand-path {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin: 2px 0 16px;
+    word-break: break-all;
+  }
+
+  /* Manage connect panel */
+  .manage-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 10px 11px;
+    margin-bottom: 16px;
+  }
+  .manage-panel.connected { border-color: var(--good); background: var(--good-soft); }
+  .manage-status-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .manage-panel.connected .manage-status-line { color: var(--ink); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); flex: none; }
+  .manage-panel.connected .status-dot { background: var(--good); }
+  .manage-btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+  .btn.primary:hover { opacity: 0.9; color: var(--surface); }
+  .btn.danger { background: var(--stamp-red-soft); border-color: var(--stamp-red); color: var(--stamp-red); }
+  .btn.danger:hover { opacity: 0.85; color: var(--stamp-red); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn.small { padding: 3px 8px; font-size: 10.5px; }
+  .manage-hint { font-size: 10.5px; color: var(--ink-faint); margin-top: 6px; line-height: 1.5; }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 10px 8px 30px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--ink);
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box input::placeholder { color: var(--ink-faint); }
+  .search-box svg {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 13px;
+    stroke: var(--ink-faint);
+  }
+
+  .nav-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 4px 4px 8px;
+  }
+
+  .tool-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 18px; }
+  .tool-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 7px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 13px;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+  }
+  .tool-nav-row:hover:not(:disabled) { background: var(--surface-hover); color: var(--ink); }
+  .tool-nav-row.active { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+  .tool-nav-row:disabled { color: var(--ink-faint); opacity: 0.55; cursor: not-allowed; }
+  .tool-nav-row svg { width: 14px; height: 14px; stroke: currentColor; flex: none; }
+  .tool-nav-row .badge {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--stamp-red);
+    color: var(--surface);
+    border-radius: 100px;
+    padding: 1px 6px;
+  }
+
+  .tree { list-style: none; margin: 0; padding: 0; }
+  .tree ul { list-style: none; margin: 0; padding-left: 15px; border-left: 1px solid var(--border-soft); }
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .tree-row:hover { background: var(--surface-hover); color: var(--ink); }
+  .tree-row.active { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+  .tree-row .chev {
+    width: 12px; height: 12px; flex: none;
+    transition: transform 0.15s ease;
+    stroke: var(--ink-faint);
+    opacity: 0.8;
+  }
+  .tree-row.leaf .chev { visibility: hidden; }
+  li.open > .tree-row .chev { transform: rotate(90deg); }
+  .tree-row .name { overflow: hidden; text-overflow: ellipsis; }
+  .tree-row .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    flex: none;
+  }
+  .tree-row.active .count { color: var(--accent-ink); opacity: 0.75; }
+  li > ul { display: none; }
+  li.open > ul { display: block; }
+
+  /* ---------- Main ---------- */
+  .main { padding: 28px 34px 64px; min-width: 0; }
+  @media (max-width: 640px) { .main { padding: 20px 16px 48px; } }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+  .breadcrumb button {
+    background: none; border: none; cursor: pointer;
+    font-family: var(--font-mono); font-size: 11.5px;
+    color: var(--ink-faint); padding: 2px 3px;
+  }
+  .breadcrumb button:hover { color: var(--accent); text-decoration: underline; }
+  .breadcrumb .sep { opacity: 0.5; }
+  .breadcrumb .current { color: var(--ink); }
+
+  .manage-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--good-soft);
+    border: 1px solid var(--good);
+    color: var(--ink);
+    border-radius: var(--radius);
+    padding: 9px 13px;
+    font-size: 12px;
+    margin-bottom: 22px;
+  }
+  .manage-banner svg { width: 15px; height: 15px; stroke: var(--good); flex: none; }
+
+  /* Overview stats ribbon */
+  .stats-ribbon {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .stat-cell {
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+  .stat-cell .num {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 540;
+    font-size: 28px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-cell .lbl {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+
+  h1.page-title {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 560;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 6px;
+  }
+  .page-desc { color: var(--ink-soft); max-width: 66ch; margin: 0 0 22px; font-size: 14px; }
+
+  .section-block { margin-bottom: 34px; }
+  .section-block h2 {
+    font-family: var(--font-display);
+    font-weight: 520;
+    font-size: 18px;
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .section-block h2 .tally {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  /* Distribution bars (overview) */
+  .dist-list { display: flex; flex-direction: column; gap: 8px; }
+  .dist-row { display: grid; grid-template-columns: 150px 1fr 34px; align-items: center; gap: 10px; }
+  .dist-row .dlabel { font-size: 12.5px; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+  .dist-row .dlabel:hover { color: var(--accent); }
+  .dist-track { background: var(--border-soft); border-radius: 2px; height: 8px; overflow: hidden; }
+  .dist-fill { background: var(--accent); height: 100%; border-radius: 2px; }
+  .dist-row .dval { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 100px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .tag-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .tag-chip.active { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+  .tag-chip .n { opacity: 0.6; margin-left: 3px; }
+
+  .flag-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .flag-row {
+    background: var(--surface);
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 12.5px;
+  }
+  .flag-row:hover { background: var(--surface-hover); }
+  .flag-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .flag-dot.dup { background: var(--stamp-red); }
+  .flag-dot.thin { background: var(--stamp-gold); }
+  .flag-row .fpath { font-family: var(--font-mono); color: var(--ink-faint); font-size: 11px; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40%; }
+
+  /* Card grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 15px 13px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+  .card.is-index { background: var(--bg-elevated); }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .card-title { font-weight: 600; font-size: 14px; line-height: 1.35; text-wrap: balance; }
+  .card-kind {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    flex: none;
+    white-space: nowrap;
+  }
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .card-tags .tag-chip { font-size: 10px; padding: 2px 7px; cursor: default; }
+  .card-assets { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border-soft); }
+  .asset-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--ink-faint);
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  .card .flagbar { position: absolute; top: 0; left: 0; bottom: 0; width: 3px; border-radius: var(--radius) 0 0 var(--radius); }
+  .card .flagbar.dup { background: var(--stamp-red); }
+  .card .flagbar.thin { background: var(--stamp-gold); }
+
+  .subfolder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .folder-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 13px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .folder-card:hover { border-color: var(--accent); }
+  .folder-card .ftitle { font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 6px; }
+  .folder-card .ftitle svg { width: 14px; height: 14px; stroke: var(--ink-faint); flex: none; }
+  .folder-card .fmeta { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); }
+
+  .empty-note { color: var(--ink-faint); font-size: 13px; padding: 20px 0; }
+
+  footer.credit {
+    margin-top: 40px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(20,20,16,0.42);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 6vh 20px; z-index: 50; overflow-y: auto;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    max-width: 560px;
+    width: 100%;
+    padding: 24px 26px 22px;
+    box-shadow: var(--shadow);
+  }
+  .modal h3 { font-family: var(--font-display); font-size: 20px; font-weight: 560; margin: 0 0 4px; text-wrap: balance; }
+  .modal .mpath { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); margin-bottom: 14px; word-break: break-all; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; margin-bottom: 14px; }
+  .modal-field .k { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); }
+  .modal-field .v { font-size: 13px; margin-top: 2px; }
+  .modal-close-btn {
+    margin-top: 6px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 7px 14px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .modal-close-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .manage-section {
+    border-top: 1px dashed var(--border);
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+  .manage-section .mtitle {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .move-form { display: flex; flex-direction: column; gap: 8px; }
+  .move-form label { font-size: 11.5px; color: var(--ink-soft); display: block; margin-bottom: 3px; }
+  .move-form input[type="text"], .move-form select {
+    width: 100%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .move-form-row { display: flex; gap: 8px; align-items: flex-end; }
+  .move-form-row > div { flex: 1; }
+
+  /* Manage dashboards (tag / dup views) */
+  .manage-view-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .tag-manage-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 18px; }
+  .tag-manage-row { background: var(--surface); padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+  .tag-manage-row input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px; flex: none; }
+  .tag-manage-row .tname { font-family: var(--font-mono); flex: 1; }
+  .tag-manage-row .tcount { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); }
+  .merge-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    flex-wrap: wrap;
+  }
+  .merge-bar input[type="text"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 9px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    flex: 1;
+    min-width: 140px;
+  }
+  .merge-bar .msel { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-soft); }
+
+  .dup-group { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; }
+  .dup-group-head { background: var(--bg-elevated); padding: 9px 13px; font-size: 12.5px; display: flex; align-items: center; gap: 10px; }
+  .dup-group-head .ghint { color: var(--ink-faint); font-family: var(--font-mono); font-size: 11px; }
+  .dup-item { background: var(--surface); padding: 9px 13px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; border-top: 1px solid var(--border-soft); }
+  .dup-item input[type="checkbox"] { accent-color: var(--stamp-red); width: 14px; height: 14px; flex: none; }
+  .dup-item .dpath { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); }
+  .dup-item .dsize { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); }
+  .dup-item .keep-tag { font-family: var(--font-mono); font-size: 10px; background: var(--good-soft); color: var(--good); padding: 1px 6px; border-radius: 100px; }
+
+  .confirm-box {
+    background: var(--stamp-red-soft);
+    border: 1px solid var(--stamp-red);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-top: 12px;
+  }
+  .confirm-box input[type="text"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 9px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    margin: 8px 0;
+    width: 200px;
+  }
+  .result-note { font-size: 12.5px; padding: 10px 12px; border-radius: var(--radius); margin-top: 10px; }
+  .result-note.ok { background: var(--good-soft); color: var(--good); }
+  .result-note.err { background: var(--stamp-red-soft); color: var(--stamp-red); }
+</style>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">内容地图</span>
+    </div>
+    <div class="brand-sub">Githubpages · Hugo Content</div>
+    <div class="brand-path" id="rootPath"></div>
+
+    <div class="manage-panel" id="managePanel">
+      <div class="manage-status-line"><span class="status-dot"></span><span id="manageStatusText">只读快照 · 未连接本地文件夹</span></div>
+      <div class="manage-btn-row" id="manageBtnRow">
+        <button class="btn primary" id="connectBtn">连接 content/ 文件夹</button>
+      </div>
+      <div class="manage-hint" id="manageHint">需要 Chrome / Edge。连接后可直接读写磁盘上的文件 —— 建议先 <code>git commit</code> 一次，方便随时撤销。</div>
+    </div>
+
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="搜索标题 / 标签 / 文件名…" autocomplete="off">
+    </div>
+
+    <div class="tool-nav" id="toolNav">
+      <button class="tool-nav-row" data-tool="tags" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .58 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.36-4.36a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        <span>标签管理</span>
+      </button>
+      <button class="tool-nav-row" data-tool="dup" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span>重复内容检测</span>
+        <span class="badge" id="dupBadge" style="display:none;"></span>
+      </button>
+    </div>
+
+    <div class="nav-label">目录结构</div>
+    <ul class="tree" id="treeRoot"></ul>
+  </aside>
+
+  <main class="main" id="mainArea"></main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<script id="content-data" type="application/json">__DATA_JSON__</script>
+<script>
+(function(){
+  let DATA = JSON.parse(document.getElementById('content-data').textContent);
+  let manageMode = false;
+  let rootDirHandle = null;
+
+  const EXT_LABEL = {
+    md: 'MD', mp4: 'MP4', png: 'PNG', jpg: 'JPG', jpeg: 'JPG', py: 'PY',
+    txt: 'TXT', gif: 'GIF', svg: 'SVG', pdf: 'PDF'
+  };
+
+  function iconFolder(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>';
+  }
+
+  /* ---------- walk helpers ---------- */
+  function isIndexPage(node){ return node.page && node.page.file === 'index.md'; }
+
+  function walk(node, path, fn){
+    fn(node, path);
+    (node.children||[]).forEach(c => walk(c, path.concat([c.name]), fn));
+  }
+
+  function collectPages(node, path){
+    const out = [];
+    walk(node, path, (n, p) => {
+      if (n.page){
+        out.push({ node: n, path: p, isIndex: n.page.file === 'index.md' });
+      }
+    });
+    return out;
+  }
+
+  /* ---------- derived state (recomputed after every mutation) ---------- */
+  let allPages, contentPages, sectionPages, titleCounts, tagFreq, extFreq;
+  let totalAssets, totalWords, totalFolders, topSections;
+
+  function recomputeDerived(){
+    allPages = collectPages(DATA, []);
+    contentPages = allPages.filter(p => p.isIndex);
+    sectionPages = allPages.filter(p => !p.isIndex);
+
+    titleCounts = {};
+    contentPages.forEach(p => {
+      const t = p.node.page.title;
+      titleCounts[t] = (titleCounts[t]||0) + 1;
+    });
+
+    tagFreq = {};
+    allPages.forEach(p => (p.node.page.tags||[]).forEach(t => tagFreq[t] = (tagFreq[t]||0)+1));
+
+    extFreq = {};
+    totalAssets = 0; totalWords = 0; totalFolders = 0;
+    walk(DATA, [], (n) => {
+      totalFolders++;
+      (n.assets||[]).forEach(a => { extFreq[a.ext||'?'] = (extFreq[a.ext||'?']||0)+1; totalAssets++; });
+    });
+    contentPages.forEach(p => totalWords += (p.node.page.words||0));
+
+    topSections = (DATA.children||[]);
+  }
+  recomputeDerived();
+
+  function flagsFor(p){
+    const flags = [];
+    const t = p.node.page.title;
+    if (titleCounts[t] > 1) flags.push('dup');
+    if ((p.node.page.words||0) <= 3) flags.push('thin');
+    return flags;
+  }
+
+  function countDescendantPages(node){
+    let c = 0;
+    walk(node, [], (n) => { if (n.page && n.page.file === 'index.md') c++; });
+    return c;
+  }
+
+  /* ---------- state ---------- */
+  let activePath = [];
+  let activeTag = null;
+  let searchQuery = '';
+  let activeTool = null; // null | 'tags' | 'dup'
+
+  function findNode(path){
+    let n = DATA;
+    for (const seg of path){
+      n = (n.children||[]).find(c => c.name === seg);
+      if (!n) return DATA;
+    }
+    return n;
+  }
+
+  /* =========================================================
+     LIVE FILESYSTEM LAYER (File System Access API)
+     ========================================================= */
+  const FS_SUPPORTED = typeof window.showDirectoryPicker === 'function';
+
+  function parseFrontmatterJS(text){
+    const m = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
+    if (!m) return { fm: {}, body: text };
+    const block = m[1];
+    const body = text.slice(m[0].length);
+    const fm = {};
+    let mm;
+    if ((mm = block.match(/^title:\s*["']?(.*?)["']?\s*$/m))) fm.title = mm[1].trim();
+    if ((mm = block.match(/^date:\s*["']?(.*?)["']?\s*$/m))) fm.date = mm[1].trim();
+    if ((mm = block.match(/^description:\s*["']?(.*?)["']?\s*$/m))) fm.description = mm[1].trim();
+    if ((mm = block.match(/^draft:\s*(true|false)\s*$/m))) fm.draft = mm[1] === 'true';
+    if ((mm = block.match(/^tags:\s*\[(.*?)\]\s*$/m))) {
+      fm.tags = mm[1].split(',').map(t => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
+    }
+    return { fm, body };
+  }
+
+  function wordCountJS(body){
+    let text = body.replace(/```[\s\S]*?```/g, '');
+    text = text.replace(/<[^>]+>/g, '');
+    const cjk = text.match(/[一-鿿]/g) || [];
+    const words = text.match(/[A-Za-z0-9_]+/g) || [];
+    return cjk.length + words.length;
+  }
+
+  async function scanDir(dirHandle, name, parentHandle){
+    const node = { name, type: 'dir', children: [], assets: [], page: null };
+    node._handle = dirHandle;
+    node._parentHandle = parentHandle;
+    const entries = [];
+    for await (const entry of dirHandle.values()) entries.push(entry);
+    entries.sort((a,b) => a.name.localeCompare(b.name));
+    const dirs = entries.filter(e => e.kind === 'directory');
+    const files = entries.filter(e => e.kind === 'file');
+
+    for (const fh of files){
+      if (fh.name === 'index.md' || fh.name === '_index.md'){
+        const file = await fh.getFile();
+        const text = await file.text();
+        const { fm, body } = parseFrontmatterJS(text);
+        node.page = {
+          file: fh.name,
+          title: fm.title || name,
+          date: fm.date || null,
+          description: fm.description || '',
+          draft: !!fm.draft,
+          tags: fm.tags || [],
+          words: wordCountJS(body),
+          _raw: text,
+          _body: body,
+          _handle: fh
+        };
+      } else {
+        const file = await fh.getFile();
+        const ext = fh.name.includes('.') ? fh.name.split('.').pop().toLowerCase() : '';
+        node.assets.push({ name: fh.name, ext, size: file.size, _handle: fh });
+      }
+    }
+    for (const dh of dirs){
+      node.children.push(await scanDir(dh, dh.name, dirHandle));
+    }
+    return node;
+  }
+
+  async function verifyReadWrite(handle){
+    const opts = { mode: 'readwrite' };
+    if ((await handle.queryPermission(opts)) === 'granted') return true;
+    if ((await handle.requestPermission(opts)) === 'granted') return true;
+    return false;
+  }
+
+  async function writeFile(fileHandle, text){
+    const w = await fileHandle.createWritable();
+    await w.write(text);
+    await w.close();
+  }
+
+  async function copyDirRecursive(srcHandle, destParentHandle, destName){
+    const destHandle = await destParentHandle.getDirectoryHandle(destName, { create: true });
+    for await (const entry of srcHandle.values()){
+      if (entry.kind === 'file'){
+        const file = await entry.getFile();
+        const w = await (await destHandle.getFileHandle(entry.name, { create: true })).createWritable();
+        await w.write(file);
+        await w.close();
+      } else {
+        await copyDirRecursive(entry, destHandle, entry.name);
+      }
+    }
+    return destHandle;
+  }
+
+  async function moveOrRenameFolder(node, newParentHandle, newName){
+    await copyDirRecursive(node._handle, newParentHandle, newName);
+    await node._parentHandle.removeEntry(node.name, { recursive: true });
+  }
+
+  async function deleteFolder(node){
+    await node._parentHandle.removeEntry(node.name, { recursive: true });
+  }
+
+  async function sha256Hex(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function replaceTagsLine(raw, newTagsArr){
+    const line = 'tags: [' + newTagsArr.map(t => JSON.stringify(t)).join(',') + ']';
+    if (/^tags:\s*\[.*?\]\s*$/m.test(raw)) return raw.replace(/^tags:\s*\[.*?\]\s*$/m, line);
+    return raw.replace(/^---\s*\n/, m => m + line + '\n');
+  }
+
+  async function mergeTags(selectedTags, targetName){
+    const selectedSet = new Set(selectedTags);
+    let changedCount = 0;
+    for (const p of allPages){
+      const pg = p.node.page;
+      if (!pg || !pg.tags || !pg._handle) continue;
+      if (!pg.tags.some(t => selectedSet.has(t))) continue;
+      const newTags = [];
+      pg.tags.forEach(t => {
+        const rep = selectedSet.has(t) ? targetName : t;
+        if (!newTags.includes(rep)) newTags.push(rep);
+      });
+      const newRaw = replaceTagsLine(pg._raw, newTags);
+      await writeFile(pg._handle, newRaw);
+      changedCount++;
+    }
+    return changedCount;
+  }
+
+  async function detectDuplicateGroups(){
+    const groups = {};
+    for (const p of contentPages){
+      const pg = p.node.page;
+      if (!pg._body || !pg._body.trim()) continue;
+      const h = await sha256Hex(pg._body.trim());
+      (groups[h] = groups[h] || []).push(p);
+    }
+    return Object.values(groups).filter(g => g.length > 1);
+  }
+
+  function allDirNodes(){
+    const out = [];
+    walk(DATA, [], (n, p) => { out.push({ node: n, path: p }); });
+    return out;
+  }
+
+  function bytesLabel(n){
+    if (n < 1024) return n + ' B';
+    if (n < 1024*1024) return (n/1024).toFixed(1) + ' KB';
+    return (n/1024/1024).toFixed(1) + ' MB';
+  }
+
+  function folderByteSize(node){
+    let total = 0;
+    walk(node, [], n => { (n.assets||[]).forEach(a => total += (a.size||0)); if (n.page && n.page._raw) total += n.page._raw.length; });
+    return total;
+  }
+
+  /* ---------- rescan / refresh ---------- */
+  async function rescanFromRoot(){
+    if (!rootDirHandle) return;
+    setStatus('正在重新扫描…', false);
+    DATA = await scanDir(rootDirHandle, 'content', null);
+    recomputeDerived();
+    renderTree();
+    renderMain();
+    setStatus('已连接 · ' + contentPages.length + ' 篇内容页', true);
+    refreshDupBadge();
+  }
+
+  let cachedDupGroups = null;
+  async function refreshDupBadge(){
+    if (!manageMode) return;
+    cachedDupGroups = await detectDuplicateGroups();
+    const badge = document.getElementById('dupBadge');
+    if (cachedDupGroups.length){
+      badge.style.display = '';
+      badge.textContent = cachedDupGroups.reduce((s,g)=>s+g.length-1,0);
+    } else {
+      badge.style.display = 'none';
+    }
+    if (activeTool === 'dup') renderMain();
+  }
+
+  function setStatus(text, connected){
+    document.getElementById('manageStatusText').textContent = text;
+    document.getElementById('managePanel').classList.toggle('connected', !!connected);
+  }
+
+  async function connectFolder(){
+    if (!FS_SUPPORTED){
+      alert('当前浏览器不支持文件系统访问（File System Access API），需要用 Chrome 或 Edge 打开这个页面才能启用管理功能。');
+      return;
+    }
+    let handle;
+    try {
+      handle = await window.showDirectoryPicker({ id: 'hugo-content-manager', mode: 'readwrite' });
+    } catch (err){
+      if (err && err.name === 'AbortError') return;
+      alert('无法访问该文件夹：' + (err && err.message || err));
+      return;
+    }
+    const ok = await verifyReadWrite(handle);
+    if (!ok){
+      alert('未获得读写权限，无法进入管理模式。');
+      return;
+    }
+    rootDirHandle = handle;
+    setStatus('正在扫描 ' + handle.name + ' …', false);
+    try {
+      DATA = await scanDir(handle, handle.name, null);
+    } catch (err){
+      alert('扫描目录失败：' + (err && err.message || err));
+      return;
+    }
+    recomputeDerived();
+    manageMode = true;
+    activePath = [];
+    document.getElementById('rootPath').textContent = handle.name + '/  (实时连接)';
+    document.getElementById('manageBtnRow').innerHTML =
+      '<button class="btn small" id="rescanBtn">重新扫描</button><button class="btn small" id="disconnectBtn">断开连接</button>';
+    document.getElementById('manageHint').textContent = '改动会直接写入磁盘。git 是你的撤销按钮。';
+    document.getElementById('rescanBtn').addEventListener('click', rescanFromRoot);
+    document.getElementById('disconnectBtn').addEventListener('click', () => location.reload());
+    document.querySelectorAll('.tool-nav-row').forEach(b => b.disabled = false);
+    setStatus('已连接 · ' + contentPages.length + ' 篇内容页', true);
+    renderTree();
+    renderMain();
+    refreshDupBadge();
+  }
+
+  document.getElementById('connectBtn').addEventListener('click', connectFolder);
+  if (!FS_SUPPORTED){
+    document.getElementById('connectBtn').disabled = true;
+    document.getElementById('connectBtn').textContent = '当前浏览器不支持';
+    document.getElementById('manageHint').textContent = '请用 Chrome 或 Edge 打开此文件（本地 http:// 或 file:// 均可）以启用管理功能。';
+  }
+
+  /* ---------- tree render ---------- */
+  const treeRoot = document.getElementById('treeRoot');
+
+  function buildTreeLi(node, path, depth){
+    const li = document.createElement('li');
+    const hasChildren = (node.children||[]).length > 0;
+    const key = path.join('/');
+    li.dataset.key = key;
+    if (depth <= 1) li.classList.add('open');
+
+    const row = document.createElement('div');
+    row.className = 'tree-row' + (hasChildren ? '' : ' leaf');
+    row.setAttribute('role', 'button');
+    row.setAttribute('tabindex', '0');
+    if (activePath.join('/') === key) row.classList.add('active');
+
+    const chev = hasChildren
+      ? '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>'
+      : '<span class="chev"></span>';
+
+    const pageCount = countDescendantPages(node);
+    row.innerHTML = chev + '<span class="name">' + escapeHtml(node.name) + '</span>' +
+      (pageCount ? '<span class="count">' + pageCount + '</span>' : '');
+
+    row.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (hasChildren) li.classList.toggle('open');
+      selectPath(path);
+    });
+
+    li.appendChild(row);
+
+    if (hasChildren){
+      const ul = document.createElement('ul');
+      node.children.forEach(c => ul.appendChild(buildTreeLi(c, path.concat([c.name]), depth+1)));
+      li.appendChild(ul);
+    }
+    return li;
+  }
+
+  function renderTree(){
+    treeRoot.innerHTML = '';
+    const rootUl = document.createElement('ul');
+    rootUl.style.borderLeft = 'none';
+    rootUl.style.paddingLeft = '0';
+    (DATA.children||[]).forEach(c => rootUl.appendChild(buildTreeLi(c, [c.name], 1)));
+    treeRoot.appendChild(rootUl);
+  }
+
+  function syncActiveRow(){
+    document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('active'));
+    const li = treeRoot.querySelector('li[data-key="' + CSS.escape(activePath.join('/')) + '"]');
+    if (li) li.querySelector(':scope > .tree-row').classList.add('active');
+  }
+
+  function selectPath(path){
+    activePath = path;
+    activeTool = null;
+    document.querySelectorAll('.tool-nav-row').forEach(r => r.classList.remove('active'));
+    syncActiveRow();
+    renderMain();
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  }
+
+  /* ---------- utils ---------- */
+  function escapeHtml(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function fmtDate(d){
+    if (!d) return '—';
+    return String(d).slice(0,10);
+  }
+
+  /* ---------- card builders ---------- */
+  function assetBadges(assets){
+    if (!assets || !assets.length) return '';
+    const byExt = {};
+    assets.forEach(a => { const e=(a.ext||'?').toLowerCase(); byExt[e]=(byExt[e]||0)+1; });
+    return '<div class="card-assets">' + Object.keys(byExt).sort().map(e =>
+      '<span class="asset-badge">' + escapeHtml((EXT_LABEL[e]||e).toUpperCase()) + ' ×' + byExt[e] + '</span>'
+    ).join('') + '</div>';
+  }
+
+  function pageCard(p){
+    const pg = p.node.page;
+    const flags = flagsFor(p);
+    const flagbar = flags.includes('dup') ? '<span class="flagbar dup"></span>' : flags.includes('thin') ? '<span class="flagbar thin"></span>' : '';
+    const tags = (pg.tags||[]).slice(0,4).map(t => '<span class="tag-chip">'+escapeHtml(t)+'</span>').join('');
+    return '<div class="card" data-key="'+escapeHtml(p.path.join('/'))+'" role="button" tabindex="0">' +
+      flagbar +
+      '<div class="card-top"><div class="card-title">'+escapeHtml(pg.title||p.node.name)+'</div>' +
+      '<span class="card-kind">'+ (pg.draft ? 'DRAFT' : 'PAGE') +'</span></div>' +
+      '<div class="card-meta"><span>'+fmtDate(pg.date)+'</span><span>'+ (pg.words||0) +' 字</span></div>' +
+      (tags ? '<div class="card-tags">'+tags+'</div>' : '') +
+      assetBadges(p.node.assets) +
+      '</div>';
+  }
+
+  function folderCard(node, path){
+    const pageCount = countDescendantPages(node);
+    const title = (node.page && node.page.title) ? node.page.title : node.name;
+    return '<div class="folder-card" data-key="'+escapeHtml(path.join('/'))+'" role="button" tabindex="0">' +
+      '<div class="ftitle">'+iconFolder()+escapeHtml(title)+'</div>' +
+      '<div class="fmeta">'+ (node.children||[]).length + ' 子目录 · ' + pageCount + ' 页面</div>' +
+      '</div>';
+  }
+
+  function attachCardHandlers(root){
+    root.querySelectorAll('.card[data-key]').forEach(el => {
+      el.addEventListener('click', () => openModalForPath(el.dataset.key.split('/').filter(Boolean)));
+    });
+    root.querySelectorAll('.folder-card[data-key]').forEach(el => {
+      el.addEventListener('click', () => {
+        const path = el.dataset.key.split('/').filter(Boolean);
+        expandTreeTo(path);
+        selectPath(path);
+      });
+    });
+    root.querySelectorAll('.dist-row .dlabel[data-key]').forEach(el => {
+      el.addEventListener('click', () => {
+        const path = el.dataset.key.split('/').filter(Boolean);
+        expandTreeTo(path);
+        selectPath(path);
+      });
+    });
+    root.querySelectorAll('.flag-row[data-key]').forEach(el => {
+      el.addEventListener('click', () => openModalForPath(el.dataset.key.split('/').filter(Boolean)));
+    });
+    root.querySelectorAll('.tag-chip[data-tag]').forEach(el => {
+      el.addEventListener('click', () => {
+        activeTag = activeTag === el.dataset.tag ? null : el.dataset.tag;
+        renderMain();
+      });
+    });
+  }
+
+  function expandTreeTo(path){
+    let acc = [];
+    for (const seg of path){
+      acc.push(seg);
+      const li = treeRoot.querySelector('li[data-key="' + CSS.escape(acc.join('/')) + '"]');
+      if (li) li.classList.add('open');
+    }
+  }
+
+  /* ---------- modal (with manage actions) ---------- */
+  function moveTargetOptions(excludePath){
+    const excludeKey = excludePath.join('/');
+    return allDirNodes()
+      .filter(d => d.node.type === 'dir')
+      .filter(d => {
+        const k = d.path.join('/');
+        return k !== excludeKey && !k.startsWith(excludeKey + '/');
+      })
+      .map(d => '<option value="'+escapeHtml(d.path.join('/'))+'">'+escapeHtml('content/'+d.path.join('/') || 'content/')+'</option>')
+      .join('');
+  }
+
+  function openModalForPath(path){
+    const node = findNode(path);
+    if (!node || !node.page) return;
+    const pg = node.page;
+    const backdrop = document.getElementById('modalBackdrop');
+    const body = document.getElementById('modalBody');
+    const flags = flagsFor({node, path});
+    let html =
+      '<h3>'+escapeHtml(pg.title||node.name)+'</h3>' +
+      '<div class="mpath">content/'+escapeHtml(path.join('/'))+'/'+escapeHtml(pg.file)+'</div>' +
+      '<div class="modal-grid">' +
+        '<div class="modal-field"><div class="k">日期</div><div class="v">'+fmtDate(pg.date)+'</div></div>' +
+        '<div class="modal-field"><div class="k">字数</div><div class="v">'+(pg.words||0)+'</div></div>' +
+        '<div class="modal-field"><div class="k">状态</div><div class="v">'+(pg.draft ? '草稿 Draft' : '已发布')+'</div></div>' +
+        '<div class="modal-field"><div class="k">资源文件</div><div class="v">'+((node.assets||[]).length)+' 个</div></div>' +
+      '</div>' +
+      ((pg.tags||[]).length ? '<div class="card-tags" style="margin-bottom:14px;">'+pg.tags.map(t=>'<span class="tag-chip">'+escapeHtml(t)+'</span>').join('')+'</div>' : '') +
+      (flags.length ? '<div class="flag-list" style="margin-bottom:14px;">' +
+        (flags.includes('dup') ? '<div class="flag-row"><span class="flag-dot dup"></span>标题与其他 '+(titleCounts[pg.title]-1)+' 个页面重复</div>' : '') +
+        (flags.includes('thin') ? '<div class="flag-row"><span class="flag-dot thin"></span>正文内容极少（≤3 字），可能是占位/测试页</div>' : '') +
+      '</div>' : '') +
+      ((node.assets||[]).length ? '<div class="card-assets" style="border:none;padding:0;margin-bottom:16px;">'+node.assets.map(a=>'<span class="asset-badge">'+escapeHtml(a.name)+'</span>').join('')+'</div>' : '');
+
+    if (manageMode){
+      html += '<div class="manage-section">' +
+        '<div class="mtitle">移动 / 重命名文件夹</div>' +
+        '<div class="move-form">' +
+          '<div class="move-form-row">' +
+            '<div><label>新名称</label><input type="text" id="moveNameInput" value="'+escapeHtml(node.name)+'"></div>' +
+          '</div>' +
+          '<div><label>移动到</label><select id="moveTargetSelect">'+moveTargetOptions(path)+'</select></div>' +
+          '<div style="display:flex; gap:8px;"><button class="btn primary small" id="applyMoveBtn">应用</button><button class="btn danger small" id="deleteFolderBtn">删除此文件夹</button></div>' +
+          '<div id="moveResult"></div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    html += '<div style="margin-top:16px;"><button class="modal-close-btn" id="modalCloseBtn">关闭</button></div>';
+    body.innerHTML = html;
+    backdrop.classList.add('open');
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+
+    if (manageMode){
+      const parentSelect = document.getElementById('moveTargetSelect');
+      const currentParentKey = path.slice(0, -1).join('/');
+      if (parentSelect) parentSelect.value = currentParentKey;
+
+      document.getElementById('applyMoveBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('moveNameInput').value.trim();
+        const targetKey = document.getElementById('moveTargetSelect').value;
+        const resultEl = document.getElementById('moveResult');
+        if (!newName){ resultEl.innerHTML = '<div class="result-note err">名称不能为空</div>'; return; }
+        const targetPath = targetKey ? targetKey.split('/').filter(Boolean) : [];
+        const targetNode = targetPath.length ? findNode(targetPath) : DATA;
+        if (newName === node.name && targetKey === currentParentKey){
+          resultEl.innerHTML = '<div class="result-note err">名称和位置都没有变化</div>';
+          return;
+        }
+        resultEl.innerHTML = '<div class="result-note ok">正在移动…</div>';
+        try {
+          await moveOrRenameFolder(node, targetNode._handle, newName);
+          closeModal();
+          await rescanFromRoot();
+        } catch (err){
+          resultEl.innerHTML = '<div class="result-note err">失败：'+escapeHtml(err && err.message || String(err))+'</div>';
+        }
+      });
+
+      document.getElementById('deleteFolderBtn').addEventListener('click', async () => {
+        const resultEl = document.getElementById('moveResult');
+        const typed = prompt('此操作会删除 content/'+path.join('/')+' 整个文件夹（含全部子文件与资源），且无法通过本工具撤销。\n\n如果确认删除，请输入 DELETE：');
+        if (typed !== 'DELETE'){
+          resultEl.innerHTML = '<div class="result-note err">已取消（未输入 DELETE）</div>';
+          return;
+        }
+        resultEl.innerHTML = '<div class="result-note ok">正在删除…</div>';
+        try {
+          await deleteFolder(node);
+          closeModal();
+          await rescanFromRoot();
+        } catch (err){
+          resultEl.innerHTML = '<div class="result-note err">失败：'+escapeHtml(err && err.message || String(err))+'</div>';
+        }
+      });
+    }
+  }
+  function closeModal(){ document.getElementById('modalBackdrop').classList.remove('open'); }
+  document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'modalBackdrop') closeModal();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  /* ---------- main render ---------- */
+  const mainArea = document.getElementById('mainArea');
+
+  function manageBanner(){
+    if (!manageMode) return '';
+    return '<div class="manage-banner"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>已连接本地文件夹，点击卡片可移动 / 重命名 / 删除；改动直接写入磁盘。</div>';
+  }
+
+  function breadcrumb(path){
+    let html = '<div class="breadcrumb">';
+    html += '<button data-nav="">内容地图</button>';
+    let acc = [];
+    path.forEach((seg, i) => {
+      acc.push(seg);
+      html += '<span class="sep">/</span>';
+      if (i === path.length-1) html += '<span class="current">'+escapeHtml(seg)+'</span>';
+      else html += '<button data-nav="'+escapeHtml(acc.join('/'))+'">'+escapeHtml(seg)+'</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function wireNavButtons(root){
+    root.querySelectorAll('[data-nav]').forEach(b => {
+      b.addEventListener('click', () => {
+        const p = b.dataset.nav ? b.dataset.nav.split('/').filter(Boolean) : [];
+        expandTreeTo(p);
+        selectPath(p);
+      });
+    });
+  }
+
+  function renderOverview(){
+    const dateVals = contentPages.map(p => p.node.page.date).filter(Boolean).sort();
+    const minDate = dateVals[0], maxDate = dateVals[dateVals.length-1];
+
+    let html = manageBanner();
+    html += '<h1 class="page-title">内容地图</h1>';
+    html += '<p class="page-desc">Githubpages 站点 <code>content/</code> 目录下全部内容的结构总览 — 涵盖学习笔记、项目展示、金融评论与鸣谢页面，共 '+contentPages.length+' 篇内容页、'+ (sectionPages.length) +' 个章节索引。</p>';
+
+    html += '<div class="stats-ribbon">' +
+      stat(contentPages.length, '内容页面') +
+      stat(topSections.length, '一级分区') +
+      stat(totalFolders-1, '目录总数') +
+      stat(totalWords.toLocaleString(), '总字数（估）') +
+      stat(totalAssets, '资源文件') +
+      stat(Object.keys(tagFreq).length, '标签种类') +
+      '</div>';
+
+    html += '<div class="section-block"><h2>分区分布 <span class="tally">按内容页面数</span></h2><div class="dist-list">';
+    const maxSec = Math.max(...topSections.map(countDescendantPages), 1);
+    topSections.forEach(s => {
+      const c = countDescendantPages(s);
+      const title = (s.page && s.page.title) || s.name;
+      html += '<div class="dist-row">' +
+        '<span class="dlabel" data-key="'+escapeHtml(s.name)+'" role="button" tabindex="0">'+escapeHtml(title)+'</span>' +
+        '<div class="dist-track"><div class="dist-fill" style="width:'+(c/maxSec*100)+'%"></div></div>' +
+        '<span class="dval">'+c+'</span></div>';
+    });
+    html += '</div></div>';
+
+    const tagEntries = Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]);
+    if (tagEntries.length){
+      html += '<div class="section-block"><h2>标签 <span class="tally">'+tagEntries.length+' 种'+(manageMode ? ' · 点击左侧「标签管理」可合并' : '')+'</span></h2><div class="tag-cloud">';
+      tagEntries.forEach(([t,n]) => {
+        html += '<span class="tag-chip' + (activeTag===t?' active':'') + '" data-tag="'+escapeHtml(t)+'" role="button" tabindex="0">'+escapeHtml(t)+'<span class="n">'+n+'</span></span>';
+      });
+      html += '</div></div>';
+    }
+
+    const extEntries = Object.entries(extFreq).sort((a,b)=>b[1]-a[1]);
+    if (extEntries.length){
+      html += '<div class="section-block"><h2>资源文件类型</h2><div class="tag-cloud">';
+      extEntries.forEach(([e,n]) => {
+        html += '<span class="tag-chip" style="cursor:default;">'+escapeHtml((EXT_LABEL[e]||e).toUpperCase())+'<span class="n">'+n+'</span></span>';
+      });
+      html += '</div></div>';
+    }
+
+    const flagged = contentPages.map(p => ({p, flags: flagsFor(p)})).filter(x => x.flags.length);
+    if (flagged.length){
+      html += '<div class="section-block"><h2>可能需要清理 <span class="tally">'+flagged.length+' 项'+(manageMode ? ' · 点击左侧「重复内容检测」精确定位' : '')+'</span></h2><div class="flag-list">';
+      flagged.forEach(({p, flags}) => {
+        const pg = p.node.page;
+        html += '<div class="flag-row" data-key="'+escapeHtml(p.path.join('/'))+'" role="button" tabindex="0">' +
+          '<span class="flag-dot ' + (flags.includes('dup')?'dup':'thin') + '"></span>' +
+          escapeHtml(pg.title) +
+          '<span class="fpath">content/'+escapeHtml(p.path.join('/'))+'</span></div>';
+      });
+      html += '</div></div>';
+    }
+
+    if (minDate){
+      html += '<footer class="credit">时间跨度 ' + fmtDate(minDate) + ' → ' + fmtDate(maxDate) + ' · ' + (manageMode ? '已连接本地文件夹，数据为最新扫描结果' : '数据来自静态快照，生成时间固定，不会自动更新') + '</footer>';
+    }
+
+    mainArea.innerHTML = html;
+    attachCardHandlers(mainArea);
+  }
+
+  function stat(num, label){
+    return '<div class="stat-cell"><div class="num">'+num+'</div><div class="lbl">'+label+'</div></div>';
+  }
+
+  function renderSection(node, path){
+    let html = manageBanner() + breadcrumb(path);
+
+    const pg = node.page;
+    const title = (pg && pg.title) || node.name;
+    html += '<h1 class="page-title">'+escapeHtml(title)+'</h1>';
+    if (pg && pg.description) html += '<p class="page-desc">'+escapeHtml(pg.description)+'</p>';
+
+    const directPages = (node.children||[]).filter(isIndexPage);
+    const subSections = (node.children||[]).filter(c => !isIndexPage(c));
+
+    const childPageCount = countDescendantPages(node);
+    const assetCount = (node.assets||[]).length;
+    html += '<div class="stats-ribbon">' +
+      stat(childPageCount, '含子级页面') +
+      stat((node.children||[]).length, '直接子项') +
+      stat(assetCount, '本级资源') +
+      '</div>';
+
+    if (subSections.length){
+      html += '<div class="section-block"><h2>子目录 <span class="tally">'+subSections.length+'</span></h2><div class="subfolder-grid">';
+      subSections.forEach(c => html += folderCard(c, path.concat([c.name])));
+      html += '</div></div>';
+    }
+
+    if (directPages.length){
+      html += '<div class="section-block"><h2>页面 <span class="tally">'+directPages.length+'</span></h2><div class="card-grid">';
+      directPages
+        .slice()
+        .sort((a,b) => (b.page.date||'').localeCompare(a.page.date||''))
+        .forEach(c => html += pageCard({node:c, path: path.concat([c.name])}));
+      html += '</div></div>';
+    }
+
+    if (!subSections.length && !directPages.length){
+      html += '<p class="empty-note">此目录下没有子内容。</p>';
+    }
+
+    if (assetCount){
+      html += '<div class="section-block"><h2>本级资源文件</h2>' + assetBadges(node.assets) + '</div>';
+    }
+
+    if (manageMode && path.length){
+      html += '<div class="section-block"><h2>移动 / 重命名此目录</h2><div class="move-form" style="max-width:420px;">' +
+        '<div><label>新名称</label><input type="text" id="secMoveNameInput" value="'+escapeHtml(node.name)+'"></div>' +
+        '<div><label>移动到</label><select id="secMoveTargetSelect">'+moveTargetOptions(path)+'</select></div>' +
+        '<div style="display:flex; gap:8px;"><button class="btn primary small" id="secApplyMoveBtn">应用</button><button class="btn danger small" id="secDeleteBtn">删除此目录</button></div>' +
+        '<div id="secMoveResult"></div>' +
+      '</div></div>';
+    }
+
+    mainArea.innerHTML = html;
+    attachCardHandlers(mainArea);
+    wireNavButtons(mainArea);
+
+    if (manageMode && path.length){
+      const sel = document.getElementById('secMoveTargetSelect');
+      const parentKey = path.slice(0,-1).join('/');
+      if (sel) sel.value = parentKey;
+      document.getElementById('secApplyMoveBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('secMoveNameInput').value.trim();
+        const targetKey = document.getElementById('secMoveTargetSelect').value;
+        const resultEl = document.getElementById('secMoveResult');
+        if (!newName){ resultEl.innerHTML = '<div class="result-note err">名称不能为空</div>'; return; }
+        const targetPath = targetKey ? targetKey.split('/').filter(Boolean) : [];
+        const targetNode = targetPath.length ? findNode(targetPath) : DATA;
+        resultEl.innerHTML = '<div class="result-note ok">正在移动…</div>';
+        try {
+          await moveOrRenameFolder(node, targetNode._handle, newName);
+          activePath = targetPath.concat([newName]);
+          await rescanFromRoot();
+          selectPath(activePath);
+        } catch (err){
+          resultEl.innerHTML = '<div class="result-note err">失败：'+escapeHtml(err && err.message || String(err))+'</div>';
+        }
+      });
+      document.getElementById('secDeleteBtn').addEventListener('click', async () => {
+        const resultEl = document.getElementById('secMoveResult');
+        const typed = prompt('此操作会删除 content/'+path.join('/')+' 整个文件夹（含全部子文件与资源），且无法通过本工具撤销。\n\n如果确认删除，请输入 DELETE：');
+        if (typed !== 'DELETE'){ resultEl.innerHTML = '<div class="result-note err">已取消（未输入 DELETE）</div>'; return; }
+        resultEl.innerHTML = '<div class="result-note ok">正在删除…</div>';
+        try {
+          await deleteFolder(node);
+          activePath = path.slice(0,-1);
+          await rescanFromRoot();
+          selectPath(activePath);
+        } catch (err){
+          resultEl.innerHTML = '<div class="result-note err">失败：'+escapeHtml(err && err.message || String(err))+'</div>';
+        }
+      });
+    }
+  }
+
+  function renderSearchResults(q){
+    const query = q.toLowerCase();
+    const results = contentPages.filter(p => {
+      const pg = p.node.page;
+      const hay = [pg.title, p.node.name, ...(pg.tags||[])].join(' ').toLowerCase();
+      return hay.includes(query);
+    });
+    let html = '<div class="breadcrumb"><button data-nav="">内容地图</button><span class="sep">/</span><span class="current">搜索 "'+escapeHtml(q)+'"</span></div>';
+    html += '<h1 class="page-title">搜索结果</h1>';
+    html += '<p class="page-desc">找到 '+results.length+' 篇匹配页面</p>';
+    if (results.length){
+      html += '<div class="card-grid">' + results.map(pageCard).join('') + '</div>';
+    } else {
+      html += '<p class="empty-note">没有找到匹配内容，换个关键词试试。</p>';
+    }
+    mainArea.innerHTML = html;
+    attachCardHandlers(mainArea);
+    mainArea.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => { document.getElementById('searchInput').value=''; searchQuery=''; selectPath([]); }));
+  }
+
+  function renderTagResults(tag){
+    const results = contentPages.filter(p => (p.node.page.tags||[]).includes(tag));
+    let html = '<div class="breadcrumb"><button data-nav="">内容地图</button><span class="sep">/</span><span class="current">标签 · '+escapeHtml(tag)+'</span></div>';
+    html += '<h1 class="page-title">#'+escapeHtml(tag)+'</h1>';
+    html += '<p class="page-desc">'+results.length+' 篇页面带有此标签</p>';
+    html += '<div class="card-grid">' + results.map(pageCard).join('') + '</div>';
+    mainArea.innerHTML = html;
+    attachCardHandlers(mainArea);
+    mainArea.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => { activeTag=null; selectPath([]); }));
+  }
+
+  /* ---------- manage tool views ---------- */
+  function renderTagManagerView(){
+    let html = manageBanner();
+    html += '<div class="breadcrumb"><button data-nav="">内容地图</button><span class="sep">/</span><span class="current">标签管理</span></div>';
+    html += '<h1 class="page-title">标签管理</h1>';
+    html += '<p class="page-desc">勾选两个及以上标签，填写目标名称后点"合并"——会把选中标签在所有页面里统一替换成目标名称（未选中的标签保持不变）。也可以只勾一个来单独改名。</p>';
+
+    const tagEntries = Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]);
+    html += '<div class="tag-manage-list">';
+    tagEntries.forEach(([t,n]) => {
+      html += '<label class="tag-manage-row"><input type="checkbox" class="tag-merge-check" value="'+escapeHtml(t)+'"><span class="tname">'+escapeHtml(t)+'</span><span class="tcount">'+n+' 篇</span></label>';
+    });
+    html += '</div>';
+
+    html += '<div class="merge-bar">' +
+      '<span class="msel" id="mergeSelCount">已选 0 个标签</span>' +
+      '<input type="text" id="mergeTargetInput" placeholder="合并后的标签名…">' +
+      '<button class="btn primary" id="doMergeBtn" disabled>合并</button>' +
+    '</div>';
+    html += '<div id="mergeResult"></div>';
+
+    mainArea.innerHTML = html;
+    wireNavButtons(mainArea);
+
+    const checks = () => [...mainArea.querySelectorAll('.tag-merge-check:checked')].map(c => c.value);
+    const updateBtn = () => {
+      const sel = checks();
+      document.getElementById('mergeSelCount').textContent = '已选 ' + sel.length + ' 个标签';
+      const target = document.getElementById('mergeTargetInput').value.trim();
+      document.getElementById('doMergeBtn').disabled = sel.length < 1 || !target;
+    };
+    mainArea.querySelectorAll('.tag-merge-check').forEach(c => c.addEventListener('change', () => {
+      const sel = checks();
+      if (sel.length === 1 && !document.getElementById('mergeTargetInput').value){
+        document.getElementById('mergeTargetInput').value = sel[0];
+      }
+      updateBtn();
+    }));
+    document.getElementById('mergeTargetInput').addEventListener('input', updateBtn);
+
+    document.getElementById('doMergeBtn').addEventListener('click', async () => {
+      const sel = checks();
+      const target = document.getElementById('mergeTargetInput').value.trim();
+      if (!sel.length || !target) return;
+      const resultEl = document.getElementById('mergeResult');
+      resultEl.innerHTML = '<div class="result-note ok">正在写入…</div>';
+      try {
+        const n = await mergeTags(sel, target);
+        await rescanFromRoot();
+        activeTool = 'tags';
+        renderMain();
+        document.getElementById('mergeResult').innerHTML = '<div class="result-note ok">已更新 '+n+' 个文件，标签统一为 "'+escapeHtml(target)+'"。</div>';
+      } catch (err){
+        resultEl.innerHTML = '<div class="result-note err">失败：'+escapeHtml(err && err.message || String(err))+'</div>';
+      }
+    });
+  }
+
+  async function renderDuplicateManagerView(){
+    let html = manageBanner();
+    html += '<div class="breadcrumb"><button data-nav="">内容地图</button><span class="sep">/</span><span class="current">重复内容检测</span></div>';
+    html += '<h1 class="page-title">重复内容检测</h1>';
+    html += '<p class="page-desc">按正文内容做哈希分组——同一组内的页面正文完全相同（多半是文件夹当模板复制时忘了改内容）。默认勾选除最早一份外的其余副本，确认无误后删除。</p>';
+    mainArea.innerHTML = html + '<p class="empty-note">正在扫描重复内容…</p>';
+
+    const groups = cachedDupGroups || await detectDuplicateGroups();
+    cachedDupGroups = groups;
+
+    if (!groups.length){
+      mainArea.innerHTML = html + '<p class="empty-note">没有发现内容完全相同的重复页面。</p>';
+      wireNavButtons(mainArea);
+      return;
+    }
+
+    let listHtml = '';
+    groups.forEach((g, gi) => {
+      const sorted = g.slice().sort((a,b) => (a.node.page.date||'9999').localeCompare(b.node.page.date||'9999'));
+      listHtml += '<div class="dup-group" data-gi="'+gi+'">' +
+        '<div class="dup-group-head">"'+escapeHtml(sorted[0].node.page.title)+'" <span class="ghint">'+sorted.length+' 份完全相同的正文</span></div>';
+      sorted.forEach((p, i) => {
+        const size = folderByteSize(p.node);
+        listHtml += '<div class="dup-item">' +
+          (i === 0
+            ? '<span class="keep-tag">保留（最早）</span>'
+            : '<input type="checkbox" class="dup-check" data-key="'+escapeHtml(p.path.join('/'))+'" checked>') +
+          '<span class="dpath">content/'+escapeHtml(p.path.join('/'))+'</span>' +
+          '<span class="dsize">'+fmtDate(p.node.page.date)+' · '+bytesLabel(size)+'</span>' +
+        '</div>';
+      });
+      listHtml += '</div>';
+    });
+
+    const totalExtra = groups.reduce((s,g) => s + g.length - 1, 0);
+    const wastedBytes = groups.reduce((s,g) => {
+      const sorted = g.slice().sort((a,b) => (a.node.page.date||'9999').localeCompare(b.node.page.date||'9999'));
+      return s + sorted.slice(1).reduce((s2,p) => s2 + folderByteSize(p.node), 0);
+    }, 0);
+
+    html += '<div class="manage-view-note">共 '+groups.length+' 组重复，合计 '+totalExtra+' 个多余文件夹，约 '+bytesLabel(wastedBytes)+'。已默认勾选除每组最早一份外的所有副本，可手动调整后再删除。</div>';
+    html += listHtml;
+    html += '<div style="display:flex; gap:8px; align-items:center; margin-top:6px;">' +
+      '<button class="btn danger" id="deleteDupsBtn">删除已勾选文件夹</button>' +
+      '<span id="dupSelCount" class="msel" style="font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);"></span>' +
+    '</div>';
+    html += '<div id="dupResult"></div>';
+
+    mainArea.innerHTML = html;
+    wireNavButtons(mainArea);
+
+    const updateCount = () => {
+      const n = mainArea.querySelectorAll('.dup-check:checked').length;
+      document.getElementById('dupSelCount').textContent = '已勾选 ' + n + ' 项';
+    };
+    mainArea.querySelectorAll('.dup-check').forEach(c => c.addEventListener('change', updateCount));
+    updateCount();
+
+    document.getElementById('deleteDupsBtn').addEventListener('click', async () => {
+      const keys = [...mainArea.querySelectorAll('.dup-check:checked')].map(c => c.dataset.key);
+      if (!keys.length) return;
+      const resultEl = document.getElementById('dupResult');
+      const typed = prompt('即将删除 '+keys.length+' 个文件夹（含子文件与资源），且无法通过本工具撤销：\n\n' + keys.map(k=>'content/'+k).join('\n') + '\n\n确认请输入 DELETE：');
+      if (typed !== 'DELETE'){ resultEl.innerHTML = '<div class="result-note err">已取消（未输入 DELETE）</div>'; return; }
+      resultEl.innerHTML = '<div class="result-note ok">正在删除…</div>';
+      let okCount = 0, failMsgs = [];
+      for (const k of keys){
+        const p = k.split('/').filter(Boolean);
+        const n = findNode(p);
+        try { await deleteFolder(n); okCount++; }
+        catch (err){ failMsgs.push(k + '：' + (err && err.message || err)); }
+      }
+      await rescanFromRoot();
+      cachedDupGroups = null;
+      await refreshDupBadge();
+      activeTool = 'dup';
+      await renderMain();
+      const note = document.getElementById('dupResult') || document.createElement('div');
+      const summary = '<div class="result-note '+(failMsgs.length?'err':'ok')+'">已删除 '+okCount+' 个文件夹'+(failMsgs.length?('，失败 '+failMsgs.length+' 个：'+failMsgs.join('；')):'')+'</div>';
+      mainArea.insertAdjacentHTML('beforeend', summary);
+    });
+  }
+
+  function renderMain(){
+    if (searchQuery){ renderSearchResults(searchQuery); return; }
+    if (activeTag){ renderTagResults(activeTag); return; }
+    if (activeTool === 'tags'){ renderTagManagerView(); return; }
+    if (activeTool === 'dup'){ renderDuplicateManagerView(); return; }
+    if (!activePath.length){ renderOverview(); return; }
+    const node = findNode(activePath);
+    renderSection(node, activePath);
+  }
+
+  /* ---------- tool nav wiring ---------- */
+  document.querySelectorAll('.tool-nav-row').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      activeTool = btn.dataset.tool;
+      activePath = [];
+      searchQuery = '';
+      activeTag = null;
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.tool-nav-row').forEach(r => r.classList.toggle('active', r === btn));
+      syncActiveRow();
+      renderMain();
+      window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    });
+  });
+
+  /* ---------- search wiring ---------- */
+  const searchInput = document.getElementById('searchInput');
+  let searchDebounce;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchQuery = e.target.value.trim();
+      activeTag = null;
+      activeTool = null;
+      document.querySelectorAll('.tool-nav-row').forEach(r => r.classList.remove('active'));
+      renderMain();
+    }, 120);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.getAttribute && e.target.getAttribute('role') === 'button'){
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
+  /* ---------- init ---------- */
+  document.getElementById('rootPath').textContent = 'content/  (静态快照)';
+  renderTree();
+  renderMain();
+})();
+</script>

@@ -6,7 +6,7 @@ series: ["ECMS"]
 series_order: 3
 math: mathjax
 ---
-{{< katex >}}
+
 > Last Edit: 9/23/24
 #### Plastice Deformation (Permanent Deformation)
 

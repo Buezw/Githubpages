@@ -6,6 +6,12 @@
       "runtimeExecutable": "hugo",
       "runtimeArgs": ["server", "-D", "--port", "1313"],
       "port": 1313
+    },
+    {
+      "name": "content-map",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8931"],
+      "port": 8931
     }
   ]
 }
