@@ -56,6 +56,26 @@ def escape_math_asterisks(text):
     return text
 
 
+def collapse_math_blank_lines(text):
+    """Notion sometimes exports a stray blank line right before the closing $$
+    of a display-math block. Markdown treats a blank line as a paragraph
+    break, so Goldmark never recognizes the block as math and prints the
+    literal '$$ ... $$' as plain text instead of rendering an equation."""
+    lines = text.split("\n")
+    out = []
+    in_math = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped == "$$":
+            in_math = not in_math
+            out.append(line)
+            continue
+        if in_math and stripped == "":
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def rewrite_image_links(text, asset_dirname):
     """Strip the Notion subfolder prefix from image links so they point
     at files sitting next to index.md (Hugo leaf bundle convention)."""
@@ -117,6 +137,7 @@ def main():
     if asset_dir is not None:
         body = rewrite_image_links(body, asset_dir.name)
     body = escape_math_asterisks(body)
+    body = collapse_math_blank_lines(body)
 
     last_edit = f"{date.month}/{date.day}/{date.strftime('%y')}"
 

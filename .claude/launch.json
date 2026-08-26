@@ -12,6 +12,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8931"],
       "port": 8931
+    },
+    {
+      "name": "import-notion-ui",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["scripts/import_notion_ui.py", "--port", "8799", "--no-browser"],
+      "port": 8799
     }
   ]
 }

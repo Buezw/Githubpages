@@ -533,7 +533,7 @@
                             {{ if $match }}
                                 {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
                             {{ else }}
-                                {{ .Summary | truncate 100 }}
+                                {{ .Summary | plainify | truncate 100 }}
                             {{ end }}
                         </div>
                     </a>
@@ -553,7 +553,7 @@
                             {{ if $match }}
                                 {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
                             {{ else }}
-                                {{ .Summary | truncate 100 }}
+                                {{ .Summary | plainify | truncate 100 }}
                             {{ end }}
                         </div>
                     </a>
@@ -581,7 +581,7 @@
                             {{ if $match }}
                                 {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
                             {{ else }}
-                                {{ .Summary | truncate 100 }}
+                                {{ .Summary | plainify | truncate 100 }}
                             {{ end }}
                         </div>
                     </a>
