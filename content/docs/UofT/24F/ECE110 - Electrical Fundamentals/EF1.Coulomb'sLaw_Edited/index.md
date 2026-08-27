@@ -37,7 +37,7 @@ In the figure four particles form a square with edge length \\(a = 3.64 × 10⁻
 
 (a) What is q if the net electrostatic force on particle 1 is zero?
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 # Shell Theorem 壳定理
 

@@ -213,7 +213,7 @@ int main() {
 }
 ```
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - Now the problem is that there exist two Complex in the heap, that if only delete the first one, the second one will cause a memory leak
 
@@ -251,7 +251,7 @@ int main() {
 }
 ```
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 # 3.4 Arrays of Pointers
 

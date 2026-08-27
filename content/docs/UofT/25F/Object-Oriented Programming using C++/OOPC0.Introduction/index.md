@@ -57,7 +57,7 @@ Created: 2025年9月2日 15:35
 
 - OS 负责分配资源，启动程序等
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 ## Languages
 
@@ -78,14 +78,14 @@ Created: 2025年9月2日 15:35
 
 - 前面提到了 High-Level Language 无法被 CPU 直接执行的问题，而 Compilers 则负责这一翻译的任务，将 High-Level Language 翻译为 Machine Language
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 ## Linker
 
 - 很多时候，代码块中并不只包含 Source Code，已知 Source Code 会被翻译成 Object Code
 - 但是其他的一些比如别人已经写好了的代码就需要通过 Linker 来 Link，最终生成一个完整的 Machine-Language Program
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 # 1.2 PROGRAMMING AND PROBLEM-SOLVING
 

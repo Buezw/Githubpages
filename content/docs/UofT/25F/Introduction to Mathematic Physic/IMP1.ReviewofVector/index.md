@@ -166,13 +166,13 @@ $$
 
 - 首先，Traces 指的是 Cross sectional slice of a 3D shape
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 比如上图中的红色曲线就是这个 Ellipsoid 椭球 和 xy-Plane 的 Intersection，整个完整的曲线也就被称为 Trace
 - 一般来说，Trace 并不单独出现，为了构建一个三位图形的骨架，需要构建多个二维对象
 - 追常见的做法就是在 xy, xz, yz 三个 Plane 上切片，最终绘出完整的 3D 图像
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 ## Graphing 2-Variable Scalar Functions (Cylinders)
 
@@ -192,7 +192,7 @@ $$
 
 - 这意味着图形在 z 方向无限延伸 → 形成一个 cylinder（柱面）
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 ## Graphing 2-Variable Scalar Functions (Level Curves)
 
@@ -201,9 +201,9 @@ $$
 - 如果等高线稀疏，表示高度变化慢
 - 其完整的定义为：Level curves（等值曲线）：把三维函数 \\(z = f(x, y)\\)  投影到 xy 平面，取不同的 z 常数值得到的曲线
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 ## Graphing Scalar 3-Variable Functions (Level Surfaces)
 
@@ -214,7 +214,7 @@ $$
 w = f(x,y,z), \quad w = \text{constant} = f(x,y,z)
 $$
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 - 如图，不同的 w 值（常数）对应不同的曲面：
     - w = 0（最内层）

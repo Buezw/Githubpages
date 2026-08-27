@@ -52,13 +52,13 @@ myString[3] = '\0';
 
 - 第三种方法就是 Pointer，有 `char* pStr = "Wow";` ，这种方法中，String Wow 将被储存在 Const + Global Variables 的内存块中，而 pStr pointer 则在 Stack 中指向了第一个字符的地址
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 当尝试修改他的时候，如 `pStr[0] = 'R';` 会报错，因为 pStr 在尝试修改一个 Constant
 - 但是是可以修改 pStr 的值，（修改一个 Pointer 的值也就是修改它指向的内存）的，如 `pStr = "Cat";`  就将指向另一个 String
 - 现在举一个具体的 Pointer 换 String 的例子
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 在这里对于字符数组 `char str[] = "It";`  来说，它实际上创建了一个可修改的字符数组，即是一个非 Const 的 Declare 方式，所以它会被存在 Stack 上
 - 而对于字符串常量 `"Wow"` 来说，定义了一个指针 `pStr`，指向一个字符串常量，这个常量实际存储在程序的 Const 区
@@ -346,7 +346,7 @@ char* stringCopy(char* pdest, const char* psrc) {
 - 另一种更加安全的赋值 String 的办法，现在 `strcpy` 的问题是如果目标空间不够，会发生 Buffer Overflow 也就是内存越界的问题，而 `strncpy` 只比 `strcpy` 多了一个参数，也就是 `char* strncpy(char *dest, const char *src, size_t n);`
 - 他会复制源字符串中的前 `n` 个字符，或遇到 `\0` 结束符为止，或者如果 `n` 比源字符串长，会在剩下的位置补上 `\0`
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 ### If n is same as the size of src
 
@@ -383,7 +383,7 @@ strncpy(d, "Hello", 7);
 - `strcat` 是用来拼接 String 的，也就是把一个追加到另一个的末尾，他的 Prototype 为 `char* strcat(char *dest, const char *src);`
 - 它会覆盖 `dest` 原有的 ****`\0`（结束符），从 `\0` 开始写入 `src` 的内容，最后 `strcat` 会在拼接后的新字符串结尾添加一个新的 `\0`
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 ### **10.3.3.2. `strncat`**
 
@@ -493,7 +493,7 @@ months[1] 是 {'F', 'e', 'b', 'r', 'u', 'a', 'r', 'y', '\0', '\0'}
 ...
 ```
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 ## **10.4.2. 1D array of `char*`**
 

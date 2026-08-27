@@ -36,7 +36,7 @@ showWordCount: true
 - 通过 ****Fourier series（傅里叶级数）和 Fourier transform（傅里叶变换），能把任意信号表示成不同频率和幅度的 sine waves之和
 - 所以，sinusoid 是电子学里最重要的信号形式之一
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 上图是一个 Sine-wave Voltage Signal，其表达式为
 
@@ -68,7 +68,7 @@ $$
 
 - 然而，就像前面的 Thevenin 一样， 真实情况下的 Signal 一般并不全是 Sine Wave，这导致他们无法被用一个简单的公式直接分析
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 所以 Fourier Series 的思想就是将任意的 Complex Signals 分解成一堆 Sine Waves 的组合
 
@@ -92,7 +92,7 @@ $$
 - 一个 Wave 包含了一个基波加上无数个谐波，而对于这个 Square Wave 来说，想要画出它的 Frequency 的成分，就可以通过 Line Spectrum
 - 其中每一根竖线代表信号在该频率下的一个正弦波分量
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - 基频分量（\\(\omega_0\\)）的幅度是 \\(\frac{4V}{\pi}\\)
 - 第三次谐波（\\(3\omega_0\\)）幅度是 \\(\frac{1}{3}\frac{4V}{\pi}\\)
@@ -116,7 +116,7 @@ $$
 - 通过一系列数字来表示某个时间点的 Signal Amplitude 的叫做 Digital Signal 数字信号
 - 他就是从 Analog Signal 中 Sampling 得到的
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 - Digital Signal 仅仅在 Sampling 的时候有定义，其不再是一个 Continue Function，而是 Discrete-Time Signal
 
@@ -125,7 +125,7 @@ $$
 - 不同的 Number System 下，Digital Signal 的表示形式也将不一样
 - 其中 Binary Number System 是最常见的，其只有 0 和 1，也就是高电平和低电平
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - 这张图中，蓝色波形表示一个 binary digital signal 随时间的变化
 - 如果用 N binary digits, 表示模拟信号的每个采样值，那么数字化后的采样值可以写成：
@@ -206,13 +206,13 @@ $$
 
 ### 1.4.2 Amplifier Circuit Symbol
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 - 一个完整的 Amplifier 应如上图，存在一个 Input 和 Output，同时有 Ground
 
 ### 1.4.3 Voltage Gain
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 - 负载电阻：\\(R_L\\) （load resistance 负载电阻）
 - 放大器把输入信号放大，输出端得到放大的复制品。
@@ -281,7 +281,7 @@ $$
 
 - 已知 Amplifier 送到 Load 的功率比从 Signal Source 获得的功率大，而那一部分多余出来的功率就是从 DC Power Supplies 直流电源 中获取
 
-![image.png](image%208.png)
+![image.png](image8.png)
 
 - 其中正电源为 \\(V_{CC}\\)，负电源为 \\(V_{EE}\\)
 - 对于 Amplifier 来说，其存在两个端子，一个接 \\(V_{CC}\\)，一个接 \\(V_{EE}\\) 剩下的接地
@@ -314,7 +314,7 @@ $$
 
 ### 1.4.7 Amplifier Saturation
 
-![image.png](image%209.png)
+![image.png](image9.png)
 
 - Amplifier 在一定范围中是 Linear 的
 - 但是一旦输出过大或者过小，Output 的 Voltage 就会到达电源的极限，导致其无法再继续增加或减小，Saturation 就出现了
@@ -326,7 +326,7 @@ $$
 
 - Distortion 是一个非常宽泛的实践，其会发生在很多种不同的情况下，其中 Clipping 就是其中一种
 
-![image.png](image%2010.png)
+![image.png](image10.png)
 
 - 如图中，直线在途中说明的就是 Amplifier 的数学规律，即 Input 和 Output 的关系
 - 其在输入到达一定大小的时候会不再变化
@@ -342,7 +342,7 @@ $$
 
 ### 1.4.8 Symbol Convention
 
-![image.png](image%2011.png)
+![image.png](image11.png)
 
 - 电流 \\(i_C(t)\\) = total instantaneous current 总瞬时电流
 - 它由两部分组成：
@@ -370,7 +370,7 @@ $$
 
 - 一个 Voltage Amplifiers 如下图
 
-![image.png](image%2012.png)
+![image.png](image12.png)
 
 #### Voltage-Controlled Voltage Source
 
@@ -390,7 +390,7 @@ $$
 - 在介绍任何的 Circuit Element 之前，先来介绍一下 Voltage Source
 - 一个 Source 并不是 Ideal 的，即其自身也存在一个 内部的 Resistor
 
-![image.png](image%2013.png)
+![image.png](image13.png)
 
 - 于是这里就出现了第一个 Resistor \\(R_S\\)
 
@@ -445,7 +445,7 @@ $$
 - 如果 \\(R_o\\) 越小，输出电压就越接近理想值 \\(A_{vo} v_i\\)
 - 所以，好的电压放大器希望 **输出电阻尽可能小**
 
-![image.png](image%2014.png)
+![image.png](image14.png)
 
 - 再加上 Source 和 Load，整个 Circuit 就完成了
 - 接下来将两个 Voltage Divider 乘在一起就得到了完整的 Overall Voltage Gain
@@ -458,6 +458,6 @@ $$
 
 - 可以同时添加多个 Amplifiers ，计算他们的区别就是多了几个 Voltage Divider
 
-![image.png](image%2015.png)
+![image.png](image15.png)
 
-![image.png](image%2016.png)
+![image.png](image16.png)

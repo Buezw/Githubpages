@@ -191,11 +191,11 @@ int main(void){
 - 这时候一个 Pointer Variable `pNeuron` 被 Declare，但是还没有 Define，也就是指向了一个 Garbage Address，这时候 Pointer 本身是在 Stack 上的
 - 之后动态分配 pNeuron 的 Memory，也就是一个 `Neuron` 的大小的 Memory `pNeuron = (Neuron *)malloc(sizeof(Neuron));`
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 这时候 `pNeuron` 就指向了 Heap 上的新 Memory，或者说 `pNeuron` 作为 Pointer Variable，它的值为在 Heap 上的一个 Neuron 的地址
 - 之后再给 `pNeuron->input = 23.96` 赋值，这个操作对于 Dynamic 和 Static Memory 的作用是一样的，就有
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 最后 free 一下，就完成了一整个 Dynamic Memory Allocation 的过程

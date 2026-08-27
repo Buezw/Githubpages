@@ -43,7 +43,7 @@ $$
 
 In the figure the electric field lines on the left have twice the separation as those on the right. (a) If the magnitude of the field at A is 39 N/C, what is the magnitude of the force on a proton at A? (b) What is the magnitude of the field at B?
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 ## The Electric Field Due to a charged Particle
 
@@ -74,9 +74,9 @@ $$
 
 In the figure the four particles are fixed in place and have charges \\(q_1 = q_2 = 4e\\), \\(q_3 = 2e\\), and \\(q_4 = -8e\\). Distance d=4.75d = 4.75 µm. What is the magnitude of the net electric field at point P due to the particles?
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 ## A Point Charge in an Electric Field
 

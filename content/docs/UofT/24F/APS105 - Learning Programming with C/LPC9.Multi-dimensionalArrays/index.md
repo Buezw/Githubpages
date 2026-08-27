@@ -64,7 +64,7 @@ int main(void) {
 
 - 一般来说 Array 在内存中都是按照顺序依次储存的，对于 C 语言中的 Array 来说则是 Row Major 的，也就是 `[0][0],[0][1],[0][2]` 的顺序
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 同 1D 的 Pointer 一样，`array[0][0]` 都会指向第一个 Element 的 Pointer，也就是 Base Address，之后通过 `&myArray[i][j] = &myArray[0][0] + (i * number_of_columns + j) * sizeof(int);` 也就可以算出第 i 个元素的 Memory Address 了
 - 但是对于 2D Array 来说，它同时是指向第一个 Element 的 Pointer，也是指向第一行的，一般来说 `*myArray` 访问到 `[0][0]` 元素，相当属于是在访问 `*(myArray + 0)` ，而  `*(myArray + 1)` 则会直接访问到第二行
@@ -111,7 +111,7 @@ int** arr = (int**) malloc(3 * sizeof(int*));
 - 这个语句通过 `malloc` 函数分配了一个足够容纳三个 `int*` 指针的空间，每个指针将指向一个整数数组的首元素。这样，`arr` 就可以通过索引访问每一行的起始地址
 - 第二步是给每一行分配一个对应的一位数组
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 接下来就是给每一个 Element 赋值，用 Pointer 或者 Array 的访问方式都是可以的
 

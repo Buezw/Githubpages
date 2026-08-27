@@ -52,7 +52,7 @@ def corr2d_multi_in(X, K):
 
 - 一个 1x1 的 Convolution Layer 看上去啥也没干，这是因为这个 Layer 的功能不是提取特征，而是同于通道的变换和组合
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 一个 $3\times3\times3$ 的输入，$1\times2\times3$ 的 Kernel 也就做到了 Linear Algebra 中的 Projection
 - 所有它本质上就是一个矩阵的乘法，Linear Transformation，还是 Not Full Full Rank 的

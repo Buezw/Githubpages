@@ -22,17 +22,17 @@ showWordCount: true
 - 这是最基本的形式，即一个 Switch，在其为 0 的时候灯为关闭的，在其为 1 的时候则是开启的
 - 当把 Switch 添加到两个的时候，就会出现两种连接这两个 Switch 的方式，Series 和 Parallel，他们也将会产生不同的结果
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 在 Series 的时候，仅当 \\(x_1 =x_2 =1\\)  的时候 Light 是开的，同时也仅当 \\(x_1=x_2=0\\)  的时候 Light 是关的
 - 在 Parallel 的情况下则不同
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 当 \\(x_1 =1 | x_2=1\\)  的情况下，Light 都是开的，同时 \\(x_1 =x_2 =1\\)  的时候 Light 也是开的
 - 上面介绍了 Series 和 Parallel 的两种情况，同时也存在一种情况即两个同时出现，叫做 Series - Parallel Connection
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - 如上图，Light 亮的情况下，需要 \\(x_3= 1\\) 的前提下，\\(x_2\\) 和 \\(x_1\\)  中起码有一个为 1
 
@@ -62,7 +62,7 @@ $$
 - 到目前已经介绍了三种最基本的逻辑运算，AND，OR 和 Complement，这些运算也可以通过 Table 的方式定义，具体方式是列出所有的可能性
 - 这个 Table 则被称为 Truth Table
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 - 在少数变量的时候可以被很方便的列出来，但是一旦 Variable 数量增加后，表格的规模会 Exponentially Ascend
 
@@ -72,17 +72,17 @@ $$
 - 每个逻辑运算都可以用 Transistors 晶体管 来实现，这样得到的电路元件叫做 **logic gate逻辑门**
 - 一个逻辑门有一个或多个输入和一个输出，输出是输入的函数
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - 上面的三个就是 Logic Gate 的 Schematic Diagram 原理图
 - 注意到其中的符号 \\(\cdot\\), + 等，正如上面所提到的，一个 Logic Gate 存在多个 Input 和一个 Output
 - 重新拿到之前的 Series-Parallel Connection
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - 这个 Circuit Diagram 被画成 Schematic Diagram 后就是先是一个 OR Gate 后接一个 AND Gate
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 ### 2.4.1 Analysis of A logic Network
 
@@ -104,7 +104,7 @@ $$
 - 其他情况下 L = 0
 - 想要分析一个新的 Logic Circuit，第一步就是列出 Truth Table
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 - 在这种情况下分析灯亮的两种情况，即 \\(\overline XY+X\overline Y\\)
 
@@ -112,7 +112,7 @@ $$
 > 
 - 于是就得到了最简单的 Function 形式
 
-![image.png](image%208.png)
+![image.png](image8.png)
 
 - 画成 Schematic Diagram 就是图 C 的样子
 - 由于这是一个很常见的 XOR，所以单独为他设计了一个 Gate Symbol，即图 D
@@ -124,11 +124,11 @@ $$
 - 当 3 个传感器中存在**两个以上**的 0 的时候，R = 1，即不通过
 - 正如前面提到的，分析 Function 的第一步就是 Truth Table
 
-![image.png](image%209.png)
+![image.png](image9.png)
 
 - 本例子中的 Truth Table 应该长这样，分析其中 R = 1 时候的情况，可以得到
 
-![image.png](image%2010.png)
+![image.png](image10.png)
 
 - 这里的关键就在于，+ 并不是再 Add，而是表示 OR
 - 但是两个 OR 是可以相互组合的，比如 \\(\overline s_0\overline s_1 \overline s_2\\) 在这里就非常重要，因为它能和剩下的三个依次组合，完成化简
@@ -138,7 +138,7 @@ $$
 
 - Timing Diagram 表示的是和 Truth Table 一样的信息，即在不同的信号下 Digit 的变化
 
-![image.png](image%2011.png)
+![image.png](image11.png)
 
 - 上图就是 Exclusive OR（XOR）的 Timing Diagram
 
@@ -146,7 +146,7 @@ $$
 
 - Algebra 从 Axioms（公理）出发，他们是一套系统最初的假设，不需要证明就接受的命题
 
-![image.png](image%2012.png)
+![image.png](image12.png)
 
 - \\(\cdot\\)  代表了 AND，0 和 0 做 AND，结果是 0，等
 - 这几个就是最基本的 Boolean Algebra
@@ -160,7 +160,7 @@ $$
 
 - 在 Axioms 之上，可以总结出存在关于 Single Boolean Variable  的推论
 
-![image.png](image%2013.png)
+![image.png](image13.png)
 
 - 他们同样有自己的 Axioms
 
@@ -168,13 +168,13 @@ $$
 
 - 当处理两个或三个变量时也存在 Identities，常见的就是 Commutative, Associative 等
 
-![image.png](image%2014.png)
+![image.png](image14.png)
 
 ![image.png](5ae18af9-6b5b-4eb4-9575-26b311f195d6.png)
 
 ### 2.5.1 Venn Diagram
 
-![image.png](image%2015.png)
+![image.png](image15.png)
 
 - 通过 Shaded Area 表示 Set
 
@@ -182,7 +182,7 @@ $$
 
 - 第一种证法就是通过 Truth Table，这里主要讲的是 Venn Diagram
 
-![image.png](image%2016.png)
+![image.png](image16.png)
 
 ### 2.5.2 Notation and Terminology
 
@@ -222,7 +222,7 @@ $$
 - 同理：A Sum term that correspond to a row of a truth table
 - 他是输出为 0 时的条件表达，所以当存在任何一个 1 的时候，都要对他取 Complement
 
-![image.png](image%2017.png)
+![image.png](image17.png)
 
 #### Cononical SoP
 

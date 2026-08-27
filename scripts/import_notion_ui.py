@@ -458,8 +458,12 @@ def run_import(export_dir, dest_dir, tags, title, series, clean):
         asset_dir = subdirs[0] if len(subdirs) == 1 else None
 
     body = importer.strip_meta_lines(text)
+    rename_map = {}
     if asset_dir is not None:
         body = importer.rewrite_image_links(body, asset_dir.name)
+        rename_map = importer.build_rename_map(asset_dir)
+        if rename_map:
+            body = importer.apply_filename_renames(body, rename_map)
     body = importer.escape_math_asterisks(body)
     body = importer.collapse_math_blank_lines(body)
 
@@ -486,8 +490,9 @@ def run_import(export_dir, dest_dir, tags, title, series, clean):
         import shutil
         for f in asset_dir.iterdir():
             if f.is_file():
-                shutil.copy2(f, dest_dir / f.name)
-                copied.append(f.name)
+                dest_name = rename_map.get(f.name, f.name)
+                shutil.copy2(f, dest_dir / dest_name)
+                copied.append(dest_name)
 
     print(f"标题：{final_title}")
     print(f"日期：{date.strftime('%Y-%m-%d')}（Last Edit: {last_edit}）")

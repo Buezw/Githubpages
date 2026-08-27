@@ -35,7 +35,7 @@ $$
 
 - 现在有以下 Circuit
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - Voltage 即 Potential Difference 是一个参考量，即根据参考点的不同具有不同的数据，图中的 4 V 和 -2 V 即为相较于 Ground 也就是 0 V 参考的
 - 而 Current 的 Direction 又和 Fragment 两端的 Node 的 Potential Difference 有关，呈现出的规律为 Current Will flow from higher to lower potential
@@ -45,7 +45,7 @@ $$
 
 - 在没有 Voltage Source 而是 Current Source 的时候，Circuit 的行为主要由 Current Source 驱动，而不是 Voltage Source
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 上图中即存在两个 Current Source，\\(i_A\\)  和 \\(i_B\\)
 - 而对于 Node 来说，Node 1 根据 KCL 有 \\(i_A=i_1+i_2\\)，Node 2 有 \\(i_2=i_B+i_3\\)

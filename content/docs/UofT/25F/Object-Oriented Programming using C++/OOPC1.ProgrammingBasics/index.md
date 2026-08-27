@@ -369,11 +369,11 @@ void swapByPointers(int* pa, int* pb) {
 
 - 用图片表现出来就是
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 首先有 a 和 b 的两个 Variables，其中 `a = 5, b = 10` ，他们的 Pointer 也被分别传入了 function
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 注意这时候函数内的 `pa`  和 `pb`  皆为 Address，然后通过 `*`  可以完成解引用
 - 也就是说，`*pa`  是 5，而 `int temp = *pa` 就是令 `temp = 5`
@@ -541,7 +541,7 @@ int userInputNum() {
 - 由于 `printNum` 使用了 `cout`，所以还要 `#include <iostream>` 和 `using namespace std;`
 - `input.cpp` 同理，需要 `#include "input.h"`，再加上 `iostream` 和 `using namespace std;`，因为它用到了 `cin` 和 `cout`
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - 于是最终所有的文件长这样
 
@@ -568,7 +568,7 @@ g++ main.cpp print.cpp input.cpp -o main
     - 链接器会找到 `print.o`、`input.o` 里的函数实现，把它们和 `main.o` 拼接在一起
     - 生成的 `main` 可执行文件就能运行
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 #### **1.5.2.1. Separate Compilation**
 
@@ -640,7 +640,7 @@ g++ main.o print.o input.o -o main
 - 结果：`struct A` 被定义了两次，编译报错 **duplicate definition（重复定义）**
     
     
-    ![image.png](image%205.png)
+    ![image.png](image5.png)
     
 
 #### Header Guards（头文件保护）

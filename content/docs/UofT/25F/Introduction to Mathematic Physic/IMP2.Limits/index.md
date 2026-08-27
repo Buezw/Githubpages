@@ -49,7 +49,7 @@ $$
 
 - 想要描述 Limit 的存在的核心条件，需要构建一个圆盘区域，中心是 \\(P_0\\)，几条曲线上的点 P 向 \\(P_0\\) 靠近
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 当点 P 沿着定义域里的所有路径趋近于 \\(P_0\\) 时，\\(f(x,y)\\) 趋于 L
 - **Limit exists if the limit is the same for all possible paths（极限存在当且仅当所有可能路径得到的极限相同）**
@@ -58,7 +58,7 @@ $$
 
 - 区域：粉色区域是集合 R
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 点 Q：在边界上
 - **Q is a boundary point（边界点）**：Every disk centered at Q contains points in R and points not in R（以 Q 为圆心的任何小圆盘，都会同时包含在 R 内的点和不在 R 内的点）
@@ -71,7 +71,7 @@ $$
 - **Solid red contour（实红线）= closed set（闭集）**
 - **Dashed red contour（虚红线）= open set（开集）**
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - 点 P 必须沿着定义域 D 内所有路径趋近于 \\(P_0\\)
 - **Limit exists if the limit is the same for all possible paths that reside within the region/domain（极限存在当且仅当所有在区域/定义域内的路径极限相同）**
@@ -298,7 +298,7 @@ $$
 
 - 如同前面对于 \\(y=mx\\) 替换方式的解释，在不同方向上存在不同的 limit 值，则极限不存在
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 ### Continuity
 
@@ -373,7 +373,7 @@ $$
 > 
 - 所以可以得到这个 Function 最后在 \\((0,0)\\) 位置上的 Limit DNE
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 #### Continuity of Composite Functions
 
@@ -472,7 +472,7 @@ $$
 
 </aside>
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 ##### Ex. Calculate PD using Definition
 
@@ -700,7 +700,7 @@ $$
 
 - \\(E_d = f(x,y) - L_{a,b}(x,y)\\)，表示函数值与切平面之间的 Vertical distance
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 - 意思是说：如果函数和切平面的偏差，比两点间的水平距离更快趋近于 0，那么函数在该点可微。
 - 如果偏导不存在，或极限不是 0 → 就不可微

@@ -92,6 +92,52 @@ def rewrite_image_links(text, asset_dirname):
     return IMG_RE.sub(repl, text)
 
 
+def sanitize_filename(name):
+    stem_ext = name.rsplit(".", 1)
+    stem, ext = (stem_ext[0], "." + stem_ext[1]) if len(stem_ext) == 2 else (name, "")
+    return re.sub(r"\s+", "", stem) + ext
+
+
+def build_rename_map(asset_dir):
+    """Map on-disk filenames with spaces to a space-free, collision-safe name.
+
+    Hugo's Resources.GetMatch() matches literal filenames, but markdown links
+    percent-encode spaces (%20), so "image 1.png" never matches "image%201.png"
+    in the link. Blowfish's render hook then falls back to an unprocessed
+    <img>, skipping the .Resize()/srcset pipeline that normalizes every other
+    image to a consistent display width -- the imported page ends up with
+    wildly inconsistent image sizes. See scripts/fix_image_spaces.py, which
+    applies this same fix retroactively across the whole site."""
+    existing = {f.name for f in asset_dir.iterdir() if f.is_file()}
+    taken = set(existing)
+    rename_map = {}
+    for name in sorted(existing):
+        if " " not in name:
+            continue
+        new_name = sanitize_filename(name)
+        if new_name in taken and new_name != name:
+            stem_ext = new_name.rsplit(".", 1)
+            stem, ext = (stem_ext[0], "." + stem_ext[1]) if len(stem_ext) == 2 else (new_name, "")
+            n = 2
+            while f"{stem}-{n}{ext}" in taken:
+                n += 1
+            new_name = f"{stem}-{n}{ext}"
+        taken.add(new_name)
+        rename_map[name] = new_name
+    return rename_map
+
+
+def apply_filename_renames(text, rename_map):
+    def repl(match):
+        pre, path, post = match.groups()
+        decoded = path.replace("%20", " ")
+        if decoded in rename_map:
+            path = rename_map[decoded]
+        return f"{pre}{path}{post}"
+
+    return IMG_RE.sub(repl, text)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("export_dir", type=Path, help="Notion export folder (contains the .md file and image subfolder)")
@@ -134,8 +180,12 @@ def main():
         asset_dir = subdirs[0] if len(subdirs) == 1 else None
 
     body = strip_meta_lines(text)
+    rename_map = {}
     if asset_dir is not None:
         body = rewrite_image_links(body, asset_dir.name)
+        rename_map = build_rename_map(asset_dir)
+        if rename_map:
+            body = apply_filename_renames(body, rename_map)
     body = escape_math_asterisks(body)
     body = collapse_math_blank_lines(body)
 
@@ -162,8 +212,9 @@ def main():
     if asset_dir is not None:
         for f in asset_dir.iterdir():
             if f.is_file():
-                shutil.copy2(f, dest_dir / f.name)
-                copied.append(f.name)
+                dest_name = rename_map.get(f.name, f.name)
+                shutil.copy2(f, dest_dir / dest_name)
+                copied.append(dest_name)
 
     print(f"Title:   {title}")
     print(f"Date:    {date.strftime('%Y-%m-%d')} (Last Edit: {last_edit})")

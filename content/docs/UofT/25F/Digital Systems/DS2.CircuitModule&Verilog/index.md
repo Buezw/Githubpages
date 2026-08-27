@@ -22,20 +22,20 @@ showWordCount: true
 
 - 先 OR 再 NOT，写作 \\(\overline{A+B}\\)
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 > 在实际制造中：NAND 和 NOR 门的晶体管布线最简单，这两个也是现实唯二的 Logic Gate
 > 
 
 ### Multiplexer
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - Multiplexer, is used as a **selector** that S’s status can determine the output
 - In case when \\(s=0\\), then output is whatever \\(x_1\\)’s value
 - When \\(s=1\\), output is whatever \\(x_2\\)’s value
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - Thus it has the logic of \\(f=\overline sx+sy\\)
 
@@ -133,12 +133,12 @@ h4|    |h2
     h3
 ```
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 - With 7 h, each controls one bar, and by setting them in correct, it can show number 0 - 9
 - As said, before analyzing the Logic Function, always use Truth Table first
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - This circuit is a 2 digit input (Four decimal numbers) input and 7 digit output function
 - Its truth table can be above
@@ -170,7 +170,7 @@ Top Level Module is like a `main` file that connect everything
 
 In this case, we created two two digit inputs, and use a multiplexer to choose one to display on HEX by 7 Segment Decoder, so its a circuit look like 
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 - We have done with the multiplexer, the 7 Segment Decoder, now need to connect them
 

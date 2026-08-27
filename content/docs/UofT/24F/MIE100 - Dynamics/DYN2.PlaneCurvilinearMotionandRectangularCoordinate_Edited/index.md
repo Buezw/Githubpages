@@ -56,7 +56,7 @@ $$
 \vec{r} = x\hat{i} + y\hat{j} + z\hat{k},|\vec{r}| = \sqrt{x^2 + y^2 + z^2}
 $$
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 ### Velocity
 

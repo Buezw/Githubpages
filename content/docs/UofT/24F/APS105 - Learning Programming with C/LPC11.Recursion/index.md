@@ -102,7 +102,7 @@ int factorial(int n) {
 - Recursion 是用来解决具有规律结构的问题的
 - 重新拿回之前的打印 `*` 的代码，如果最终的目标是打印 n 个 `*` ，那将其拆分成子任务就变成了打印一个，之后在打印 n - 1 个，最终在 `n == 1` 的时候为 End Case
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 ## 11.2.2 Print a Triangle of Stars
 

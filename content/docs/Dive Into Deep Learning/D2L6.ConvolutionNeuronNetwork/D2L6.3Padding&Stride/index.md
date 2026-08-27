@@ -54,7 +54,7 @@ comp_conv2d(conv2d, X).shape
 - 在默认的互相关运算中，默认 Kernel 是一个个元素滑动的，但是有的时候是可以跳过的
 - 将每一次滑动的元素的数量称为 Stride 步幅
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 上图为一个垂直步幅 3，水平步幅 2 的互相关运算
 - 一个垂直步幅为 h，水平步幅为 w 的互相关运算的输出形状为

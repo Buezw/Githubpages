@@ -444,21 +444,21 @@ $$
 
 - Critical Point 出现在 x = 0 和 4 的位置
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 ## Stability of Critical Points
 
 ### Stable Point
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 ### Unstable Point
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 ### Semi-Stable Point
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 ---
 
@@ -500,7 +500,7 @@ $$
 L = a_n(x) \frac{d^n}{dx^n} + a_{n-1}(x) \frac{d^{n-1}}{dx^{n-1}} + \cdots + a_1(x) \frac{d}{dx} + a_0(x)
 $$
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 #### Ex1. Find Linear Differential Operator L
 
@@ -630,7 +630,7 @@ Are functions \\(\{1 - 3x + 2x², 1 - x + x², 1 + x\}\\) linearly independent?
 
 ---
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 #### Ex2. Finding the Linear Independency of function
 
@@ -638,7 +638,7 @@ Are functions \\(\{e^x, xe^x, x²e^x\}\\) linearly independent?\
 
 ---
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 ## How to check if n functions are independent?
 
@@ -935,7 +935,7 @@ The function is \\(y''+4y'+4y=0\\),  \\(y_1(x) = e^{-2x}\\)
 
 ---
 
-![image.png](image%208.png)
+![image.png](image8.png)
 
 ## Find the fundamental set of solutions for Higher Order Homo Linear DE
 
@@ -1153,7 +1153,7 @@ Having the function \\(y'' - 3y' + 2y = e^{x}\\)
 
 ---
 
-![image.png](image%209.png)
+![image.png](image9.png)
 
 ### Variation of Parameters
 
@@ -1281,7 +1281,7 @@ We have the function \\(y'' - 2y' + y = \frac{e^t}{1+t^2}\\)
 
 ---
 
-![image.png](image%2010.png)
+![image.png](image10.png)
 
 ---
 

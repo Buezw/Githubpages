@@ -126,7 +126,7 @@ $$
 
 - 假设有一个 \\(z = a + bi\\)，What is the geometric interpretation of  \\(\overline z\\)  and \\(\frac1z\\)
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - 根据上面 Polar Form 中得到的结论可以看出，Conjugate 和 Reciprocal 的 Mod 和 Argument
 
@@ -134,7 +134,7 @@ $$
 
 - 当一个 Complex Number 乘上一个 Imaginary Number i 的时候，本质上就是将其 Polar Form 的图案 CCW 移动了 90 Degree
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 同时，当两个 Complex Number 互乘的时候，他们的结果如下
 
@@ -155,7 +155,7 @@ $$
 
 - 注意到 \\(\sin\\) 和 \\(\cos\\) 的位置不对，通过三角公式可以变换求得 \\(\theta\\)
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 #### Principle Argument
 
@@ -167,7 +167,7 @@ $$
 
 #### Ex.
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 ## Complex Exponential
 
@@ -407,7 +407,7 @@ $$
 
 ### Ex.
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - B 和 C 正确没什么特别的，对于 E 来说 \\(\frac{3\pi}{4}=-\frac{5\pi}{4}\\) 也没问题
 - 对于 F 来说就是多了一个 \\(2\pi\\)，也没问题
@@ -480,7 +480,7 @@ $$
 w = e^{i(\pi/2 + 2k\pi)/2}, \quad k=0,1\Rightarrow w_1 = e^{i\pi/4}, \quad w_2 = e^{i(5\pi/4)}
 $$
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 - 在图上，两个根分布在圆上，相隔 \\(\pi\\)（180°）
 
@@ -520,7 +520,7 @@ $$
 > 上面的意思就是，给定一个 \\(Z\in \mathbb C\\)，\\(\ln(Z)\\) 存在无数个 Periodic Solutions
 > 
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 - 其中每一个 Solution 之间间隔 \\(2\pi\\)
 
@@ -606,7 +606,7 @@ $$
 
 - 用图表示这个解就是
 
-![image.png](image%208.png)
+![image.png](image8.png)
 
 - 用图画出所有解在复平面上的位置就有，将 Real Part 固定：\\(\log_e \sqrt{2}\\)，将 Imagery Part 周期性上移：\\(\frac{\pi}{4} + 2\pi k\\)
 - 最终得到一条沿虚轴等间距排列的点列
@@ -760,7 +760,7 @@ $$
 \sinh(x) = \frac{e^x - e^{-x}}{2}, \quad\cosh(x) = \frac{e^x + e^{-x}}{2}
 $$
 
-![image.png](image%209.png)
+![image.png](image9.png)
 
 - 同理，Complex Number 下的 \\(\sinh z\\) 就是把 z 先带入
 
@@ -1045,7 +1045,7 @@ $$
 
 - 所以最终得出 \\(\sinh(z)\\) 和 \\(\cosh(z)\\)  的周期是 **\\(2\pi i\\)**
 
-![image.png](image%2010.png)
+![image.png](image10.png)
 
 - 还有很多和 Real Number 中相同的结论
 

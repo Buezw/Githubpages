@@ -30,13 +30,13 @@ Consider a cylinder of radius R in a uniform electric field with axis parallel t
 
 ![EF3.Gauss'Law-1.png](EF3.GaussLaw-1.png)
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 # Gauss's Law
 
 - Consider a particle with charge +q is surrounded by an imaginary concentric sphere
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 > 这是一个 Gauss‘ Law 的 Special Case
 > 
@@ -56,7 +56,7 @@ $$
 
 Consider two charges with opposite signs and equal magnitude (+q and –q). Determine the electric flux of the four Gaussian surfaces are shown below:
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 - S1：q 是一个 Positive Charge，是一个 Positive Number
 - S2：q 是一个 Negative Charge，是 Negative
@@ -68,14 +68,14 @@ Consider two charges with opposite signs and equal magnitude (+q and –q). Dete
 - 孤立导体上，所有额外的电荷都会移动到导体的表面，导体内部不会有多余电荷
 - 这是因为导体内部的电荷会通过相互作用重新分布，直到内部电场为零，从而达到静电平衡
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 - 同理如果里面出现了一个 Cavity，其也不会存在电荷
 - 当 Conductor 不是一个光滑的 Spherical 的情况下，电荷并不会均匀的分布在表面上，而是受到曲率的影响，导致尖锐的部分会拥有更多的电荷密度
 
 ## The External Electric Field
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - 对于一个贴着 Conductor 的 Gaussian Surface，由于 Conductor 内部 Electric Field 为 0，所以只考虑外部的通量
 

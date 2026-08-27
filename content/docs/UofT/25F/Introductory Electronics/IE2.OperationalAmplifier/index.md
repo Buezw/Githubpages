@@ -22,7 +22,7 @@ summary:
 - 而 3 则是输出 Output
 - 为了让 Op AMP 工作，需要接入两个 DC Power Supply
 
-![image.png](image%201.png)
+![image.png](image1.png)
 
 - Op AMP 的特点是，其是一个 Semi-custom Design，即它是以一个部分完成的通用放大模块
 - 可以根据需要来定制它的功能，比如：反向放大，积分器，比较器等
@@ -41,14 +41,14 @@ $$
 > 具体原因后面会进一步说明
 > 
 
-![image.png](image%202.png)
+![image.png](image2.png)
 
 - 目前的情况下，三个 Signal（两个 Input 和一个 Output）是独立的
 - 这种情况下由于 \\(A_{v0}\\) 是一个非常大的值，来到了 \\(10e5\\) 的级别
 - 在 V1 和 V2 的数值有一点点细小的变化的时候，Output 会马上来到 Saturation 饱和阶段
 - 所以在没有 Feedback 之前，这个 Op AMP 只适合做一个 Comparator 比较器
 
-![image.png](image%203.png)
+![image.png](image3.png)
 
 ### Ideal v.s. Discrete
 
@@ -89,7 +89,7 @@ $$
 
 ### 1. **Non-inverting Op Amp（同相放大器）**
 
-![image.png](image%204.png)
+![image.png](image4.png)
 
 - 输入电压 \\(v_i\\) 接在 **+ 端**，所以这个 Op AMP 是一个 Noninverting input
 - 负反馈电阻 \\(R_1\\) 和 \\(R_2\\) 组成一个分压器，从输出 \\(v_o\\) 接回 **– 端**
@@ -105,7 +105,7 @@ $$
 
 ### 2. **Inverting Op Amp（反相放大器）**
 
-![image.png](image%205.png)
+![image.png](image5.png)
 
 - 在这个例子下，Signal \\(v_i\\) 从负端进入，即是一个 Inverting
 - 输入 \\(v_i\\) 接到 **– 端**，通过电阻 R1
@@ -120,7 +120,7 @@ $$
 
 ### 3. **Unit-gain Buffer（电压跟随器）**
 
-![image.png](image%206.png)
+![image.png](image6.png)
 
 - 输入 \\(v_i\\) 接在 + 端
 - 输出端直接连接到 – 端（无电阻）
@@ -151,7 +151,7 @@ $$
 - 左边 \\(V_{\text{sig}}\\) 不会被拉低的同时右边负载 \\(R_L\\) 也不会拉低输出
 - 整体结构就来到了这样
 
-![image.png](image%207.png)
+![image.png](image7.png)
 
 - 有 \\(V_{\text{out}} \approx V_o \approx V_{\text{sig}}\\)
 - 具体原理如下，由于 Buffer 有一个很大的 \\(R_{in}\\)，所以有
@@ -168,7 +168,7 @@ $$
 
 - 在这用情况下，Input 的 Signal 就几乎等同于 Output 的了
 
-![image.png](image%208.png)
+![image.png](image8.png)
 
 > 不知道这张图在干什么
 > 
@@ -255,7 +255,7 @@ Resistor, Inductor, Capacitor 都能看作是阻抗：\\(Z = R + jX\\)
 
 </aside>
 
-![image.png](image%209.png)
+![image.png](image9.png)
 
 - 于是就可以得到这样的一个 Circuit，其和之前的 Op amp 分析起来并没有区别
 - 可以很容易的看出这是一个 Inverting AMP，其 Gian 为
@@ -318,7 +318,7 @@ $$
 - 现在就可以开始分析 Miller Integrator 在 Time Domain 下的表现了
 - 假设目前先只给了一个 DC 的 \\(v_{i}\\)（方便展示 Integrate 的效果）
 
-![image.png](image%2010.png)
+![image.png](image10.png)
 
 - 可以同步得到 Input Current 为 \\(i = v_i / R_1\\)
 - 之后，这个突然出现的冲击 Current 将碰到 Capacitor，最后 \\(v_o\\)  变化的斜率将由 C 决定
@@ -345,13 +345,13 @@ $$
 v_o = -\frac{V_i}{R_1 C} t
 $$
 
-![image.png](image%2011.png)
+![image.png](image11.png)
 
 - 于是最终 Time Domain 就长这样
 
 #### Differentiator
 
-![image.png](image%2012.png)
+![image.png](image12.png)
 
 - 将 Integrator 的 C 的位置换一下就是 Differentiator 了
 - 能看出这是一个 Inverting Gain，大小为
@@ -366,7 +366,7 @@ $$
 \frac{v_o}{v_i} = -j \omega R_1 C_1
 $$
 
-![image.png](image%2013.png)
+![image.png](image13.png)
 
 <aside>
 💡
@@ -383,7 +383,7 @@ $$
 
 #### Summing Circuit
 
-![image.png](image%2014.png)
+![image.png](image14.png)
 
 - Summing Circuit 中，两个输入电压：\\(v_1, v_2\\)，分别通过电阻 \\(R_1, R_2\\) 接到运放反相端
 - 运放的反馈电阻是 \\(R_F\\)，所以这是一个 Inverting Op amp
@@ -417,7 +417,7 @@ $$
 
 #### Difference Amplifier
 
-![image.png](image%2015.png)
+![image.png](image15.png)
 
 - 同样有两个 Input，不过两个接入的位置为一正一负
 - 分析两个端口电压，对于 \\(v_+\\) 端来说，其电压为
@@ -464,7 +464,7 @@ $$
     
 - 想要分析 Difference Op amp 还能通过 Superposition 的办法，分别分析两个 Input Voltage
 
-![image.png](image%2016.png)
+![image.png](image16.png)
 
 - 可以看出，左边的就是一个 Typical Inverting Op amp
 - 而右边的则是一个 Typical Noninverting Op amp，不过它的 Input Voltage 有一点不同，是 \\(\frac{R_4}{R_3+R_4}v_2\\)，是一个被分压后的值
@@ -501,11 +501,11 @@ $$
 
 - 当存在多个 Op amp 串联的情况的时候，将他们的 Gain 乘上就是 Overall Gain
 
-![image.png](image%2017.png)
+![image.png](image17.png)
 
 ### **Instrumentation Amplifier (an improved difference amplifier)**
 
-![image.png](image%2018.png)
+![image.png](image18.png)
 
 - **Instrumentation Amplifier（仪表放大器）**，它是一种 I**mproved difference amplifier 改进型差分放大器**
 - 其由三个 Op amp 组成，前面有两个 Noninverting 的作为输入
@@ -546,15 +546,15 @@ $$
 
 - 源于制造过程中的不对称性
 
-![image.png](image%2019.png)
+![image.png](image19.png)
 
 - 已知一个标准 OP amp 在当 \\(V_2=V_1\\)  的时候，输出 \\(V_0  = 0\\)，但是现实中的 Op amp 更像是加上了一个 Input Offset Voltage
 
-![image.png](image%2020.png)
+![image.png](image20.png)
 
 - 于是他就导致了 Output \\(V_o\\)  和 \\(V_2-V_1\\)  之间产生了 Bias，不再是 Linear 的了
 
-![image.png](image%2021.png)
+![image.png](image21.png)
 
 ### Effect of  \\(V_{OS}\\)  on Amplifier
 
@@ -562,7 +562,7 @@ $$
 
 #### Non-Inverting conf.
 
-![image.png](image%2022.png)
+![image.png](image22.png)
 
 - 对于 Non-Inverting 来说，\\(V_{OS}\\)  就是一个和 \\(V_{in}\\) 被加在一块的 Input
 - 所以整体这个 Op amp 产生的 output 将是
@@ -576,12 +576,12 @@ $$
 
 #### **Inverting conf.**
 
-![image.png](image%2023.png)
+![image.png](image23.png)
 
 - 这次，\\(V_{in}\\) 来到了 Negative 端，而 Virtual Short 只会发生在离 Positive 端最近的旁边一个点上
 - 这就导致一个 Extra Voltage 在 Positive 端的进入，可以通过 Superposition 来分析，有
 
-![image.png](image%2024.png)
+![image.png](image24.png)
 
 - Superposition 将 Inverting Conf. 分为了一个 Non-Inverting + 一个 Inverting 的 Conf.
 - 左图中 \\(V_{out}' = -\frac{R_2}{R_1} V_{in}\\)，右图中 \\(V_{out}'' = \left(1 + \frac{R_2}{R_1}\right) V_{OS}\\)
@@ -595,13 +595,13 @@ $$
 
 - 通过在 \\(R_{in}\\) 和 \\(v_{in}\\) 中串联一个 Capacitor
 
-![image.png](image%2025.png)
+![image.png](image25.png)
 
 - 这个 Capacitor 会阻断直流，即不能让偏移电压直接传到电路中
 - 所以虽然有 \\(V_{OS}\\)，但它不会完全被放大到输出端
 - 来分析一下这个 Capacitor 具体会干什么，先将 \\(V_{in}\\) 设为 0，单独拿出 \\(V_{OS}\\) 分析
 
-![image.png](image%2026.png)
+![image.png](image26.png)
 
 - 在只有 \\(V_{OS}\\) 的情况下，Virtual Short 导致了 Negative 端电压也是 \\(V_{OS}\\)
 - 但是由于 \\(V_{OS}\\) 是一个 Dircet Current，它无法进入 Capcitor
@@ -623,7 +623,7 @@ $$
 
 - 当尝试分析之前的 Miller Integrator 时
 
-![image.png](image%2027.png)
+![image.png](image27.png)
 
 - 并没有考虑到可能出现的 DC Imperfection 可能造成的影响
 - 而实际上，当多出了一个 \\(V_{OS}\\) 的情况下，会使得另一端出现 Imperfection，导致
@@ -644,7 +644,7 @@ $$
 > 
 - 加了 \\(R_2\\) 以后，这个 DC 电流可以**改走 \\(R_2\\) 路径**，而不是一直积累在电容上
 
-![image.png](image%2028.png)
+![image.png](image28.png)
 
 - 于是最终 \\(V_{\text{out}}\\) 会有一个有限的、稳定的直流偏移（offset），而不是无限上升；
 - 在没有 \\(R_2\\) 的时候，Miller Integrator 的 Gain 为
@@ -656,7 +656,7 @@ $$
 - 这就是一个是一个 Ideal integrator 的 Gain
 - 但是由于多了一个 DC Imperfection \\(\omega = 0\\)，可以观察 Gain 发现，在 \\(\omega\\)  为 0 的时候，Gain 直接 Diverge 了
 
-![image.png](image%2029.png)
+![image.png](image29.png)
 
 - 接下去分析有了 \\(R_2\\) 的情况，新的传递函数变成：
 
@@ -666,7 +666,7 @@ $$
 
 - Frequency Domain 也变成了
 
-![image.png](image%2030.png)
+![image.png](image30.png)
 
 - 将 Gain Function 取模
 
@@ -691,13 +691,13 @@ $$
 
 ### Time Domain
 
-![image.png](image%2031.png)
+![image.png](image31.png)
 
 - 当一个最普通的方波输出 \\(V_{in}\\) 进入
 
 #### Miller Integrator
 
-![image.png](image%2032.png)
+![image.png](image32.png)
 
 - **0 < t < T：**
     - 理想积分器，输出是对输入常数 \\(V_{in}\\) 的积分
@@ -742,7 +742,7 @@ $$
     - \\(I_{B1} \approx I_{B2} \approx 100 \, \text{nA}\\)
     - \\(I_{OS} = |I_{B2} - I_{B1}| \approx 10 \, \text{nA}\\)（**输入失调电流**）
 
-![image.png](image%2033.png)
+![image.png](image33.png)
 
 - 将两个 Input Voltage 都 Grounded（0V），但是由于有 \\(I_{B1}\\) 流过反馈电阻 \\(R_2\\)，导致输出电压不为 0
     
@@ -760,13 +760,13 @@ $$
 
 - 这个东西同样也有解决方案，就是在 Positive Input 端 Parallel 一个 Resistor \\(R_1 \parallel R_2\\)
 
-![image.png](image%2034.png)
+![image.png](image34.png)
 
 ### Superposition
 
 \\(I_{B1}\\)
 
-![image.png](image%2035.png)
+![image.png](image35.png)
 
 - 运放正输入端接地（0V）
 - 输出产生：
@@ -778,7 +778,7 @@ $$
 
 #### \\(I_{B2}\\)
 
-![image.png](image%2036.png)
+![image.png](image36.png)
 
 - 在正输入端加了一个等效电阻 \\(R_1 \parallel R_2\\)
 - 这个电流通过该电阻向下流，并造成输出扰动：
@@ -803,7 +803,7 @@ $$
 
 ### Biased Current in Miller Integrator
 
-![image.png](image%2037.png)
+![image.png](image37.png)
 
 - 一标准的积分器结构：反馈路径是电容 \\(C_1\\)，但现在多了 \\(I_{B1}, I_{B2}\\)
 - 输入端接地，但 \\(I_{B1}\\) 没有其他去路，只能穿过电容 **\\(C_1\\)**
@@ -821,16 +821,16 @@ The Op-amp has some Limitation under large signals, those are basically
 
 ### Output voltage saturation
 
-![image.png](image%2038.png)
+![image.png](image38.png)
 
 - The graph above is an example of Non-Inverting Amplifier
 - As the Vcc are 15v, which means that the output voltage can’t be bigger than 15v in this case
 
-![image.png](image%2039.png)
+![image.png](image39.png)
 
 - And the part which is out of range will then be **Saturation**
 
-![image.png](image%2040.png)
+![image.png](image40.png)
 
 - By analyzing the waveform, we can find out that the part bigger than 13v (usually 1 or 2 v from railing) will be clipping
 
@@ -840,11 +840,11 @@ We have a 1 v peak to peak sin function input, with \\(R_1=1k\\), \\(R_2 = 19k\\
 
 ---
 
-![image.png](image%2041.png)
+![image.png](image41.png)
 
 ### Output Current Limit
 
-![image.png](image%2042.png)
+![image.png](image42.png)
 
 - Using this circuit, there’s a speaker load with \\(8\Omega\\), and the op-amp we are using is called the 741 Op-amp, its limited current output should be \\(20mA\\)
 - Let’s assume that this buffer has \\(v_i = 1V\\), the ideal output should also be \\(v_o=1V\\)
@@ -859,18 +859,18 @@ $$
 SR = \left( \frac{dV_o(t)}{dt} \right)_{max}
 $$
 
-![image.png](image%2043.png)
+![image.png](image43.png)
 
 - This graph describe the highest amount of change the output can have, thus if the blue output waveform goes above the SR line, meaning its derivative exceed SR, then the waveform will distort
 - The op-amp we mentioned above, which is 741, it has \\(SR = ±1V/μs = ±10^6 V/s\\)
 
-![image.png](image%2044.png)
+![image.png](image44.png)
 
 - Thus in the graph above, the black signal is the one we want, but with the limit of SR, the signal will distort
 
 #### Ex. Distortion in op amp
 
-![image.png](image%2045.png)
+![image.png](image45.png)
 
 Giving a Buffer, with
 
@@ -886,7 +886,7 @@ Find the largest step input, (\\(V_i\\)), without SR limiting
 
 ---
 
-![image.png](image%2046.png)
+![image.png](image46.png)
 
 ### Full-power bandwidth
 
