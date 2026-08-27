@@ -68,8 +68,13 @@
         }
 
         .header-titles {
-            flex: 1;
+            flex: 1 1 auto;
+            min-width: 0;
             text-align: center;
+        }
+
+        .site-nav-spacer {
+            visibility: hidden;
         }
 
         .site-title {
@@ -90,9 +95,8 @@
         }
 
         .site-nav {
-            display: flex;
             flex: 0 0 auto;
-            justify-content: flex-start;
+            display: flex;
             flex-wrap: wrap;
             gap: 20px;
         }
@@ -107,12 +111,15 @@
             white-space: nowrap;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1400px) {
             .site-header {
                 flex-direction: column;
             }
             .site-nav {
                 justify-content: center;
+            }
+            .site-nav-spacer {
+                display: none;
             }
         }
         .site-nav-link:hover {
@@ -363,6 +370,13 @@
             <h1 class="site-title">Research & Engineering Archive</h1>
             <div class="site-subtitle">Research & Engineering | Quantitative Systems | Academic Archive</div>
         </div>
+        <nav class="site-nav site-nav-spacer" aria-hidden="true">
+            {{ range .Site.Menus.main }}
+                {{ if not .Params.pre }}
+                <a href="{{ .URL }}" class="site-nav-link" tabindex="-1">{{ .Name }}</a>
+                {{ end }}
+            {{ end }}
+        </nav>
     </header>
 
     <div class="fluid-wrapper">
