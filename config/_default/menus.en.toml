@@ -11,6 +11,21 @@
 # ordered by weight from lowest to highest.
 
 [[main]]
+  name = "Student"
+  pageRef = "student"
+  weight = 5
+
+[[main]]
+  name = "UTEFA"
+  pageRef = "utefa"
+  weight = 6
+
+[[main]]
+  name = "VEPE"
+  pageRef = "vepe"
+  weight = 7
+
+[[main]]
   name = "Docs"
   pageRef = "docs"
   weight = 10

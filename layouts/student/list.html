@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jingnan Huang | UofT Student</title>
+    {{ partial "persona/styles.html" (dict "Accent" "#0033cc") }}
+</head>
+<body>
+
+    {{ partial "persona/header.html" . }}
+
+    <div class="fluid-wrapper">
+        <aside class="sidebar">
+            <a href="/" class="btn-back">← All Roles</a>
+            <h2 class="profile-name">Jingnan Huang</h2>
+
+            <div class="profile-bio">
+                <div class="bio-role">
+                    <strong>B.A.Sc Computer Engineering</strong><br>
+                    <span style="color: var(--dim)">University of Toronto</span>
+                </div>
+
+                <div class="bio-edu">
+                    + PEY Co-op<br>
+                    <span style="font-size: 0.85em; font-style: italic;">Intended Minor: Engineering Business and Entrepreneurship</span><br>
+                    <span style="font-size: 0.85em; color: #999;">Exp. Apr 2029</span>
+                </div>
+            </div>
+
+            <a href="/cv.pdf" class="btn-cv">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Download CV
+            </a>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Coordinates</div>
+                <ul class="contact-list">
+                    <li>
+                        <span class="contact-label">Academic Email</span>
+                        <span class="contact-val">
+                            <a href="mailto:jingnan.huang@mail.utoronto.ca">jingnan.huang@mail.utoronto.ca</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-label">Github</span>
+                        <span class="contact-val">
+                            <a href="https://github.com/Buezw" target="_blank">github.com/Buezw</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Coursework Focus</div>
+                <div class="comp-tags">
+                    <span class="tag-pill">Circuits & Systems</span>
+                    <span class="tag-pill">Math & Physics</span>
+                    <span class="tag-pill">OOP / C++</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">DEV TOOLS</div>
+                <div class="comp-tags">
+                    <span class="tag-pill">Linux / Bash</span>
+                    <span class="tag-pill">Vim / Neovim</span>
+                    <span class="tag-pill">CMake</span>
+                    <span class="tag-pill">Git</span>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <h2 class="section-header">UofT Coursework <span>STUDENT</span></h2>
+            <p class="persona-intro">
+                Lecture notes, lab writeups, and problem sets from the B.A.Sc Computer Engineering program at the University of Toronto — spanning circuits, digital systems, math, and programming courses.
+            </p>
+
+            {{ $uoft := .Site.GetPage "/docs/uoft" }}
+            {{ $entries := slice }}
+            {{ if $uoft }}
+                {{ $entries = sort $uoft.RegularPagesRecursive "Date" "desc" }}
+            {{ end }}
+
+            {{ if $entries }}
+            <div class="entry-list">
+                {{ range first 10 $entries }}
+                <a href="{{ .RelPermalink }}" class="entry-item">
+                    <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}
+                        {{ range first 1 .Params.tags }}<span class="meta-tag-rl">{{ . | upper }}</span>{{ end }}
+                    </div>
+                    <div class="entry-title-mono">{{ .Title }}</div>
+                    <div class="entry-summary">
+                        {{ $regex := "(?m)^>\\s*Last Edit.*" }}
+                        {{ $match := findRE $regex .RawContent 1 }}
+                        {{ if $match }}
+                            {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
+                        {{ else }}
+                            {{ .Summary | plainify | truncate 100 }}
+                        {{ end }}
+                    </div>
+                </a>
+                {{ end }}
+            </div>
+            <p><a href="/docs/uoft/" class="see-all-link">See all coursework →</a></p>
+            {{ else }}
+            <div class="empty-state">No coursework entries yet.</div>
+            {{ end }}
+        </main>
+    </div>
+
+    {{ partial "persona/footer.html" . }}
+
+</body>
+</html>

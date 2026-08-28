@@ -1,0 +1,21 @@
+{{ $current := .RelPermalink }}
+<header class="site-header">
+    <nav class="site-nav">
+        {{ range .Site.Menus.main }}
+            {{ if not .Params.pre }}
+            <a href="{{ .URL }}" class="site-nav-link{{ if eq $current .URL }} is-active{{ end }}">{{ .Name }}</a>
+            {{ end }}
+        {{ end }}
+    </nav>
+    <div class="header-titles">
+        <h1 class="site-title"><a href="/">Research & Engineering Archive</a></h1>
+        <div class="site-subtitle">Research & Engineering | Quantitative Systems | Academic Archive</div>
+    </div>
+    <nav class="site-nav site-nav-spacer" aria-hidden="true">
+        {{ range .Site.Menus.main }}
+            {{ if not .Params.pre }}
+            <a href="{{ .URL }}" class="site-nav-link" tabindex="-1">{{ .Name }}</a>
+            {{ end }}
+        {{ end }}
+    </nav>
+</header>
