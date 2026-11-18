@@ -6,156 +6,97 @@
     <title>Jingnan Huang | UTEFA Analyst</title>
     {{ partial "persona/styles.html" (dict "Accent" "#cc0000") }}
 </head>
-<body>
+<body class="theme-utefa">
 
     {{ partial "persona/header.html" . }}
 
     <div class="fluid-wrapper">
-        <aside class="sidebar">
-            <a href="/" class="btn-back">← All Roles</a>
-            <h2 class="profile-name">Jingnan Huang</h2>
-
-            <div class="profile-bio">
-                <div class="bio-role">
-                    <strong>Sales & Trading Analyst</strong><br>
-                    <span style="color: var(--dim)">@ <a href="https://www.utefa.com/" target="_blank">UTEFA</a></span>
-                </div>
-            </div>
-
-            <a href="/cv.pdf" class="btn-cv">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Download CV
-            </a>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Coordinates</div>
-                <ul class="contact-list">
-                    <li>
-                        <span class="contact-label">Personal Email</span>
-                        <span class="contact-val">
-                            <a href="mailto:buezwqwg@outlook.com">buezwqwg@outlook.com</a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="contact-label">LinkedIn</span>
-                        <span class="contact-val">
-                            <a href="https://linkedin.com/in/jingnan-huang-buezw/" target="_blank">in/jingnan-huang-buezw</a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">RESEARCH FOCUS</div>
-                <div class="comp-tags">
-                    <span class="tag-pill">Market Microstructure</span>
-                    <span class="tag-pill">Low Latency Systems</span>
-                    <span class="tag-pill">FPGA Acceleration</span>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Skills</div>
-                <div class="comp-tags">
-                    <span class="tag-pill" style="background: #111; color: #fff; border: 1px solid #111;">C++ / Python</span>
-                    <span class="tag-pill" style="background: #111; color: #fff; border: 1px solid #111;">Verilog / FPGA</span>
-                    <span class="tag-pill">HFT Architecture</span>
-                    <span class="tag-pill">Stoch. Calculus</span>
-                </div>
-            </div>
-        </aside>
-
         <main>
             <section id="projects">
-                <h2 class="section-header">Selected Projects <span>ALPHA & SYSTEMS</span></h2>
-                <div class="projects-grid">
-
-                    <a href="#" class="project-card">
-                        <div>
-                            <h3>
+                <h2 class="section-header">Systems Log <span>DESK BUILD NOTES</span></h2>
+                <div class="table-scroll">
+                <table class="ledger-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Date</th>
+                            <th>System</th>
+                            <th>Stack</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ledger-idx">TKT-1102</td>
+                            <td class="ledger-date">2025.11.02</td>
+                            <td class="ledger-name">
                                 Option Pricer
-                                <span class="icon-link">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                                </span>
-                            </h3>
-                            <p>High-performance Monte Carlo engine in C++ with variance reduction.</p>
-                            <div class="project-keypoints">
-                                Monte Carlo <span>//</span> AVX2 <span>//</span> Asian Options
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">C++17</span>
-                                <span class="card-tag">HPC</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#" class="project-card">
-                        <div>
-                            <h3>
+                                <div class="ledger-desc">High-performance Monte Carlo engine in C++ with variance reduction.</div>
+                            </td>
+                            <td class="ledger-stack">C++17 · Monte Carlo · AVX2 · Asian Options</td>
+                            <td><span class="ledger-status status-live">SHIPPED</span></td>
+                        </tr>
+                        <tr>
+                            <td class="ledger-idx">TKT-0915</td>
+                            <td class="ledger-date">2025.09.15</td>
+                            <td class="ledger-name">
                                 FPGA Matching
-                                <span class="icon-link">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                                </span>
-                            </h3>
-                            <p>Low-latency matching engine on Xilinx UltraScale+ with tick-to-trade opt.</p>
-                            <div class="project-keypoints">
-                                Order Book <span>//</span> Xilinx <span>//</span> TCP/IP Offload
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">Verilog</span>
-                                <span class="card-tag">HFT</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#" class="project-card">
-                        <div>
-                            <h3>
+                                <div class="ledger-desc">Low-latency matching engine on Xilinx UltraScale+ with tick-to-trade optimization.</div>
+                            </td>
+                            <td class="ledger-stack">Verilog · Xilinx · TCP/IP Offload · HFT</td>
+                            <td><span class="ledger-status status-wip">IN PROGRESS</span></td>
+                        </tr>
+                        <tr>
+                            <td class="ledger-idx">TKT-0701</td>
+                            <td class="ledger-date">2025.07.01</td>
+                            <td class="ledger-name">
                                 Market Sim
-                                <span class="icon-link">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                                </span>
-                            </h3>
-                            <p>Event-driven market simulator with realistic latency & queue models.</p>
-                            <div class="project-keypoints">
-                                Event-Driven <span>//</span> L3 Data <span>//</span> Match Engine
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">Python</span>
-                                <span class="card-tag">Sim</span>
-                            </div>
-                        </div>
-                    </a>
-
+                                <div class="ledger-desc">Event-driven market simulator with realistic latency & queue models.</div>
+                            </td>
+                            <td class="ledger-stack">Python · Event-Driven · L3 Data</td>
+                            <td><span class="ledger-status status-live">SHIPPED</span></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="ledger-summary">
+                            <td colspan="5">3 SYSTEMS LOGGED · 2 SHIPPED · 1 IN PROGRESS</td>
+                        </tr>
+                    </tfoot>
+                </table>
                 </div>
             </section>
 
-            <h2 class="section-header">Market Insights <span>MI</span></h2>
+            <h2 class="section-header">Market Insights <span>DESK COMMENTARY</span></h2>
             {{ $entries := where .Site.RegularPages "Section" "finance" }}
             {{ $entries = sort $entries "Date" "desc" }}
             {{ if $entries }}
-            <div class="entry-list">
-                {{ range first 8 $entries }}
-                <a href="{{ .RelPermalink }}" class="entry-item">
-                    <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }} <span class="meta-tag-mi">MACRO</span></div>
-                    <div class="entry-title">{{ .Title }}</div>
-                    <div class="entry-summary">
-                        {{ $regex := "(?m)^>\\s*Last Edit.*" }}
-                        {{ $match := findRE $regex .RawContent 1 }}
-                        {{ if $match }}
-                            {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
-                        {{ else }}
-                            {{ .Summary | plainify | truncate 100 }}
-                        {{ end }}
-                    </div>
-                </a>
-                {{ end }}
+            {{ $shown := first 8 $entries }}
+            <div class="table-scroll">
+            <table class="ledger-table">
+                <thead>
+                    <tr>
+                        <th>Note</th>
+                        <th>Date</th>
+                        <th>Tag</th>
+                        <th>Headline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range $i, $e := $shown }}
+                    <tr>
+                        <td class="ledger-idx">{{ printf "NOTE-%02d" (add $i 1) }}</td>
+                        <td class="ledger-date">{{ $e.Date.Format "2006.01.02" }}</td>
+                        <td><span class="ledger-tag">MACRO</span></td>
+                        <td class="ledger-name"><a href="{{ $e.RelPermalink }}">{{ $e.Title }}</a></td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+                <tfoot>
+                    <tr class="ledger-summary">
+                        <td colspan="4">{{ len $shown }} NOTES ON FILE</td>
+                    </tr>
+                </tfoot>
+            </table>
             </div>
             <p><a href="/finance/market-commentary/" class="see-all-link">See all market insights →</a></p>
             {{ else }}
