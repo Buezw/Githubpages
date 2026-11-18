@@ -1,4 +1,0 @@
-baseURL = 'https://buezw.github.io/'
-languageCode = 'en'
-title = 'My New Hugo Site'
-theme = 'blowfish'
