@@ -1,0 +1,70 @@
+# 自动构建并发布网站
+#
+# - 推送到 main(包括在 GitHub 网页上直接改文件、合并 PR)：构建并发布到 Buezw/buezw.github.io
+# - 开 PR 到 main：只构建、不发布，用来检查改动会不会把网站弄坏
+# - Actions 页面手动点 "Run workflow"：构建并发布
+#
+# 发布需要一个仓库 Secret：SITE_DEPLOY_TOKEN
+# (一个对 Buezw/buezw.github.io 有 Contents 读写权限的 fine-grained token)
+
+name: Build and deploy site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: site-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      # 与目前线上网站使用的版本一致
+      HUGO_VERSION: 0.135.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 只拉主题。public 是旧的手动发布用的子模块，这里不需要
+      - name: Fetch Blowfish theme
+        run: git submodule update --init --depth 1 themes/blowfish
+
+      - name: Install Hugo
+        run: |
+          wget -q -O "${{ runner.temp }}/hugo.deb" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${{ runner.temp }}/hugo.deb"
+          hugo version
+
+      - name: Build
+        run: hugo --destination _site
+
+      - name: Check deploy token
+        if: github.event_name != 'pull_request'
+        env:
+          SITE_DEPLOY_TOKEN: ${{ secrets.SITE_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$SITE_DEPLOY_TOKEN" ]; then
+            echo "::error::缺少 SITE_DEPLOY_TOKEN。请在 Settings → Secrets and variables → Actions 中添加。"
+            exit 1
+          fi
+
+      # keep_files: 保留线上仓库里已有、但不是这次构建产生的文件(admin/、moban.txt 等)，
+      # 与之前手动发布的行为一致
+      - name: Deploy to Buezw/buezw.github.io
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.SITE_DEPLOY_TOKEN }}
+          external_repository: Buezw/buezw.github.io
+          publish_branch: main
+          publish_dir: ./_site
+          keep_files: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          full_commit_message: "deploy: build from Buezw/Githubpages@${{ github.sha }}"
