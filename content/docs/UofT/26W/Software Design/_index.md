@@ -1,9 +1,7 @@
 ---
-title: "Advanced Engineering Mathematics"
-tags: ["AEM"]
+title: "Software Design"
+tags: ["Software Design"]
 math: mathjax
 showWordCount: false
+draft: true
 ---
-    
-
-

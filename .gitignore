@@ -1,4 +1,14 @@
-# 忽略 docs 文件夹及其所有内容
+# Hugo 生成的文件(构建时自动生成,不入库)
+/resources/_gen/
+/.hugo_build.lock
+# 旧的本地构建输出
+/ebug/
 
 # 本地专用 Hugo 版本(与全局安装版本不兼容主题时使用)
 /tools/
+
+# 系统 / 编辑器杂项
+.DS_Store
+__MACOSX/
+__pycache__/
+*.pyc
