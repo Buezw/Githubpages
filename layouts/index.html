@@ -26,7 +26,7 @@
             transform: translateX(4px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-        .role-row-head { flex: 0 0 340px; }
+        .role-row-head { flex: 0 0 22rem; }
         .role-row-tag {
             font-family: var(--font-mono);
             font-size: 0.9rem;
@@ -89,13 +89,43 @@
             padding-bottom: 8px;
         }
         .trinity-col .entry-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+        /* 最新文章：两栏并排，窄屏变单栏 */
+        .trinity-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .trinity-grid.cols-2 .trinity-col:last-child { grid-column: auto; }
+        @media (max-width: 1000px) {
+            .trinity-grid.cols-2 { grid-template-columns: minmax(0, 1fr); }
+        }
+
+        /* 手机 / 平板：单列时顺序改为 选角色 → 个人简介 → 最新文章 */
+        @media (max-width: 1000px) {
+            .home-wrapper { row-gap: 0; }
+            .home-wrapper > main { display: contents; }
+            .home-wrapper .section-header { order: 1; }
+            .home-wrapper .role-list { order: 2; }
+            .home-wrapper .sidebar {
+                order: 3;
+                margin: 32px 0 8px;
+                padding-top: 24px;
+                border-top: 1px solid var(--line);
+            }
+            .home-wrapper .hub-heading { order: 4; margin-top: 24px; }
+            .home-wrapper .trinity-grid { order: 5; }
+            .home-wrapper .profile-name { margin-bottom: 16px; }
+        }
+        @media (max-width: 640px) {
+            .role-row { padding: 18px 20px; }
+            .role-row-title { font-size: 1.6rem; }
+            .role-row-desc { font-size: 1rem; }
+            .role-row-enter { font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
 
     {{ partial "persona/header.html" . }}
 
-    <div class="fluid-wrapper">
+    <div class="fluid-wrapper home-wrapper">
         <aside class="sidebar">
             <h2 class="profile-name">Jingnan Huang</h2>
             <div class="profile-bio">
@@ -104,7 +134,7 @@
                     <span style="color: var(--dim)">University of Toronto</span>
                 </div>
                 <div class="bio-edu">
-                    Working across quantitative trading, low-latency systems, and computational biology research. Pick a role to see the relevant work.
+                    Working across quantitative trading and low-latency systems. Pick a role to see the relevant work.
                 </div>
             </div>
 
@@ -143,7 +173,6 @@
                     <span class="tag-pill">Market Microstructure</span>
                     <span class="tag-pill">Low Latency Systems</span>
                     <span class="tag-pill">FPGA Acceleration</span>
-                    <span class="tag-pill">Computational Biology</span>
                 </div>
             </div>
         </aside>
@@ -171,20 +200,10 @@
                     </p>
                     <div class="role-row-enter">View Research →</div>
                 </a>
-                <a href="/vepe/" class="role-row" style="border-left-color:#008855;">
-                    <div class="role-row-head">
-                        <div class="role-row-tag" style="color:#008855;">VEPE RESEARCHER</div>
-                        <h3 class="role-row-title">Virtual Cell</h3>
-                    </div>
-                    <p class="role-row-desc">
-                        Research notes and progress on virtual cell modeling at VEPE — this section is being set up and will fill in as the work develops.
-                    </p>
-                    <div class="role-row-enter">View Research →</div>
-                </a>
             </div>
 
             <div class="hub-heading is-section">Latest Across the Archive</div>
-            <div class="trinity-grid">
+            <div class="trinity-grid cols-2">
                 <div class="trinity-col">
                     <div class="list-group-header">Computer Engineering <span style="color:#0033cc;">UOFT</span></div>
                     {{ $uoft := .Site.GetPage "/docs/uoft" }}
@@ -218,25 +237,6 @@
                         {{ end }}
                     </div>
                     <p><a href="/utefa/" class="see-all-link">See all research →</a></p>
-                    {{ else }}
-                    <div class="empty-state">No entries yet.</div>
-                    {{ end }}
-                </div>
-                <div class="trinity-col">
-                    <div class="list-group-header">Virtual Cell <span style="color:#008855;">VEPE</span></div>
-                    {{ $vepe := .Site.GetPage "/vepe" }}
-                    {{ $vepeEntries := slice }}
-                    {{ if $vepe }}{{ $vepeEntries = sort $vepe.RegularPagesRecursive "Date" "desc" }}{{ end }}
-                    {{ if $vepeEntries }}
-                    <div class="entry-list">
-                        {{ range first 3 $vepeEntries }}
-                        <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
-                            <div class="entry-title-mono">{{ .Title }}</div>
-                        </a>
-                        {{ end }}
-                    </div>
-                    <p><a href="/vepe/" class="see-all-link">See all research →</a></p>
                     {{ else }}
                     <div class="empty-state">No entries yet.</div>
                     {{ end }}
