@@ -90,7 +90,7 @@
         }
         .trinity-col .entry-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
-        /* 只有两栏时(VEPE 隐藏)：两栏并排，窄屏变单栏 */
+        /* 最新文章：两栏并排，窄屏变单栏 */
         .trinity-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .trinity-grid.cols-2 .trinity-col:last-child { grid-column: auto; }
         @media (max-width: 1000px) {
@@ -122,9 +122,6 @@
     </style>
 </head>
 <body>
-
-    {{/* VEPE 暂时从首页隐藏。要恢复时把 false 改成 true 即可，/vepe/ 页面本身一直保留 */}}
-    {{ $showVepe := false }}
 
     {{ partial "persona/header.html" . }}
 
@@ -203,22 +200,10 @@
                     </p>
                     <div class="role-row-enter">View Research →</div>
                 </a>
-                {{ if $showVepe }}
-                <a href="/vepe/" class="role-row" style="border-left-color:#008855;">
-                    <div class="role-row-head">
-                        <div class="role-row-tag" style="color:#008855;">VEPE RESEARCHER</div>
-                        <h3 class="role-row-title">Virtual Cell</h3>
-                    </div>
-                    <p class="role-row-desc">
-                        Research notes and progress on virtual cell modeling at VEPE — this section is being set up and will fill in as the work develops.
-                    </p>
-                    <div class="role-row-enter">View Research →</div>
-                </a>
-                {{ end }}
             </div>
 
             <div class="hub-heading is-section">Latest Across the Archive</div>
-            <div class="trinity-grid{{ if not $showVepe }} cols-2{{ end }}">
+            <div class="trinity-grid cols-2">
                 <div class="trinity-col">
                     <div class="list-group-header">Computer Engineering <span style="color:#0033cc;">UOFT</span></div>
                     {{ $uoft := .Site.GetPage "/docs/uoft" }}
@@ -256,27 +241,6 @@
                     <div class="empty-state">No entries yet.</div>
                     {{ end }}
                 </div>
-                {{ if $showVepe }}
-                <div class="trinity-col">
-                    <div class="list-group-header">Virtual Cell <span style="color:#008855;">VEPE</span></div>
-                    {{ $vepe := .Site.GetPage "/vepe" }}
-                    {{ $vepeEntries := slice }}
-                    {{ if $vepe }}{{ $vepeEntries = sort $vepe.RegularPagesRecursive "Date" "desc" }}{{ end }}
-                    {{ if $vepeEntries }}
-                    <div class="entry-list">
-                        {{ range first 3 $vepeEntries }}
-                        <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
-                            <div class="entry-title-mono">{{ .Title }}</div>
-                        </a>
-                        {{ end }}
-                    </div>
-                    <p><a href="/vepe/" class="see-all-link">See all research →</a></p>
-                    {{ else }}
-                    <div class="empty-state">No entries yet.</div>
-                    {{ end }}
-                </div>
-                {{ end }}
             </div>
         </main>
     </div>
