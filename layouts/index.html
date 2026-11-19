@@ -89,13 +89,36 @@
             padding-bottom: 8px;
         }
         .trinity-col .entry-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+        /* 手机 / 平板：单列时顺序改为 选角色 → 个人简介 → 最新文章 */
+        @media (max-width: 1000px) {
+            .home-wrapper { row-gap: 0; }
+            .home-wrapper > main { display: contents; }
+            .home-wrapper .section-header { order: 1; }
+            .home-wrapper .role-list { order: 2; }
+            .home-wrapper .sidebar {
+                order: 3;
+                margin: 32px 0 8px;
+                padding-top: 24px;
+                border-top: 1px solid var(--line);
+            }
+            .home-wrapper .hub-heading { order: 4; margin-top: 24px; }
+            .home-wrapper .trinity-grid { order: 5; }
+            .home-wrapper .profile-name { margin-bottom: 16px; }
+        }
+        @media (max-width: 640px) {
+            .role-row { padding: 18px 20px; }
+            .role-row-title { font-size: 1.6rem; }
+            .role-row-desc { font-size: 1rem; }
+            .role-row-enter { font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
 
     {{ partial "persona/header.html" . }}
 
-    <div class="fluid-wrapper">
+    <div class="fluid-wrapper home-wrapper">
         <aside class="sidebar">
             <h2 class="profile-name">Jingnan Huang</h2>
             <div class="profile-bio">
