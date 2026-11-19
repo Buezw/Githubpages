@@ -32,6 +32,11 @@
         --page-max: 1440px;
         --gutter: 48px;
     }
+    /* 大屏(2K 及以上)：页面更宽，整体字号放大约 10% */
+    @media (min-width: 2000px) {
+        :root { --page-max: 1680px; }
+        html { font-size: 17.6px; }
+    }
     @media (max-width: 1000px) { :root { --gutter: 25px; } }
     @media (max-width: 640px)  { :root { --gutter: 20px; } }
 
@@ -45,7 +50,12 @@
         font-family: var(--font-body);
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+        /* 内容不满一屏时，页脚贴在屏幕底部 */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
+    .site-footer { margin-top: auto; }
 
     a { color: inherit; text-decoration: none; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     a:hover { color: var(--accent); }
@@ -147,6 +157,8 @@
        III. 核心布局
        ======================================================= */
     .fluid-wrapper {
+        width: 100%;
+        box-sizing: border-box;
         max-width: var(--page-max);
         margin: 0 auto 16px;
         padding: 0 var(--gutter);
