@@ -4,80 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jingnan Huang | Research & Engineering Archive</title>
-    {{ partial "persona/styles.html" (dict "Accent" "#cc0000") }}
+    {{ partial "persona/styles.html" (dict "Accent" "#111111") }}
     <style>
-        /* 角色卡片：每个角色一张卡，包含简介和最新文章 */
-        .role-cards {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
+        /* 首页专用：两种字体(标题 Playfair / 正文 Noto Serif)，少框少线，颜色只留给两张角色卡 */
+
+        /* --- 页头：标题居中，导航在下面一行 --- */
+        .home .site-header { border-bottom: 1px solid var(--text); margin-bottom: 36px; }
+        .home .site-header-inner { flex-direction: column; align-items: center; gap: 0; padding: 26px var(--gutter) 0; }
+        .home .header-titles { order: 1; text-align: center; }
+        .home .site-title { font-size: 2.75rem; letter-spacing: -0.5px; }
+        .home .site-subtitle {
+            font-family: var(--font-body); font-style: italic; text-transform: none;
+            letter-spacing: 0.02em; font-size: 1.05rem; margin-top: 8px;
         }
-        /* subgrid：两张卡的 标题/简介/Latest/列表 四行互相对齐，不受文字长短影响 */
-        .role-card {
-            display: grid;
-            grid-row: span 4;
-            grid-template-rows: subgrid;
-            row-gap: 0;
-            align-content: start;
-            border: 1px solid var(--line);
-            border-left: 3px solid var(--role);
-            padding: 22px 26px 18px;
+        .home .sub-sep { margin: 0 0.5em; }
+        .home .site-nav {
+            order: 2; width: 100%; justify-content: center; gap: 40px;
+            margin-top: 20px; padding: 10px 0 11px; border-top: 1px solid var(--line);
         }
-        .role-card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
+        .home .site-nav-link {
+            font-family: var(--font-body); font-variant: all-small-caps; text-transform: none;
+            letter-spacing: 0.12em; font-size: 1.05rem; border-bottom: none;
         }
-        .role-card-tag {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--role);
-            margin-bottom: 8px;
+        .home .site-nav-link:hover { color: var(--dim); }
+
+        /* --- 左侧个人信息 --- */
+        .home .profile-name { font-size: 2rem; margin-bottom: 18px; }
+        .home .bio-role { font-family: var(--font-body); border-left: none; padding-left: 0; font-size: 1rem; line-height: 1.6; }
+        .home .bio-role strong { font-weight: 700; }
+        .home .bio-edu { line-height: 1.7; }
+        .home .btn-cv {
+            background: transparent; color: var(--text); border: 1px solid var(--text);
+            font-family: var(--font-body); text-transform: none; letter-spacing: 0.02em;
+            font-size: 0.95rem; padding: 7px 16px;
         }
-        .role-card-title {
-            font-family: var(--font-serif);
-            font-size: 1.9rem;
-            line-height: 1.15;
-            margin: 0;
+        .home .btn-cv:hover { background: var(--text); color: #fff; transform: none; }
+        .home .sidebar-section { margin-top: 30px; }
+        .home .sidebar-label {
+            font-family: var(--font-body); font-variant: all-small-caps; text-transform: none;
+            letter-spacing: 0.12em; font-weight: 400; font-size: 1.05rem; color: var(--dim);
+            border-left: none; padding: 0 0 6px; margin-bottom: 12px; border-bottom: 1px solid var(--line);
         }
-        .role-card-title a:hover { color: var(--role); }
-        .role-card-enter {
-            flex: 0 0 auto;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            padding-top: 4px;
+        .home .contact-list { font-family: var(--font-body); font-size: 0.98rem; }
+        .home .contact-list li { margin-bottom: 10px; }
+        .home .contact-label { font-size: 0.85rem; text-transform: none; letter-spacing: 0; color: #999; font-style: italic; margin-bottom: 1px; }
+        .home .contact-val a { border-bottom: 1px solid var(--line); }
+        .home .contact-val a:hover { color: var(--text); border-bottom-color: var(--text); }
+        .home .comp-tags { display: block; }
+        .home .tag-pill { display: block; border: none; padding: 0; font-size: 0.98rem; line-height: 1.85; color: var(--text); }
+
+        /* --- 右侧：选角色 --- */
+        .home .section-header { font-size: 1.8rem; border-bottom: none; padding-bottom: 0; margin-bottom: 22px; }
+
+        .role-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+        /* subgrid：两张卡的 标题/简介/列表/View all 四行互相对齐 */
+        .home .role-card {
+            display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; align-content: start;
+            border: none; border-top: 2px solid var(--role); padding: 20px 0 0;
         }
-        .role-card-enter:hover { color: var(--role); }
-        .role-card-desc {
-            font-size: 1.05rem;
-            color: var(--dim);
-            line-height: 1.55;
-            margin: 12px 0 18px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        .home .role-card:hover { transform: none; box-shadow: none; }
+        .home .role-card-tag {
+            font-family: var(--font-body); font-variant: all-small-caps; text-transform: none;
+            letter-spacing: 0.12em; font-size: 1.05rem; color: var(--role); margin-bottom: 4px;
         }
-        .role-card-latest {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: var(--dim);
-            border-bottom: 1px solid var(--line);
-            padding-bottom: 6px;
-            margin-bottom: 12px;
+        .home .role-card-title { font-size: 2rem; line-height: 1.15; margin: 0; }
+        .home .role-card-title a:hover { color: var(--role); }
+        .home .role-card-desc {
+            font-family: var(--font-body); font-size: 1rem; line-height: 1.7; color: var(--dim);
+            margin: 12px 0 22px; max-width: 46ch;
         }
-        .role-card .entry-item { margin-bottom: 10px; padding-bottom: 10px; }
-        .role-card .entry-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .role-card .entry-item:hover .entry-title,
-        .role-card .entry-item:hover .entry-title-mono { color: var(--role); }
+        .home .role-card .entry-list { border-top: 1px solid var(--line); }
+        .home .role-card .entry-item,
+        .home .role-card .entry-item:last-child {
+            border-bottom: 1px solid var(--line); margin: 0; padding: 14px 0 13px;
+        }
+        .home .role-card .entry-title {
+            font-family: var(--font-serif), var(--font-body); font-size: 1.12rem; font-weight: 700;
+            line-height: 1.35; color: var(--text); margin: 0 0 4px;
+        }
+        .home .role-card .entry-meta { font-family: var(--font-body); font-style: italic; font-size: 0.9rem; margin: 0; }
+        .home .role-card .entry-item:hover .entry-title { color: var(--role); }
+        .home .role-card-enter {
+            justify-self: start; align-self: start; margin-top: 16px;
+            font-family: var(--font-body); font-style: italic; text-transform: none; letter-spacing: 0;
+            font-size: 1rem; color: var(--role);
+        }
+        .home .role-card-enter:hover { color: var(--role); text-decoration: underline; text-underline-offset: 3px; }
+
+        .home .site-footer {
+            font-family: var(--font-body); font-style: italic; font-size: 0.9rem; padding: 18px; margin-top: auto;
+        }
 
         @media (max-width: 1200px) {
-            .role-cards { grid-template-columns: minmax(0, 1fr); }
+            .role-cards { grid-template-columns: minmax(0, 1fr); row-gap: 44px; }
         }
 
         /* 手机 / 平板：单列时顺序改为 选角色 → 个人简介 */
@@ -87,21 +106,22 @@
             .home-wrapper .section-header { order: 1; }
             .home-wrapper .role-cards { order: 2; }
             .home-wrapper .sidebar {
-                order: 3;
-                margin: 32px 0 8px;
-                padding-top: 24px;
-                border-top: 1px solid var(--line);
+                order: 3; margin: 48px 0 8px; padding-top: 28px; border-top: 1px solid var(--text);
             }
-            .home-wrapper .profile-name { margin-bottom: 16px; }
         }
         @media (max-width: 640px) {
-            .role-card { padding: 18px 20px 16px; }
-            .role-card-title { font-size: 1.6rem; }
-            .role-card-desc { font-size: 1rem; }
+            .home .site-header { margin-bottom: 30px; }
+            .home .site-header-inner { align-items: center; padding-top: 24px; }
+            .home .site-title { font-size: 1.75rem; white-space: normal; }
+            .home .site-subtitle { font-size: 0.95rem; }
+            .home .site-nav { gap: 28px; margin-top: 16px; justify-content: center; }
+            .home .site-nav-link { font-size: 0.98rem; letter-spacing: 0.08em; }
+            .home .section-header { font-size: 1.5rem; }
+            .home .role-card-title { font-size: 1.65rem; }
         }
     </style>
 </head>
-<body>
+<body class="home">
 
     {{ partial "persona/header.html" . }}
 
@@ -125,7 +145,7 @@
             </div>
 
             <a href="/cv.pdf" class="btn-cv">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                 Download CV
             </a>
 
@@ -164,59 +184,57 @@
         </aside>
 
         <main>
-            <h2 class="section-header">Choose a Role <span>ARCHIVE</span></h2>
+            <h2 class="section-header">Choose a Role</h2>
             <div class="role-cards">
 
-                <section class="role-card" style="--role:#0033cc;">
+                <section class="role-card" style="--role:#1f3a8a;">
                     <div class="role-card-head">
                         <div>
                             <div class="role-card-tag">UofT Student</div>
                             <h3 class="role-card-title"><a href="/student/">Computer Engineering</a></h3>
                         </div>
-                        <a href="/student/" class="role-card-enter">View all →</a>
                     </div>
                     <p class="role-card-desc">
                         Lecture notes and lab write-ups from the B.A.Sc Computer Engineering program — circuits, systems, math, and software.
                     </p>
-                    <div class="role-card-latest">Latest</div>
                     {{ if $studentEntries }}
                     <div class="entry-list">
                         {{ range first 3 $studentEntries }}
                         <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
-                            <div class="entry-title-mono">{{ .Title }}</div>
+                            <div class="entry-title">{{ .Title }}</div>
+                            <div class="entry-meta">{{ .Date.Format "January 2, 2006" }}</div>
                         </a>
                         {{ end }}
                     </div>
                     {{ else }}
                     <div class="empty-state">No entries yet.</div>
                     {{ end }}
+                    <a href="/student/" class="role-card-enter">All course notes →</a>
                 </section>
 
-                <section class="role-card" style="--role:#cc0000;">
+                <section class="role-card" style="--role:#7a2430;">
                     <div class="role-card-head">
                         <div>
                             <div class="role-card-tag">UTEFA Analyst</div>
                             <h3 class="role-card-title"><a href="/utefa/">Sales & Trading</a></h3>
                         </div>
-                        <a href="/utefa/" class="role-card-enter">View all →</a>
                     </div>
                     <p class="role-card-desc">
                         Market commentary, microstructure research, and trading-infrastructure builds from the UTEFA Sales & Trading desk.
                     </p>
-                    <div class="role-card-latest">Latest</div>
                     {{ if $financeEntries }}
                     <div class="entry-list">
                         {{ range first 3 $financeEntries }}
                         <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
                             <div class="entry-title">{{ .Title }}</div>
+                            <div class="entry-meta">{{ .Date.Format "January 2, 2006" }}</div>
                         </a>
                         {{ end }}
                     </div>
                     {{ else }}
                     <div class="empty-state">No entries yet.</div>
                     {{ end }}
+                    <a href="/utefa/" class="role-card-enter">All UTEFA work →</a>
                 </section>
 
             </div>
