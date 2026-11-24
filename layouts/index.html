@@ -6,31 +6,9 @@
     · Activity：上面两类内容的发布日期
 */ -}}
 
-{{- /* ========== Notebook：收集笔记 ========== */ -}}
+{{- /* ========== Notebook：收集笔记（见 partials/site/notes.html） ========== */ -}}
 {{- $nb := site.Data.notebook -}}
-{{- $pages := slice -}}
-{{- with site.GetPage "/docs" -}}
-  {{- range $p := .RegularPagesRecursive -}}
-    {{- if and $p.File (not $p.Date.IsZero) -}}
-      {{- $hit := false -}}
-      {{- range $nb.sources -}}
-        {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $hit = true -}}{{- end -}}
-      {{- end -}}
-      {{- if $hit -}}{{- $pages = $pages | append $p -}}{{- end -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-{{- $pages = sort $pages "Date" "desc" -}}
-
-{{- /* 每篇笔记对应的课程名 / 领域 */ -}}
-{{- $items := slice -}}
-{{- range $p := $pages -}}
-  {{- $src := dict -}}
-  {{- range $nb.sources -}}
-    {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}
-  {{- end -}}
-  {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area) -}}
-{{- end -}}
+{{- $items := partial "site/notes.html" . -}}
 
 {{- /* 首页显示：最新 4 篇，再补上其他领域各自最新的一篇，共 7 篇 */ -}}
 {{- $shown := slice -}}
@@ -44,11 +22,6 @@
   {{- end -}}
 {{- end -}}
 
-{{- /* 搜索结果里显示的课程名：文件夹网址前缀 → 显示名 */ -}}
-{{- $names := dict -}}
-{{- range $src := $nb.sources -}}
-  {{- with site.GetPage (printf "/%s" $src.dir) -}}{{- if .RelPermalink -}}{{- $names = merge $names (dict .RelPermalink $src.name) -}}{{- end -}}{{- end -}}
-{{- end -}}
 {{- $areasUsed := dict -}}
 {{- range $items -}}{{- $areasUsed = merge $areasUsed (dict (lower .area) true) -}}{{- end -}}
 
@@ -89,93 +62,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jingnan Huang</title>
-<meta name="description" content="Jingnan Huang — Computer Engineering at the University of Toronto. Course notes, trading systems and market research.">
-<link rel="icon" href="/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+{{ partial "site/head.html" (dict "title" "Jingnan Huang" "description" "Jingnan Huang — Computer Engineering at the University of Toronto. Course notes, trading systems and market research.") }}
 <style>
-:root{
-  --paper:#f3f0ea; --paper2:#ebe6dc; --text:#141414; --dim:#7a7670; --line:#e2ddd4;
-  --blue:#1f3a8a; --red:#7a2430;
-  --px:clamp(20px,3.2vw,56px);
-  --serif:'Source Serif 4','Noto Serif SC',Georgia,serif;
-}
-/* 大屏：整页按比例放大 */
-html{--zoom:1;zoom:var(--zoom)}
-@media (min-width:2000px){html{--zoom:1.3}}
-@media (min-width:2400px){html{--zoom:1.45}}
-*{box-sizing:border-box}
-body{margin:0;min-height:calc(100vh / var(--zoom));display:flex;flex-direction:column;background:#fff;color:var(--text);
-  font:15px/1.6 'Inter Tight','Noto Sans SC',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-.serif{font-family:var(--serif);font-weight:500;letter-spacing:-.015em}
-
-/* ---------- 顶栏 / 页脚 ---------- */
-.topnav{position:relative;z-index:5;display:flex;align-items:center;gap:28px;padding:15px var(--px) 14px;border-bottom:1px solid var(--text);font-size:.9rem;background:#fff}
-.brand{display:flex;align-items:center;gap:12px;color:var(--text);flex:none}
-.brand b{font-size:1.3rem;line-height:1}
-.brand span{color:var(--dim);border-left:1px solid var(--line);padding-left:12px}
-.topnav nav{display:flex;gap:26px;margin-left:auto;flex:none}
-.topnav nav a{color:var(--text)}
-.topnav nav a:hover{color:var(--blue)}
-
-/* 搜索框 + 结果下拉 */
-.search{position:relative;flex:1;max-width:520px}
-.sbox{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:6px 12px;color:var(--dim);background:#faf9f6}
-.sbox:focus-within{border-color:var(--text);background:#fff}
-.sbox input{all:unset;flex:1;min-width:0;font-size:.9rem;color:var(--text)}
-.sbox input::placeholder{color:var(--dim)}
-.sbox input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
-.sbox kbd{font-family:inherit;font-size:.72rem;border:1px solid var(--line);padding:0 6px;background:#fff;color:var(--dim)}
-.sres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--text);box-shadow:0 12px 30px rgba(20,20,20,.12);max-height:min(70vh,560px);overflow:auto;display:none}
-.sres.open{display:block}
-.sres a{display:block;padding:10px 14px;border-bottom:1px solid var(--line)}
-.sres a:last-child{border-bottom:none}
-.sres a.on,.sres a:hover{background:#f6f4ef}
-.sres .srt{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
-.sres .srt b{font-weight:500;font-size:.92rem;color:var(--text);min-width:0;overflow-wrap:anywhere}
-.sres .srt span{color:var(--dim);font-size:.78rem;white-space:nowrap;flex:none;max-width:45%;overflow:hidden;text-overflow:ellipsis}
-.sres p{margin:3px 0 0;color:var(--dim);font-size:.82rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sres mark{background:#fbeec2;color:inherit;padding:0 1px}
-.sres .none{padding:14px;color:var(--dim);font-size:.88rem}
-footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;border-top:1px solid var(--line);color:var(--dim);font-size:.8rem}
-
 /* ---------- 版面：左栏 | 日历（横跨）/ Notebook | Research ---------- */
 .board{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,5fr);grid-template-rows:auto 1fr}
-.side{grid-column:1;grid-row:1/3;background:var(--paper);padding:40px 24px 22px var(--px);display:flex;flex-direction:column;gap:28px}
+.board>.side{grid-column:1;grid-row:1/3}
 .band{grid-column:2/4;grid-row:1;padding:16px var(--px) 13px;border-bottom:1px solid var(--line);border-left:1px solid var(--line)}
 .col{grid-row:2;border-left:1px solid var(--line);padding:12px var(--px) 22px;display:flex;flex-direction:column}
 .col h2{font-size:2.15rem;line-height:1.05;margin:4px 0 10px}
 .col .go{margin-top:auto;padding-top:22px;font-size:.95rem;color:var(--c)}
 .col .go:hover{text-decoration:underline}
 .stack{display:flex;flex-direction:column;gap:20px}
-
-/* 小标题行 */
-.lab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.8rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:2px}
-.lab b{font-weight:500;color:var(--text);font-size:.9rem}
-
-/* ---------- 左栏 ---------- */
-.side h1{font-size:2.25rem;line-height:1;margin:0}
-.who{color:var(--dim);margin-top:8px;font-size:.9rem;line-height:1.5}
-.who b{font-weight:500;color:var(--text)}
-.blurb{margin:0;color:#3a3833;font-size:.95rem;line-height:1.6}
-.side .lab{border-color:var(--paper2)}
-.kit{padding:6px 0;border-bottom:1px solid var(--paper2)}
-.kit:last-child{border-bottom:none}
-.kit>span{display:block;color:var(--dim);font-size:.78rem;margin-bottom:5px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips span{background:#fff;border:1px solid var(--paper2);padding:2px 8px;font-size:.8rem}
-.contact{font-size:.9rem;margin-top:8px}
-.contact>a{display:block;padding-bottom:6px;border-bottom:1px solid var(--paper2);overflow-wrap:anywhere}
-.contact div{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:6px}
-.contact a:hover{text-decoration:underline}
-.cv{margin-top:auto;align-self:flex-start;border:1px solid var(--text);padding:7px 15px;font-size:.92rem}
-.cv:hover{background:var(--text);color:#fff}
-
 /* ---------- Activity 日历 ---------- */
 .bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--dim);margin-bottom:8px}
 .bh b{font-weight:500;color:var(--text);font-size:.9rem}
@@ -188,82 +85,30 @@ footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;bo
 .ml{position:relative;height:16px;margin-top:5px;font-size:.72rem;color:var(--dim)}
 .ml em{position:absolute;font-style:normal;white-space:nowrap}
 
-/* ---------- 列表 ---------- */
-.rs{display:block;padding:7px 0 8px;border-bottom:1px solid var(--line)}
-.rs .t{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
-.rs .t b{font-weight:500;font-size:.95rem;line-height:1.4;min-width:0;overflow-wrap:anywhere}
-.rs .t span{color:var(--dim);white-space:nowrap;font-size:.86rem}
-.rs p{margin:4px 0 3px;color:var(--dim);font-size:.86rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.rs .m{font-size:.78rem;color:var(--red)}
-.rs:hover b{color:var(--red)}
-.nb .rs{padding:5px 0}
-.nb .rs p{-webkit-line-clamp:1}
-.nb .rs .m{color:var(--blue)}
-.nb .rs:hover b{color:var(--blue)}
-.mrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.mrow .m{display:flex;align-items:center;gap:8px;min-width:0}
-.area{font-style:normal;font-size:.7rem;font-weight:500;line-height:1.55;white-space:nowrap;color:var(--text)}
-.area::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--d)}
-.lang{font-style:normal;font-size:.68rem;font-weight:500;letter-spacing:.03em;line-height:1.55;padding:0 6px;border-radius:2px;color:var(--dim);border:1px solid #cfcac1;white-space:nowrap}
-
-.sys{padding:7px 0 8px;border-bottom:1px solid var(--line)}
-.sys .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.sys .t b{font-weight:500}
-.st{font-size:.8rem;white-space:nowrap}
-.st::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
-.ok{color:#2f6b4a}.wip{color:#b06a1e}
-.sys .d{color:var(--dim);font-size:.86rem;margin-top:1px}
-.sys .m{color:var(--dim);font-size:.78rem}
-
 /* ---------- 平板：左栏放到最上面，下面两栏并排 ---------- */
 @media (max-width:1100px){
   .board{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto 1fr}
-  .side{grid-column:1/3;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;row-gap:20px;padding:24px var(--px)}
+  .board>.side{grid-column:1/3;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;row-gap:20px;padding:24px var(--px)}
   .side .cv{margin-top:0}
   .band{grid-column:1/3;grid-row:2;border-left:none}
   .col{grid-row:3}
   .col.nb{border-left:none}
-  .topnav{flex-wrap:wrap;row-gap:12px}
-  .search{order:3;flex-basis:100%;max-width:none}
 }
 /* ---------- 手机：全部单列 ---------- */
 @media (max-width:760px){
-  body{font-size:14.5px}
-  .topnav{flex-wrap:wrap;gap:12px 18px;padding-top:13px;padding-bottom:12px}
-  .brand span{display:none}
-  .topnav nav{gap:16px;flex-wrap:wrap;margin-left:0;order:2;flex-basis:100%}
-  .search{order:3;flex-basis:100%;max-width:none}
-  .sbox kbd{display:none}
   .board{display:flex;flex-direction:column}
-  .side{display:flex;padding:22px var(--px)}
+  .board>.side{display:flex;padding:22px var(--px)}
   .band,.col{border-left:none}
   .col{padding-top:20px}
   .col.rsc{border-top:1px solid var(--line)}
   .hm{gap:1px}.hm i{height:5px}
   .lg{margin-left:6px}
-  .nb .rs p{-webkit-line-clamp:2}
 }
 </style>
 </head>
 <body>
 
-<header class="topnav">
-  <a href="/" class="brand"><b class="serif">JH</b><span>buezw.github.io</span></a>
-  <div class="search">
-    <label class="sbox"><span aria-hidden="true">⌕</span><input id="q" type="search" autocomplete="off" placeholder="Search {{ len $items }} notes and {{ len $reports }} reports" aria-label="Search notes"><kbd>/</kbd></label>
-    <div class="sres" id="sres" role="listbox"></div>
-  </div>
-  <nav>
-    <a href="/student/">Notebook</a>
-    <a href="/utefa/">Research</a>
-    <a href="/docs/">Docs</a>
-    <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu</a>
-    <a href="https://github.com/Buezw" target="_blank" rel="noopener">GitHub ↗</a>
-    {{- if fileExists "static/cv.pdf" }}
-    <a href="/cv.pdf">CV</a>
-    {{- end }}
-  </nav>
-</header>
+{{ partial "site/header.html" (dict "active" "") }}
 
 <div class="board">
 
@@ -336,30 +181,7 @@ footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;bo
     <h2 class="serif">Notebook</h2>
     <div class="lab"><b>Latest</b><span>{{ len $items }} notes · {{ len $areasUsed }} areas</span></div>
     {{- range $shown }}
-      {{- $p := .page }}
-      {{- /* 摘要：笔记的前几个章节标题 */}}
-      {{- $norm := replaceRE `[^a-z0-9]` "" (lower $p.Title) }}
-      {{- $cand := slice }}
-      {{- range $p.Fragments.Headings }}{{ $cand = $cand | append .Title }}{{ end }}
-      {{- if lt (len $cand) 3 }}
-        {{- range $p.Fragments.Headings }}{{ range .Headings }}{{ $cand = $cand | append .Title }}{{ end }}{{ end }}
-      {{- end }}
-      {{- $hs := slice }}
-      {{- range $cand }}
-        {{- $t := trim (. | plainify | htmlUnescape) " " }}
-        {{- if and $t (not (findRE `[$\\]` $t)) (ne (replaceRE `[^a-z0-9]` "" (lower $t)) $norm) }}{{ $hs = $hs | append $t }}{{ end }}
-      {{- end }}
-      {{- /* 语言：正文里中文字多就标 CN */}}
-      {{- $cjk := len (findRE `\p{Han}` $p.RawContent) }}
-      {{- $color := "#999" }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $color = $v }}{{ end }}{{ end }}
-    <a class="rs" href="{{ $p.RelPermalink }}">
-      <div class="t"><b>{{ $p.Title }}</b><span>{{ $p.Date.Format "Jan 2, 2006" }}</span></div>
-      {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
-      <div class="mrow">
-        <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ .area }}</i><span>{{ .name }}</span></span>
-        <i class="lang">{{ if gt $cjk 200 }}CN{{ else }}EN{{ end }}</i>
-      </div>
-    </a>
+    {{ partial "site/note-row.html" (dict "item" .) }}
     {{- end }}
     <a class="go" href="/student/">Open the notebook →</a>
   </section>
@@ -402,92 +224,7 @@ footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;bo
 
 </div>
 
-<footer>
-  <span>© {{ now.Format "2006" }} Jingnan Huang</span>
-  <span>buezw.github.io</span>
-</footer>
+{{ partial "site/footer.html" . }}
 
-<script>
-/* 首页搜索：第一次用到时加载站点的 /index.json（Hugo 自动生成），只在本地浏览器里搜 */
-(function(){
-  var q=document.getElementById('q'), box=document.getElementById('sres');
-  if(!q||!box) return;
-  var NAMES={{ $names | jsonify | safeJS }};
-  var data=null, loading=null, sel=-1, hits=[];
-  var SKIP=/\/(docs\/sample|credits|tags|categories|authors|series)\//i;
-  function load(){
-    if(data) return Promise.resolve(data);
-    if(!loading) loading=fetch('/index.json').then(function(r){return r.json();}).then(function(d){
-      data=d.filter(function(x){return x.content && x.permalink && !SKIP.test(x.permalink+'/');});
-      return data;
-    }).catch(function(){ data=[]; return data; });
-    return loading;
-  }
-  function esc(t){return t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-  function hl(t,terms){
-    var out=esc(t);
-    terms.forEach(function(w){ if(!w) return; out=out.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),function(m){return '<mark>'+m+'</mark>';}); });
-    return out;
-  }
-  function clean(c){
-    return c.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
-      .replace(/\$\$[\s\S]*?\$\$/g,' ').replace(/\$[^$\n]*\$/g,' ').replace(/\\[a-zA-Z]+/g,' ')
-      .replace(/[#*_>`|]/g,' ').replace(/\s+/g,' ').trim();
-  }
-  function snippet(c,w){
-    c=clean(c);
-    var i=c.toLowerCase().indexOf(w);
-    if(i<0) return c.slice(0,140);
-    var a=Math.max(0,i-50);
-    return (a?'… ':'')+c.slice(a,a+150);
-  }
-  function where(p){
-    for(var k in NAMES){ if(p.indexOf(k)===0) return NAMES[k]; }
-    p=decodeURIComponent(p).replace(/^\/|\/$/g,'').split('/');
-    if(p[0]==='finance') return 'Research';
-    if(p[0]==='docs'&&p[1]==='uoft'&&p[3]) return p[3].replace(/-+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-    return p.length>1 ? p[1].replace(/-+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}) : '';
-  }
-  function render(){
-    var v=q.value.trim().toLowerCase();
-    if(!v){ box.classList.remove('open'); box.innerHTML=''; return; }
-    var terms=v.split(/\s+/);
-    hits=data.map(function(x){
-      var t=x.title.toLowerCase(), c=x.content.toLowerCase(), s=0;
-      for(var i=0;i<terms.length;i++){
-        var w=terms[i];
-        if(t.indexOf(w)>=0) s+=10; else if(c.indexOf(w)>=0) s+=1; else return null;
-      }
-      return {x:x,s:s};
-    }).filter(Boolean).sort(function(a,b){return b.s-a.s;}).slice(0,8);
-    sel=-1;
-    if(!hits.length){ box.innerHTML='<div class="none">No matches for “'+esc(q.value.trim())+'”</div>'; box.classList.add('open'); return; }
-    box.innerHTML=hits.map(function(h){
-      var x=h.x;
-      return '<a href="'+x.permalink+'"><div class="srt"><b>'+hl(x.title,terms)+'</b><span>'+esc(where(x.permalink))+(x.date?' · '+esc(x.date):'')+'</span></div><p>'+hl(snippet(x.content,terms[0]),terms)+'</p></a>';
-    }).join('');
-    box.classList.add('open');
-  }
-  function mark(){
-    var as=box.querySelectorAll('a');
-    as.forEach(function(a,i){a.classList.toggle('on',i===sel);});
-    if(as[sel]) as[sel].scrollIntoView({block:'nearest'});
-  }
-  q.addEventListener('focus',load);
-  q.addEventListener('input',function(){ load().then(render); });
-  q.addEventListener('keydown',function(e){
-    var n=box.querySelectorAll('a').length;
-    if(e.key==='ArrowDown'&&n){ sel=(sel+1)%n; mark(); e.preventDefault(); }
-    else if(e.key==='ArrowUp'&&n){ sel=(sel-1+n)%n; mark(); e.preventDefault(); }
-    else if(e.key==='Enter'){ var a=box.querySelectorAll('a')[sel<0?0:sel]; if(a){ location.href=a.href; e.preventDefault(); } }
-    else if(e.key==='Escape'){ q.value=''; render(); q.blur(); }
-  });
-  document.addEventListener('keydown',function(e){
-    if(e.key==='/'&&document.activeElement!==q&&!/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); q.focus(); }
-  });
-  document.addEventListener('click',function(e){ if(!e.target.closest('.search')) box.classList.remove('open'); });
-  q.addEventListener('focus',function(){ if(q.value.trim()&&box.innerHTML) box.classList.add('open'); });
-})();
-</script>
 </body>
 </html>
