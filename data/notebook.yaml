@@ -1,0 +1,82 @@
+# 首页 Notebook 栏的设置
+#
+# areas：学科领域，以及首页上领域名字前面那个小圆点的颜色
+# sources：哪些文件夹里的笔记会出现在首页
+#   dir  —— content/ 下面的文件夹路径，大小写和空格要和文件夹名一模一样
+#   name —— 首页上显示的课程名或书名
+#   area —— 属于哪个领域（要在上面的 areas 里）
+#
+# 新开一门课：在 sources 里照着加一段即可。没列在这里的文件夹不会出现在首页。
+
+areas:
+  Circuits: "#6b86b8"
+  Signals: "#c49a5a"
+  Hardware: "#5b8c85"
+  Physics: "#8a7bb0"
+  Math: "#b97a7a"
+  Programming: "#8c8577"
+  ML: "#7fa070"
+  Finance: "#9a4a55"
+
+sources:
+  # ---- Winter 2026 ----
+  - dir: docs/UofT/26W/ECE221 - Circuit Analysis
+    name: ECE221 Circuit Analysis
+    area: Circuits
+  - dir: docs/UofT/26W/ECE243 - Computer Organization
+    name: ECE243 Computer Organization
+    area: Hardware
+  - dir: docs/UofT/26W/Electric and Magnetic Field
+    name: Electric & Magnetic Fields
+    area: Physics
+  - dir: docs/UofT/26W/Signal and Systems
+    name: Signals & Systems
+    area: Signals
+  - dir: docs/UofT/26W/Software Design
+    name: Software Design
+    area: Programming
+
+  # ---- Fall 2025 ----
+  - dir: docs/UofT/25F/Advanced Engineering Mathematics
+    name: Advanced Engineering Mathematics
+    area: Math
+  - dir: docs/UofT/25F/Digital Systems
+    name: Digital Systems
+    area: Hardware
+  - dir: docs/UofT/25F/Introduction to Mathematic Physic
+    name: Introduction to Mathematical Physics
+    area: Physics
+  - dir: docs/UofT/25F/Introductory Electronics
+    name: Introductory Electronics
+    area: Circuits
+  - dir: docs/UofT/25F/Object-Oriented Programming using C++
+    name: Object-Oriented Programming in C++
+    area: Programming
+
+  # ---- Fall 2024 ----
+  - dir: docs/UofT/24F/APS104 - Engineering Chemistry & Materials Science
+    name: APS104 Engineering Chemistry & Materials Science
+    area: Physics
+  - dir: docs/UofT/24F/APS105 - Learning Programming with C
+    name: APS105 Programming with C
+    area: Programming
+  - dir: docs/UofT/24F/ECE110 - Electrical Fundamentals
+    name: ECE110 Electrical Fundamentals
+    area: Circuits
+  - dir: docs/UofT/24F/MAT186 - Calculus
+    name: MAT186 Calculus
+    area: Math
+  - dir: docs/UofT/24F/MAT188 - LinearAlgebra
+    name: MAT188 Linear Algebra
+    area: Math
+  - dir: docs/UofT/24F/MIE100 - Dynamics
+    name: MIE100 Dynamics
+    area: Physics
+
+  # ---- 自学 / 读书笔记 ----
+  - dir: docs/Dive Into Deep Learning
+    name: Dive Into Deep Learning
+    area: ML
+  - dir: docs/Reads/EfficientlyInefficient
+    name: Efficiently Inefficient
+    area: Finance
