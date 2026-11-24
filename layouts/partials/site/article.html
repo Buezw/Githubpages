@@ -113,6 +113,16 @@
 <script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
+.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:30px var(--px) 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:end}
+.banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 12px;max-width:960px;overflow-wrap:anywhere}
+.banner .meta{font-size:.86rem}
+.banner .lead{max-width:860px;margin:0 0 12px}
+.nav2{display:flex;gap:8px}
+.nav2 a{display:block;background:#fff;border:1px solid var(--paper2);padding:8px 14px;width:220px}
+.nav2 a:hover{border-color:var(--text)}
+.nav2 small{display:block;font-size:.72rem;color:var(--dim)}
+.nav2 b{display:block;font-weight:500;font-size:.86rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav2 .nx{text-align:right}
 .page{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
 .sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:18px;max-height:calc(100vh / var(--zoom) - 40px);overflow:auto;padding-right:4px}
 .side{padding:30px 22px 30px var(--px)}
@@ -139,7 +149,7 @@
 .totop{display:inline-block;margin-top:14px;font-size:.8rem;color:var(--dim)}
 .totop:hover{color:var(--text)}
 
-.art{padding:34px clamp(24px,3.4vw,64px) 50px;min-width:0}
+.art{padding:30px clamp(24px,3.4vw,64px) 50px;min-width:0}
 .art>*{margin-left:auto;margin-right:auto}
 .ahead{max-width:860px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--text)}
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.84rem;color:var(--dim)}
@@ -184,12 +194,17 @@
 .pn b{font-weight:500;font-size:.95rem;overflow-wrap:anywhere}
 .pn .nx{text-align:right;grid-column:2}
 
+@media (max-width:1100px){
+  .banner{grid-template-columns:minmax(0,1fr)}
+}
 @media (max-width:1000px){
   .page{grid-template-columns:minmax(0,1fr)}
   .rail{display:none}
 }
 @media (max-width:760px){
-  .ahead h1{font-size:1.9rem}
+  .banner{padding:22px var(--px) 18px;gap:16px}
+  .banner h1{font-size:1.8rem}
+  .nav2{display:none}
   .prose{font-size:.98rem}
   .pn{grid-template-columns:1fr}
   .pn .nx{grid-column:1}
@@ -199,20 +214,29 @@
 <body style="{{ printf "--c:%s" (cond (eq $active "research") "var(--red)" "var(--blue)") | safeCSS }}">
 {{ partial "site/header.html" (dict "active" $active) }}
 
+<section class="banner">
+  <div>
+    <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
+    <h1 class="serif">{{ partial "site/nice-title.html" $p.Title }}</h1>
+    {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
+    <div class="meta">
+      {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
+      <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
+      {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
+      <span>{{ $mins }} min read</span>
+      <i class="lang">{{ $lang }}</i>
+    </div>
+  </div>
+  {{- if or $prev $next }}
+  <nav class="nav2" aria-label="Previous and next">
+    {{- with $prev }}<a href="{{ .RelPermalink }}"><small>← Previous</small><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+    {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><small>Next →</small><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+  </nav>
+  {{- end }}
+</section>
+
 <div class="page">
   <article class="art">
-    <header class="ahead">
-      <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
-      <div class="meta">
-        {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-        <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
-        {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
-        <span>{{ $mins }} min read</span>
-        <i class="lang">{{ $lang }}</i>
-      </div>
-      <h1 class="serif">{{ $p.Title }}</h1>
-      {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
-    </header>
 
     <div class="prose">
       {{ $content | safeHTML }}
@@ -220,8 +244,8 @@
 
     {{- if or $prev $next }}
     <nav class="pn">
-      {{- with $prev }}<a href="{{ .RelPermalink }}"><span>← Previous</span><b>{{ .Title }}</b></a>{{ end }}
-      {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><span>Next →</span><b>{{ .Title }}</b></a>{{ end }}
+      {{- with $prev }}<a href="{{ .RelPermalink }}"><span>← Previous</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+      {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><span>Next →</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
     </nav>
     {{- end }}
   </article>
