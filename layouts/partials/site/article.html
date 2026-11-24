@@ -113,7 +113,7 @@
 <script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
-.page{flex:1;display:grid;grid-template-columns:minmax(220px,2.5fr) minmax(0,7.5fr) minmax(200px,2.4fr)}
+.page{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
 .sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:18px;max-height:calc(100vh / var(--zoom) - 40px);overflow:auto;padding-right:4px}
 .side{padding:30px 22px 30px var(--px)}
 .crumb{font-size:.8rem;color:var(--dim)}
@@ -139,11 +139,13 @@
 .totop{display:inline-block;margin-top:14px;font-size:.8rem;color:var(--dim)}
 .totop:hover{color:var(--text)}
 
-.art{border-left:1px solid var(--line);padding:30px clamp(24px,3.4vw,64px) 50px;min-width:0}
+.art{padding:34px clamp(24px,3.4vw,64px) 50px;min-width:0}
+.art>*{margin-left:auto;margin-right:auto}
 .ahead{max-width:860px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--text)}
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.84rem;color:var(--dim)}
 .meta .area{font-size:.8rem}
 .ahead h1{font-size:2.6rem;line-height:1.12;margin:12px 0 0;overflow-wrap:anywhere}
+.ahead .crumb{margin-bottom:10px}
 .lead{margin:14px 0 0;font-size:1.05rem;line-height:1.65;color:#4a4741}
 
 /* ---------- 正文排版 ---------- */
@@ -182,14 +184,9 @@
 .pn b{font-weight:500;font-size:.95rem;overflow-wrap:anywhere}
 .pn .nx{text-align:right;grid-column:2}
 
-@media (max-width:1300px){
-  .page{grid-template-columns:minmax(220px,2.6fr) minmax(0,8fr)}
-  .rail{display:none}
-}
 @media (max-width:1000px){
   .page{grid-template-columns:minmax(0,1fr)}
-  .side{display:none}
-  .art{border-left:none}
+  .rail{display:none}
 }
 @media (max-width:760px){
   .ahead h1{font-size:1.9rem}
@@ -203,31 +200,11 @@
 {{ partial "site/header.html" (dict "active" $active) }}
 
 <div class="page">
-  <aside class="side">
-    <div class="sticky">
-      <div>
-        <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}</div>
-        {{- with $groupName }}
-        <div class="grp"><a href="{{ $groupURL }}">{{ . }}</a>
-          <small{{ with $color }} style="{{ printf "--d:%s" . | safeCSS }}"{{ end }}>{{ if $color }}<i></i>{{ $area }} · {{ end }}{{ len $siblings }} {{ if $isReport }}reports{{ else }}notes{{ end }}</small>
-        </div>
-        {{- end }}
-      </div>
-      {{- if gt (len $siblings) 1 }}
-      <nav class="sib" aria-label="{{ $groupName }}">
-        {{- range $siblings }}
-        <a href="{{ .page.RelPermalink }}"{{ if eq .page.RelPermalink $p.RelPermalink }} class="cur" aria-current="page"{{ end }}><em>{{ .num }}</em><span>{{ .short | default .page.Title }}</span></a>
-        {{- end }}
-      </nav>
-      {{- end }}
-    </div>
-  </aside>
-
   <article class="art">
     <header class="ahead">
+      <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
       <div class="meta">
         {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-        {{- with $groupName }}<span>{{ . }}</span>{{ end }}
         <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
         {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
         <span>{{ $mins }} min read</span>
