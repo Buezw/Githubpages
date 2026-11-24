@@ -36,7 +36,9 @@
     {{- $mm := findRESubmatch `^\S+\s+(\d+)(?:\.(\d+))?` .page.Title 1 -}}
     {{- if not $mm -}}{{- $mm = findRESubmatch `^[A-Za-z]+(\d+)()` .page.Title 1 -}}{{- end -}}
     {{- with $mm -}}{{- $g := index . 0 -}}{{- $k = float (index $g 1) -}}{{- with index $g 2 -}}{{- $k = add $k (div (float .) 100.0) -}}{{- end -}}{{- end -}}
-    {{- $siblings = $siblings | append (dict "page" .page "k" $k) -}}
+    {{- $num := "" -}}{{- $short := .page.Title -}}
+    {{- with findRESubmatch `^\S+?\s*(\d+(?:\.\d+)?)\.?\s*(.+)$` .page.Title 1 -}}{{- $num = index (index . 0) 1 -}}{{- $short = index (index . 0) 2 -}}{{- end -}}
+    {{- $siblings = $siblings | append (dict "page" .page "k" $k "num" $num "short" $short) -}}
   {{- end -}}
   {{- $siblings = sort $siblings "k" "asc" -}}
 {{- else if $isReport -}}
@@ -111,39 +113,47 @@
 <script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
-.page{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,10fr)}
-.sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:22px;max-height:calc(100vh / var(--zoom) - 40px);overflow:auto;padding-right:4px}
-.side{padding-top:30px}
+.page{flex:1;display:grid;grid-template-columns:minmax(220px,2.5fr) minmax(0,7.5fr) minmax(200px,2.4fr)}
+.sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:18px;max-height:calc(100vh / var(--zoom) - 40px);overflow:auto;padding-right:4px}
+.side{padding:30px 22px 30px var(--px)}
 .crumb{font-size:.8rem;color:var(--dim)}
 .crumb a:hover{color:var(--text)}
 .crumb i{font-style:normal;margin:0 6px;color:#bdb7ac}
-.grp{font-family:var(--serif);font-weight:500;font-size:1.35rem;line-height:1.2;display:flex;align-items:center;gap:9px;margin-top:6px}
-.grp i{width:9px;height:9px;border-radius:50%;background:var(--d);flex:none}
+.grp{font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.2;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--paper2)}
 .grp a:hover{color:var(--c)}
-.sib{font-size:.86rem;line-height:1.4;margin-top:6px}
-.sib a{display:block;padding:5px 0 5px 10px;border-left:2px solid transparent;color:#4a4741;overflow-wrap:anywhere}
-.sib a:hover{color:var(--text)}
-.sib a.cur{border-left-color:var(--c);color:var(--text);font-weight:500;background:rgba(255,255,255,.5)}
-.toc{font-size:.84rem;line-height:1.4}
-.toc a{display:block;padding:4px 0;color:#4a4741}
-.toc a.l2{padding-left:12px}.toc a.l3{padding-left:24px;color:var(--dim)}
-.toc a:hover,.toc a.on{color:var(--c)}
+.grp small{display:flex;align-items:center;gap:7px;font-family:'Inter Tight',sans-serif;font-size:.76rem;font-weight:400;color:var(--dim);margin-top:6px;letter-spacing:0}
+.grp small i{width:7px;height:7px;border-radius:50%;background:var(--d)}
+.sib{font-size:.88rem;line-height:1.35;counter-reset:n}
+.sib a{display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;align-items:baseline;padding:6px 8px 6px 0;color:#4a4741;border-radius:3px}
+.sib a em{font-style:normal;font-family:var(--serif);font-size:.95rem;color:var(--dim);text-align:right;padding-right:6px}
+.sib a span{overflow-wrap:anywhere}
+.sib a:hover{color:var(--text);background:rgba(255,255,255,.55)}
+.sib a.cur{background:#fff;color:var(--text);font-weight:500;box-shadow:inset 2px 0 0 var(--c)}
+.sib a.cur em{color:var(--c)}
+.rail{padding:30px var(--px) 30px 24px;border-left:1px solid var(--line)}
+.toc{font-size:.84rem;line-height:1.4;border-left:1px solid var(--line)}
+.toc a{display:block;padding:4px 0 4px 12px;margin-left:-1px;border-left:2px solid transparent;color:#5a5650}
+.toc a.l2{padding-left:24px;font-size:.8rem;color:var(--dim)}
+.toc a:hover{color:var(--text)}
+.toc a.on{color:var(--c);border-left-color:var(--c)}
+.totop{display:inline-block;margin-top:14px;font-size:.8rem;color:var(--dim)}
+.totop:hover{color:var(--text)}
 
-.art{border-left:1px solid var(--line);padding:30px var(--px) 50px;min-width:0}
-.ahead{max-width:780px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--text)}
+.art{border-left:1px solid var(--line);padding:30px clamp(24px,3.4vw,64px) 50px;min-width:0}
+.ahead{max-width:860px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--text)}
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.84rem;color:var(--dim)}
 .meta .area{font-size:.8rem}
 .ahead h1{font-size:2.6rem;line-height:1.12;margin:12px 0 0;overflow-wrap:anywhere}
 .lead{margin:14px 0 0;font-size:1.05rem;line-height:1.65;color:#4a4741}
 
 /* ---------- 正文排版 ---------- */
-.prose{max-width:780px;font-size:1.02rem;line-height:1.8;color:#232220;overflow-wrap:break-word}
+.prose{max-width:860px;font-size:1.02rem;line-height:1.8;color:#232220;overflow-wrap:break-word}
 .prose h1,.prose h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;font-size:1.65rem;line-height:1.25;margin:2.2em 0 .6em;padding-bottom:.25em;border-bottom:1px solid var(--line);scroll-margin-top:20px}
 .prose h3{font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.3;margin:1.8em 0 .5em;scroll-margin-top:20px}
 .prose h4{font-size:1.05rem;font-weight:600;margin:1.6em 0 .4em;scroll-margin-top:20px}
 .prose>*:first-child{margin-top:0}
 .prose h1>span,.prose h2>span,.prose h3>span,.prose h4>span{display:none}
-.prose .anchor{display:none}
+.prose .anchor{scroll-margin-top:20px}
 .prose p{margin:0 0 1em}
 .prose a{color:var(--c);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
 .prose strong{font-weight:600;color:var(--text)}
@@ -165,14 +175,18 @@
 .prose .katex-display{overflow-x:auto;overflow-y:hidden;padding:.2em 0}
 .prose .katex{font-size:1.06em}
 
-.pn{max-width:780px;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px;padding-top:18px;border-top:1px solid var(--text)}
+.pn{max-width:860px;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px;padding-top:18px;border-top:1px solid var(--text)}
 .pn a{display:block;padding:12px 14px;border:1px solid var(--line)}
 .pn a:hover{border-color:var(--text)}
 .pn span{display:block;font-size:.78rem;color:var(--dim)}
 .pn b{font-weight:500;font-size:.95rem;overflow-wrap:anywhere}
 .pn .nx{text-align:right;grid-column:2}
 
-@media (max-width:1100px){
+@media (max-width:1300px){
+  .page{grid-template-columns:minmax(220px,2.6fr) minmax(0,8fr)}
+  .rail{display:none}
+}
+@media (max-width:1000px){
   .page{grid-template-columns:minmax(0,1fr)}
   .side{display:none}
   .art{border-left:none}
@@ -194,25 +208,17 @@
       <div>
         <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}</div>
         {{- with $groupName }}
-        <div class="grp"{{ with $color }} style="{{ printf "--d:%s" . | safeCSS }}"{{ end }}>{{ if $color }}<i></i>{{ end }}<a href="{{ $groupURL }}">{{ . }}</a></div>
-        {{- end }}
-        {{- if gt (len $siblings) 1 }}
-        <nav class="sib">
-          {{- range $siblings }}
-          <a href="{{ .page.RelPermalink }}"{{ if eq .page.RelPermalink $p.RelPermalink }} class="cur" aria-current="page"{{ end }}>{{ .page.Title }}</a>
-          {{- end }}
-        </nav>
+        <div class="grp"><a href="{{ $groupURL }}">{{ . }}</a>
+          <small{{ with $color }} style="{{ printf "--d:%s" . | safeCSS }}"{{ end }}>{{ if $color }}<i></i>{{ $area }} · {{ end }}{{ len $siblings }} {{ if $isReport }}reports{{ else }}notes{{ end }}</small>
+        </div>
         {{- end }}
       </div>
-      {{- if ge (len $toc) 2 }}
-      <div>
-        <div class="lab"><b>On this page</b></div>
-        <nav class="toc" id="toc">
-          {{- range $toc }}{{ if le .l (add $minL 1) }}
-          <a href="#{{ .id }}" class="l{{ add (sub .l $minL) 1 }}">{{ .t | plainify }}</a>
-          {{- end }}{{ end }}
-        </nav>
-      </div>
+      {{- if gt (len $siblings) 1 }}
+      <nav class="sib" aria-label="{{ $groupName }}">
+        {{- range $siblings }}
+        <a href="{{ .page.RelPermalink }}"{{ if eq .page.RelPermalink $p.RelPermalink }} class="cur" aria-current="page"{{ end }}><em>{{ .num }}</em><span>{{ .short | default .page.Title }}</span></a>
+        {{- end }}
+      </nav>
       {{- end }}
     </div>
   </aside>
@@ -242,6 +248,20 @@
     </nav>
     {{- end }}
   </article>
+
+  <aside class="rail">
+    <div class="sticky">
+      {{- if ge (len $toc) 2 }}
+      <div class="lab"><b>On this page</b></div>
+      <nav class="toc" id="toc">
+        {{- range $toc }}{{ if le .l (add $minL 1) }}
+        <a href="#{{ .id }}" class="l{{ add (sub .l $minL) 1 }}">{{ .t | plainify }}</a>
+        {{- end }}{{ end }}
+      </nav>
+      <a class="totop" href="#">↑ Back to top</a>
+      {{- end }}
+    </div>
+  </aside>
 </div>
 
 {{ partial "site/footer.html" . }}
@@ -249,7 +269,7 @@
 /* 目录：滚动时高亮当前章节 */
 (function(){
   var links=[].slice.call(document.querySelectorAll('#toc a')); if(!links.length) return;
-  var heads=links.map(function(a){return document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));});
+  var heads=links.map(function(a){var e=document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));return e&&(e.closest('h1,h2,h3,h4,h5,h6')||e);});
   function on(){
     var y=window.scrollY+80, k=0;
     heads.forEach(function(h,i){ if(h && h.getBoundingClientRect().top+window.scrollY<=y) k=i; });
