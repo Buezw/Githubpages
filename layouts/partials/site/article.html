@@ -113,7 +113,7 @@
 <script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
-.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:30px var(--px) 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:end}
+.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:30px var(--px) 24px}
 .banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 12px;max-width:960px;overflow-wrap:anywhere}
 .banner .meta{font-size:.86rem}
 .banner .lead{max-width:860px;margin:0 0 12px}
@@ -227,12 +227,6 @@
       <i class="lang">{{ $lang }}</i>
     </div>
   </div>
-  {{- if or $prev $next }}
-  <nav class="nav2" aria-label="Previous and next">
-    {{- with $prev }}<a href="{{ .RelPermalink }}"><small>← Previous</small><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
-    {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><small>Next →</small><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
-  </nav>
-  {{- end }}
 </section>
 
 <div class="page">
@@ -274,6 +268,7 @@
   function on(){
     var y=window.scrollY+80, k=0;
     heads.forEach(function(h,i){ if(h && h.getBoundingClientRect().top+window.scrollY<=y) k=i; });
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4) k=heads.length-1;
     links.forEach(function(a,i){a.classList.toggle('on',i===k);});
   }
   window.addEventListener('scroll',on,{passive:true}); on();
