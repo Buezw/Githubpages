@@ -1,229 +1,372 @@
+{{- /*
+  首页 —— 独立页面，不使用 persona 共用样式。
+  内容全部自动生成：
+    · Notebook：data/notebook.yaml 里列出的文件夹中的笔记
+    · Research：data/systems.yaml（交易系统）+ content/finance 里的文章
+    · Activity：上面两类内容的发布日期
+*/ -}}
+
+{{- /* ========== Notebook：收集笔记 ========== */ -}}
+{{- $nb := site.Data.notebook -}}
+{{- $pages := slice -}}
+{{- with site.GetPage "/docs" -}}
+  {{- range $p := .RegularPagesRecursive -}}
+    {{- if and $p.File (not $p.Date.IsZero) -}}
+      {{- $hit := false -}}
+      {{- range $nb.sources -}}
+        {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $hit = true -}}{{- end -}}
+      {{- end -}}
+      {{- if $hit -}}{{- $pages = $pages | append $p -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $pages = sort $pages "Date" "desc" -}}
+
+{{- /* 每篇笔记对应的课程名 / 领域 */ -}}
+{{- $items := slice -}}
+{{- range $p := $pages -}}
+  {{- $src := dict -}}
+  {{- range $nb.sources -}}
+    {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}
+  {{- end -}}
+  {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area) -}}
+{{- end -}}
+
+{{- /* 首页显示：最新 4 篇，再补上其他领域各自最新的一篇，共 7 篇 */ -}}
+{{- $shown := slice -}}
+{{- $seen := dict -}}
+{{- range first 4 $items -}}
+  {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (lower .area) true) -}}
+{{- end -}}
+{{- range after 4 $items -}}
+  {{- if and (lt (len $shown) 7) (not (index $seen (lower .area))) -}}
+    {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (lower .area) true) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $areasUsed := dict -}}
+{{- range $items -}}{{- $areasUsed = merge $areasUsed (dict (lower .area) true) -}}{{- end -}}
+
+{{- /* ========== Research ========== */ -}}
+{{- $systems := site.Data.systems | default slice -}}
+{{- $shipped := len (where $systems "status" "shipped") -}}
+{{- $wip := len (where $systems "status" "wip") -}}
+{{- $reports := sort (where site.RegularPages "Section" "finance") "Date" "desc" -}}
+{{- $stopTags := slice "Finance" "Commentary" "Notes" "Algo" "Docs" -}}
+
+{{- /* ========== Activity 日历 ========== */ -}}
+{{- $blue := dict -}}
+{{- range $items -}}
+  {{- $k := .page.Date.Format "2006-01-02" -}}
+  {{- $blue = merge $blue (dict $k (add (index $blue $k | default 0) 1)) -}}
+{{- end -}}
+{{- $red := dict -}}
+{{- range $reports -}}
+  {{- $k := .Date.Format "2006-01-02" -}}
+  {{- $red = merge $red (dict $k (add (index $red $k | default 0) 1)) -}}
+{{- end -}}
+{{- range $systems -}}
+  {{- $k := (time.AsTime .date).Format "2006-01-02" -}}
+  {{- $red = merge $red (dict $k (add (index $red $k | default 0) 1)) -}}
+{{- end -}}
+{{- /* 最近更新日期：笔记、文章、系统里最新的那个；日历到这一天为止 */ -}}
+{{- $updated := now -}}
+{{- with $items -}}{{- $updated = (index . 0).page.Date -}}{{- end -}}
+{{- with $reports -}}{{- if (index . 0).Date.After $updated -}}{{- $updated = (index . 0).Date -}}{{- end -}}{{- end -}}
+{{- range $systems -}}{{- if (time.AsTime .date).After $updated -}}{{- $updated = time.AsTime .date -}}{{- end -}}{{- end -}}
+{{- $weeks := 88 -}}
+{{- $end := $updated -}}
+{{- $wdmap := dict "Mon" 0 "Tue" 1 "Wed" 2 "Thu" 3 "Fri" 4 "Sat" 5 "Sun" 6 -}}
+{{- $off := index $wdmap ($end.Format "Mon") -}}
+{{- $start := $end.AddDate 0 0 (int (sub (mul -7 (sub $weeks 1)) $off)) -}}
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jingnan Huang | Research & Engineering Archive</title>
-    {{ partial "persona/styles.html" (dict "Accent" "#cc0000") }}
-    <style>
-        /* 角色卡片：每个角色一张卡，包含简介和最新文章 */
-        .role-cards {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-        }
-        /* subgrid：两张卡的 标题/简介/Latest/列表 四行互相对齐，不受文字长短影响 */
-        .role-card {
-            display: grid;
-            grid-row: span 4;
-            grid-template-rows: subgrid;
-            row-gap: 0;
-            align-content: start;
-            border: 1px solid var(--line);
-            border-left: 3px solid var(--role);
-            padding: 22px 26px 18px;
-        }
-        .role-card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-        }
-        .role-card-tag {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--role);
-            margin-bottom: 8px;
-        }
-        .role-card-title {
-            font-family: var(--font-serif);
-            font-size: 1.9rem;
-            line-height: 1.15;
-            margin: 0;
-        }
-        .role-card-title a:hover { color: var(--role); }
-        .role-card-enter {
-            flex: 0 0 auto;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            padding-top: 4px;
-        }
-        .role-card-enter:hover { color: var(--role); }
-        .role-card-desc {
-            font-size: 1.05rem;
-            color: var(--dim);
-            line-height: 1.55;
-            margin: 12px 0 18px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        .role-card-latest {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: var(--dim);
-            border-bottom: 1px solid var(--line);
-            padding-bottom: 6px;
-            margin-bottom: 12px;
-        }
-        .role-card .entry-item { margin-bottom: 10px; padding-bottom: 10px; }
-        .role-card .entry-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .role-card .entry-item:hover .entry-title,
-        .role-card .entry-item:hover .entry-title-mono { color: var(--role); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jingnan Huang</title>
+<meta name="description" content="Jingnan Huang — Computer Engineering at the University of Toronto. Course notes, trading systems and market research.">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3f0ea; --paper2:#ebe6dc; --text:#141414; --dim:#7a7670; --line:#e2ddd4;
+  --blue:#1f3a8a; --red:#7a2430;
+  --px:clamp(20px,3.2vw,56px);
+  --serif:'Source Serif 4','Noto Serif SC',Georgia,serif;
+}
+/* 大屏：整页按比例放大 */
+html{--zoom:1;zoom:var(--zoom)}
+@media (min-width:2000px){html{--zoom:1.3}}
+@media (min-width:2400px){html{--zoom:1.45}}
+*{box-sizing:border-box}
+body{margin:0;min-height:calc(100vh / var(--zoom));display:flex;flex-direction:column;background:#fff;color:var(--text);
+  font:15px/1.6 'Inter Tight','Noto Sans SC',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.serif{font-family:var(--serif);font-weight:500;letter-spacing:-.015em}
 
-        @media (max-width: 1200px) {
-            .role-cards { grid-template-columns: minmax(0, 1fr); }
-        }
+/* ---------- 顶栏 / 页脚 ---------- */
+.topnav{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:11px var(--px);border-bottom:1px solid var(--line);font-size:.9rem;color:var(--dim)}
+.topnav nav{display:flex;gap:24px}
+.topnav nav a:hover{color:var(--text)}
+footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;border-top:1px solid var(--line);color:var(--dim);font-size:.8rem}
 
-        /* 手机 / 平板：单列时顺序改为 选角色 → 个人简介 */
-        @media (max-width: 1000px) {
-            .home-wrapper { row-gap: 0; }
-            .home-wrapper > main { display: contents; }
-            .home-wrapper .section-header { order: 1; }
-            .home-wrapper .role-cards { order: 2; }
-            .home-wrapper .sidebar {
-                order: 3;
-                margin: 32px 0 8px;
-                padding-top: 24px;
-                border-top: 1px solid var(--line);
-            }
-            .home-wrapper .profile-name { margin-bottom: 16px; }
-        }
-        @media (max-width: 640px) {
-            .role-card { padding: 18px 20px 16px; }
-            .role-card-title { font-size: 1.6rem; }
-            .role-card-desc { font-size: 1rem; }
-        }
-    </style>
+/* ---------- 版面：左栏 | 日历（横跨）/ Notebook | Research ---------- */
+.board{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,5fr);grid-template-rows:auto 1fr}
+.side{grid-column:1;grid-row:1/3;background:var(--paper);padding:20px 24px 22px var(--px);display:flex;flex-direction:column;gap:28px}
+.band{grid-column:2/4;grid-row:1;padding:16px var(--px) 13px;border-bottom:1px solid var(--line);border-left:1px solid var(--line)}
+.col{grid-row:2;border-left:1px solid var(--line);padding:12px var(--px) 22px;display:flex;flex-direction:column}
+.col h2{font-size:2.15rem;line-height:1.05;margin:4px 0 10px}
+.col .go{margin-top:auto;padding-top:22px;font-size:.95rem;color:var(--c)}
+.col .go:hover{text-decoration:underline}
+.stack{display:flex;flex-direction:column;gap:20px}
+
+/* 小标题行 */
+.lab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.8rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:2px}
+.lab b{font-weight:500;color:var(--text);font-size:.9rem}
+
+/* ---------- 左栏 ---------- */
+.side h1{font-size:2.25rem;line-height:1;margin:0}
+.who{color:var(--dim);margin-top:8px;font-size:.9rem;line-height:1.5}
+.who b{font-weight:500;color:var(--text)}
+.blurb{margin:0;color:#3a3833;font-size:.95rem;line-height:1.6}
+.side .lab{border-color:var(--paper2)}
+.kit{padding:6px 0;border-bottom:1px solid var(--paper2)}
+.kit:last-child{border-bottom:none}
+.kit>span{display:block;color:var(--dim);font-size:.78rem;margin-bottom:5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{background:#fff;border:1px solid var(--paper2);padding:2px 8px;font-size:.8rem}
+.contact{font-size:.9rem;margin-top:8px}
+.contact>a{display:block;padding-bottom:6px;border-bottom:1px solid var(--paper2);overflow-wrap:anywhere}
+.contact div{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:6px}
+.contact a:hover{text-decoration:underline}
+.cv{margin-top:auto;align-self:flex-start;border:1px solid var(--text);padding:7px 15px;font-size:.92rem}
+.cv:hover{background:var(--text);color:#fff}
+
+/* ---------- Activity 日历 ---------- */
+.bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--dim);margin-bottom:8px}
+.bh b{font-weight:500;color:var(--text);font-size:.9rem}
+.lg{display:inline-block;width:9px;height:9px;margin:0 3px 0 10px;vertical-align:-1px}
+.hm{display:flex;gap:2px}
+.hm>span{display:flex;flex-direction:column;gap:1px;flex:1}
+.hm i{display:block;height:7px;background:#efece6;border-radius:1px}
+.hm i.x{background:transparent}
+.hm i.b1{background:#9fb0d6}.hm i.b2,.lg.b2{background:#4f69ad}.hm i.b3{background:var(--blue)}.hm i.r,.lg.r{background:var(--red)}
+.ml{position:relative;height:16px;margin-top:5px;font-size:.72rem;color:var(--dim)}
+.ml em{position:absolute;font-style:normal;white-space:nowrap}
+
+/* ---------- 列表 ---------- */
+.rs{display:block;padding:7px 0 8px;border-bottom:1px solid var(--line)}
+.rs .t{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.rs .t b{font-weight:500;font-size:.95rem;line-height:1.4;min-width:0;overflow-wrap:anywhere}
+.rs .t span{color:var(--dim);white-space:nowrap;font-size:.86rem}
+.rs p{margin:4px 0 3px;color:var(--dim);font-size:.86rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rs .m{font-size:.78rem;color:var(--red)}
+.rs:hover b{color:var(--red)}
+.nb .rs{padding:5px 0}
+.nb .rs p{-webkit-line-clamp:1}
+.nb .rs .m{color:var(--blue)}
+.nb .rs:hover b{color:var(--blue)}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.mrow .m{display:flex;align-items:center;gap:8px;min-width:0}
+.area{font-style:normal;font-size:.7rem;font-weight:500;line-height:1.55;white-space:nowrap;color:var(--text)}
+.area::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--d)}
+.lang{font-style:normal;font-size:.68rem;font-weight:500;letter-spacing:.03em;line-height:1.55;padding:0 6px;border-radius:2px;color:var(--dim);border:1px solid #cfcac1;white-space:nowrap}
+
+.sys{padding:7px 0 8px;border-bottom:1px solid var(--line)}
+.sys .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sys .t b{font-weight:500}
+.st{font-size:.8rem;white-space:nowrap}
+.st::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+.ok{color:#2f6b4a}.wip{color:#b06a1e}
+.sys .d{color:var(--dim);font-size:.86rem;margin-top:1px}
+.sys .m{color:var(--dim);font-size:.78rem}
+
+/* ---------- 平板：左栏放到最上面，下面两栏并排 ---------- */
+@media (max-width:1100px){
+  .board{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto 1fr}
+  .side{grid-column:1/3;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;row-gap:20px;padding:24px var(--px)}
+  .side .cv{margin-top:0}
+  .band{grid-column:1/3;grid-row:2;border-left:none}
+  .col{grid-row:3}
+  .col.nb{border-left:none}
+}
+/* ---------- 手机：全部单列 ---------- */
+@media (max-width:760px){
+  body{font-size:14.5px}
+  .topnav{flex-direction:column;align-items:flex-start;gap:6px}
+  .topnav nav{gap:18px;flex-wrap:wrap}
+  .board{display:flex;flex-direction:column}
+  .side{display:flex;padding:22px var(--px)}
+  .band,.col{border-left:none}
+  .col{padding-top:20px}
+  .col.rsc{border-top:1px solid var(--line)}
+  .hm{gap:1px}.hm i{height:5px}
+  .lg{margin-left:6px}
+  .nb .rs p{-webkit-line-clamp:2}
+}
+</style>
 </head>
 <body>
 
-    {{ partial "persona/header.html" . }}
+<header class="topnav">
+  <span>Toronto · Updated {{ $updated.Format "Jan 2, 2006" }}</span>
+  <nav>
+    <a href="/student/">Notebook</a>
+    <a href="/utefa/">Research</a>
+    <a href="/docs/">Docs</a>
+    <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu</a>
+    {{- if fileExists "static/cv.pdf" }}
+    <a href="/cv.pdf">CV</a>
+    {{- end }}
+  </nav>
+</header>
 
-    {{/* 各角色的最新文章 */}}
-    {{ $uoft := .Site.GetPage "/docs/uoft" }}
-    {{ $studentEntries := slice }}
-    {{ if $uoft }}{{ $studentEntries = sort $uoft.RegularPagesRecursive "Date" "desc" }}{{ end }}
-    {{ $financeEntries := sort (where .Site.RegularPages "Section" "finance") "Date" "desc" }}
+<div class="board">
 
-    <div class="fluid-wrapper home-wrapper">
-        <aside class="sidebar">
-            <h2 class="profile-name">Jingnan Huang</h2>
-            <div class="profile-bio">
-                <div class="bio-role">
-                    <strong>B.A.Sc Computer Engineering Candidate</strong><br>
-                    <span style="color: var(--dim)">University of Toronto</span>
-                </div>
-                <div class="bio-edu">
-                    Working across quantitative trading and low-latency systems. Pick a role to see the relevant work.
-                </div>
-            </div>
-
-            <a href="/cv.pdf" class="btn-cv">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Download CV
-            </a>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Coordinates</div>
-                <ul class="contact-list">
-                    <li>
-                        <span class="contact-label">Academic Email</span>
-                        <span class="contact-val">
-                            <a href="mailto:jingnan.huang@mail.utoronto.ca">jingnan.huang@mail.utoronto.ca</a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="contact-label">GitHub</span>
-                        <span class="contact-val">
-                            <a href="https://github.com/Buezw" target="_blank">github.com/Buezw</a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="contact-label">LinkedIn</span>
-                        <span class="contact-val">
-                            <a href="https://linkedin.com/in/jingnan-huang-buezw/" target="_blank">in/jingnan-huang-buezw</a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Focus Areas</div>
-                <div class="comp-tags">
-                    <span class="tag-pill">Market Microstructure</span>
-                    <span class="tag-pill">Low Latency Systems</span>
-                    <span class="tag-pill">FPGA Acceleration</span>
-                </div>
-            </div>
-        </aside>
-
-        <main>
-            <h2 class="section-header">Choose a Role <span>ARCHIVE</span></h2>
-            <div class="role-cards">
-
-                <section class="role-card" style="--role:#0033cc;">
-                    <div class="role-card-head">
-                        <div>
-                            <div class="role-card-tag">UofT Student</div>
-                            <h3 class="role-card-title"><a href="/student/">Computer Engineering</a></h3>
-                        </div>
-                        <a href="/student/" class="role-card-enter">View all →</a>
-                    </div>
-                    <p class="role-card-desc">
-                        Lecture notes and lab write-ups from the B.A.Sc Computer Engineering program — circuits, systems, math, and software.
-                    </p>
-                    <div class="role-card-latest">Latest</div>
-                    {{ if $studentEntries }}
-                    <div class="entry-list">
-                        {{ range first 3 $studentEntries }}
-                        <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
-                            <div class="entry-title-mono">{{ .Title }}</div>
-                        </a>
-                        {{ end }}
-                    </div>
-                    {{ else }}
-                    <div class="empty-state">No entries yet.</div>
-                    {{ end }}
-                </section>
-
-                <section class="role-card" style="--role:#cc0000;">
-                    <div class="role-card-head">
-                        <div>
-                            <div class="role-card-tag">UTEFA Analyst</div>
-                            <h3 class="role-card-title"><a href="/utefa/">Sales & Trading</a></h3>
-                        </div>
-                        <a href="/utefa/" class="role-card-enter">View all →</a>
-                    </div>
-                    <p class="role-card-desc">
-                        Market commentary, microstructure research, and trading-infrastructure builds from the UTEFA Sales & Trading desk.
-                    </p>
-                    <div class="role-card-latest">Latest</div>
-                    {{ if $financeEntries }}
-                    <div class="entry-list">
-                        {{ range first 3 $financeEntries }}
-                        <a href="{{ .RelPermalink }}" class="entry-item">
-                            <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}</div>
-                            <div class="entry-title">{{ .Title }}</div>
-                        </a>
-                        {{ end }}
-                    </div>
-                    {{ else }}
-                    <div class="empty-state">No entries yet.</div>
-                    {{ end }}
-                </section>
-
-            </div>
-        </main>
+  {{- /* ===== 左栏：个人信息 ===== */}}
+  <aside class="side">
+    <div>
+      <h1 class="serif">Jingnan Huang</h1>
+      <div class="who"><b>Computer Engineering</b> · UofT<br><b>Sales &amp; Trading Analyst</b> · UTEFA</div>
     </div>
+    <p class="blurb">I work on quantitative trading and low-latency systems — market microstructure, low-latency infrastructure and FPGA acceleration — and keep notes on every course I take.</p>
+    <div>
+      <div class="lab"><b>Toolkit</b></div>
+      <div class="kit"><span>Languages</span><div class="chips"><span>C++17</span><span>C</span><span>Python</span><span>Verilog</span></div></div>
+      <div class="kit"><span>Hardware</span><div class="chips"><span>Xilinx FPGA</span><span>AVX2 SIMD</span></div></div>
+      <div class="kit"><span>Quant</span><div class="chips"><span>Monte Carlo</span><span>VPIN</span><span>Stochastic calculus</span></div></div>
+      <div class="kit"><span>Math</span><div class="chips"><span>Laplace &amp; Fourier</span><span>Linear algebra</span></div></div>
+    </div>
+    <div>
+      <div class="lab"><b>Contact</b></div>
+      <div class="contact">
+        <a href="mailto:jingnan.huang@mail.utoronto.ca">jingnan.huang@mail.utoronto.ca</a>
+        <div>
+          <a href="https://github.com/Buezw" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://linkedin.com/in/jingnan-huang-buezw/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu ↗</a>
+        </div>
+      </div>
+    </div>
+    {{- if fileExists "static/cv.pdf" }}
+    <a class="cv" href="/cv.pdf">Download CV ↓</a>
+    {{- end }}
+  </aside>
 
-    {{ partial "persona/footer.html" . }}
+  {{- /* ===== Activity：每格一天 ===== */}}
+  <section class="band">
+    <div class="bh">
+      <b>Activity</b>
+      <span>{{ $start.Format "Jan 2006" }} — {{ $end.Format "Jan 2006" }} · <i class="lg b2"></i>notes <i class="lg r"></i>research &amp; systems</span>
+    </div>
+    {{- $labels := slice }}
+    <div class="hm">
+      {{- range $w := seq 0 (sub $weeks 1) }}
+        {{- $first := $start.AddDate 0 0 (int (mul $w 7)) }}
+        {{- if and (le $first.Day 7) (in (slice "1" "5" "9") ($first.Format "1")) }}
+          {{- $labels = $labels | append (dict "pct" (div (mul $w 100.0) $weeks) "text" ($first.Format "Jan 06")) }}
+        {{- end }}
+        <span>
+        {{- range $d := seq 0 6 }}
+          {{- $day := $start.AddDate 0 0 (int (add (mul $w 7) $d)) }}
+          {{- if $day.After $end }}<i class="x"></i>
+          {{- else }}
+            {{- $k := $day.Format "2006-01-02" }}
+            {{- $n := index $blue $k | default 0 }}
+            {{- if index $red $k }}<i class="r" title="{{ $day.Format "Jan 2, 2006" }} · research"></i>
+            {{- else if $n }}<i class="b{{ cond (gt $n 2) 3 $n }}" title="{{ $day.Format "Jan 2, 2006" }} · {{ $n }} note{{ if gt $n 1 }}s{{ end }}"></i>
+            {{- else }}<i></i>
+            {{- end }}
+          {{- end }}
+        {{- end -}}
+        </span>
+      {{- end }}
+    </div>
+    <div class="ml">
+      {{- range $labels }}<em style="left:{{ printf "%.2f" .pct }}%">{{ .text }}</em>{{ end -}}
+    </div>
+  </section>
+
+  {{- /* ===== Notebook ===== */}}
+  <section class="col nb" style="--c:var(--blue)">
+    <h2 class="serif">Notebook</h2>
+    <div class="lab"><b>Latest</b><span>{{ len $items }} notes · {{ len $areasUsed }} areas</span></div>
+    {{- range $shown }}
+      {{- $p := .page }}
+      {{- /* 摘要：笔记的前几个章节标题 */}}
+      {{- $norm := replaceRE `[^a-z0-9]` "" (lower $p.Title) }}
+      {{- $cand := slice }}
+      {{- range $p.Fragments.Headings }}{{ $cand = $cand | append .Title }}{{ end }}
+      {{- if lt (len $cand) 3 }}
+        {{- range $p.Fragments.Headings }}{{ range .Headings }}{{ $cand = $cand | append .Title }}{{ end }}{{ end }}
+      {{- end }}
+      {{- $hs := slice }}
+      {{- range $cand }}
+        {{- $t := trim (. | plainify | htmlUnescape) " " }}
+        {{- if and $t (not (findRE `[$\\]` $t)) (ne (replaceRE `[^a-z0-9]` "" (lower $t)) $norm) }}{{ $hs = $hs | append $t }}{{ end }}
+      {{- end }}
+      {{- /* 语言：正文里中文字多就标 CN */}}
+      {{- $cjk := len (findRE `\p{Han}` $p.RawContent) }}
+      {{- $color := "#999" }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $color = $v }}{{ end }}{{ end }}
+    <a class="rs" href="{{ $p.RelPermalink }}">
+      <div class="t"><b>{{ $p.Title }}</b><span>{{ $p.Date.Format "Jan 2, 2006" }}</span></div>
+      {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
+      <div class="mrow">
+        <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ .area }}</i><span>{{ .name }}</span></span>
+        <i class="lang">{{ if gt $cjk 200 }}CN{{ else }}EN{{ end }}</i>
+      </div>
+    </a>
+    {{- end }}
+    <a class="go" href="/student/">Open the notebook →</a>
+  </section>
+
+  {{- /* ===== Research ===== */}}
+  <section class="col rsc" style="--c:var(--red)">
+    <h2 class="serif">Research</h2>
+    <div class="stack">
+      {{- with $systems }}
+      <div>
+        <div class="lab"><b>Systems</b><span>{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span></div>
+        {{- range . }}
+        <div class="sys">
+          <div class="t"><b>{{ .name }}</b>
+            {{- if eq .status "shipped" }}<span class="st ok">Shipped</span>{{ else }}<span class="st wip">In progress</span>{{ end }}</div>
+          <div class="d">{{ .desc }}</div>
+          <div class="m">{{ delimit (first 2 .stack) " · " }} · {{ (time.AsTime .date).Format "Jan 2006" }}</div>
+        </div>
+        {{- end }}
+      </div>
+      {{- end }}
+      {{- with $reports }}
+      <div>
+        <div class="lab"><b>Reports</b><span>{{ len . }} published</span></div>
+        {{- range first 2 . }}
+          {{- $meta := slice }}
+          {{- range .Params.categories }}{{ $meta = $meta | append . }}{{ end }}
+          {{- range .Params.tags }}{{ if not (in $stopTags .) }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
+        <a class="rs" href="{{ .RelPermalink }}">
+          <div class="t"><b>{{ .Title }}</b><span>{{ .Date.Format "Jan 2, 2006" }}</span></div>
+          {{- with (.Params.summary | default .Summary) }}<p>{{ . | plainify }}</p>{{ end }}
+          {{- with $meta }}<div class="m">{{ delimit (first 3 .) " · " }}</div>{{ end }}
+        </a>
+        {{- end }}
+      </div>
+      {{- end }}
+    </div>
+    <a class="go" href="/utefa/">Open research →</a>
+  </section>
+
+</div>
+
+<footer>
+  <span>© {{ now.Format "2006" }} Jingnan Huang</span>
+  <span>buezw.github.io</span>
+</footer>
 
 </body>
 </html>

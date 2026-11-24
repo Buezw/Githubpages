@@ -25,41 +25,25 @@
                             <th>Status</th>
                         </tr>
                     </thead>
+                    {{- /* 系统列表来自 data/systems.yaml（首页 Research 栏也用这一份） */}}
+                    {{- $systems := site.Data.systems | default slice }}
                     <tbody>
+                        {{- range $systems }}
                         <tr>
-                            <td class="ledger-idx">TKT-1102</td>
-                            <td class="ledger-date">2025.11.02</td>
+                            <td class="ledger-idx">{{ .ticket }}</td>
+                            <td class="ledger-date">{{ (time.AsTime .date).Format "2006.01.02" }}</td>
                             <td class="ledger-name">
-                                Option Pricer
-                                <div class="ledger-desc">High-performance Monte Carlo engine in C++ with variance reduction.</div>
+                                {{ .name }}
+                                <div class="ledger-desc">{{ .desc }}</div>
                             </td>
-                            <td class="ledger-stack">C++17 · Monte Carlo · AVX2 · Asian Options</td>
-                            <td><span class="ledger-status status-live">SHIPPED</span></td>
+                            <td class="ledger-stack">{{ delimit .stack " · " }}</td>
+                            <td>{{ if eq .status "shipped" }}<span class="ledger-status status-live">SHIPPED</span>{{ else }}<span class="ledger-status status-wip">IN PROGRESS</span>{{ end }}</td>
                         </tr>
-                        <tr>
-                            <td class="ledger-idx">TKT-0915</td>
-                            <td class="ledger-date">2025.09.15</td>
-                            <td class="ledger-name">
-                                FPGA Matching
-                                <div class="ledger-desc">Low-latency matching engine on Xilinx UltraScale+ with tick-to-trade optimization.</div>
-                            </td>
-                            <td class="ledger-stack">Verilog · Xilinx · TCP/IP Offload · HFT</td>
-                            <td><span class="ledger-status status-wip">IN PROGRESS</span></td>
-                        </tr>
-                        <tr>
-                            <td class="ledger-idx">TKT-0701</td>
-                            <td class="ledger-date">2025.07.01</td>
-                            <td class="ledger-name">
-                                Market Sim
-                                <div class="ledger-desc">Event-driven market simulator with realistic latency & queue models.</div>
-                            </td>
-                            <td class="ledger-stack">Python · Event-Driven · L3 Data</td>
-                            <td><span class="ledger-status status-live">SHIPPED</span></td>
-                        </tr>
+                        {{- end }}
                     </tbody>
                     <tfoot>
                         <tr class="ledger-summary">
-                            <td colspan="5">3 SYSTEMS LOGGED · 2 SHIPPED · 1 IN PROGRESS</td>
+                            <td colspan="5">{{ len $systems }} SYSTEMS LOGGED · {{ len (where $systems "status" "shipped") }} SHIPPED · {{ len (where $systems "status" "wip") }} IN PROGRESS</td>
                         </tr>
                     </tfoot>
                 </table>

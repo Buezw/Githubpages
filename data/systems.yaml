@@ -1,0 +1,27 @@
+# 交易系统列表 —— 首页 Research 栏和 UTEFA 页面共用这一份
+#
+# 加一个新系统：照着下面复制一段，放在最上面（新的在前）
+#   date   —— 日期，格式 "YYYY-MM-DD"，要加引号
+#   stack  —— 技术栈，首页只显示前两个
+#   status —— shipped（已完成）或 wip（进行中）
+
+- ticket: TKT-1102
+  date: "2025-11-02"
+  name: Option Pricer
+  desc: High-performance Monte Carlo engine in C++ with variance reduction.
+  stack: [C++17, Monte Carlo, AVX2, Asian Options]
+  status: shipped
+
+- ticket: TKT-0915
+  date: "2025-09-15"
+  name: FPGA Matching
+  desc: Low-latency matching engine on Xilinx UltraScale+ with tick-to-trade optimization.
+  stack: [Verilog, Xilinx, TCP/IP Offload, HFT]
+  status: wip
+
+- ticket: TKT-0701
+  date: "2025-07-01"
+  name: Market Sim
+  desc: Event-driven market simulator with realistic latency & queue models.
+  stack: [Python, Event-Driven, L3 Data]
+  status: shipped
