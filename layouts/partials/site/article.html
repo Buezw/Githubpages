@@ -73,9 +73,9 @@
 {{- /* ---------- 正文处理 ---------- */ -}}
 {{- $content := $p.Content -}}
 {{- $lastEdit := "" -}}
-{{- with findRESubmatch `<blockquote>\s*<p>\s*Last Edit:\s*([^<]*?)\s*</p>\s*</blockquote>` $content 1 -}}
-  {{- $lastEdit = index (index . 0) 1 -}}
-  {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit:[^<]*</p>\s*</blockquote>` "" $content 1 -}}
+{{- with findRESubmatch `<blockquote>\s*<p>\s*Last Edit:\s*([^<]*?)\s*</p>\s*</blockquote>` $content -}}
+  {{- $lastEdit = index (index . (sub (len .) 1)) 1 -}}
+  {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit:[^<]*</p>\s*</blockquote>` "" $content -}}
 {{- end -}}
 {{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
 {{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
@@ -113,8 +113,11 @@
 <script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
-.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:30px var(--px) 24px}
-.banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 12px;max-width:960px;overflow-wrap:anywhere}
+/* 横幅：左边和正文对齐（用和下方相同的两栏网格），标题可以向右延伸到目录栏上方 */
+.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:28px 0 22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
+.banner>div{padding:0 clamp(24px,3.4vw,64px);max-width:calc(860px + 2*clamp(24px,3.4vw,64px));width:100%;margin:0 auto;box-sizing:border-box;min-width:0}
+.banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 12px;white-space:nowrap;width:max-content}
+.banner h1.wrap{white-space:normal;width:auto}
 .banner .meta{font-size:.86rem}
 .banner .lead{max-width:860px;margin:0 0 12px}
 .nav2{display:flex;gap:8px}
@@ -194,16 +197,13 @@
 .pn b{font-weight:500;font-size:.95rem;overflow-wrap:anywhere}
 .pn .nx{text-align:right;grid-column:2}
 
-@media (max-width:1100px){
-  .banner{grid-template-columns:minmax(0,1fr)}
-}
 @media (max-width:1000px){
   .page{grid-template-columns:minmax(0,1fr)}
   .rail{display:none}
 }
 @media (max-width:760px){
-  .banner{padding:22px var(--px) 18px;gap:16px}
-  .banner h1{font-size:1.8rem}
+  .banner{display:block;padding:22px 0 18px}
+  .banner h1{font-size:1.8rem!important;white-space:normal;width:auto}
   .nav2{display:none}
   .prose{font-size:.98rem}
   .pn{grid-template-columns:1fr}
@@ -217,7 +217,7 @@
 <section class="banner">
   <div>
     <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
-    <h1 class="serif">{{ partial "site/nice-title.html" $p.Title }}</h1>
+    <h1 class="serif" id="atitle">{{ partial "site/nice-title.html" $p.Title }}</h1>
     {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
     <div class="meta">
       {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
@@ -260,6 +260,22 @@
 </div>
 
 {{ partial "site/footer.html" . }}
+<script>
+/* 标题只占一行：放不下时逐步缩小字号（最小 1.5rem），仍放不下就换行 */
+(function(){
+  var h=document.getElementById('atitle'); if(!h) return;
+  function fit(){
+    h.classList.remove('wrap'); h.style.fontSize='';
+    if(window.innerWidth<=760) return;
+    var band=h.closest('.banner'), right=band.getBoundingClientRect().right-parseFloat(getComputedStyle(document.documentElement).fontSize)*2.5;
+    var size=parseFloat(getComputedStyle(h).fontSize), min=parseFloat(getComputedStyle(document.documentElement).fontSize)*1.5;
+    while(h.getBoundingClientRect().right>right && size>min){ size-=1; h.style.fontSize=size+'px'; }
+    if(h.getBoundingClientRect().right>right) h.classList.add('wrap');
+  }
+  fit(); window.addEventListener('resize',fit);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+})();
+</script>
 <script>
 /* 目录：滚动时高亮当前章节 */
 (function(){
