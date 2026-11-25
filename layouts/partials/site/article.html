@@ -79,7 +79,6 @@
 {{- end -}}
 {{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
 {{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
-{{- $mins := math.Max 1 (math.Round (div (add (float $p.WordCount) (div (float $cjk) 2.0)) 220.0)) -}}
 
 {{- /* 目录：前两层标题（笔记里常用 # 作为章节） */ -}}
 {{- $toc := slice -}}
@@ -223,7 +222,6 @@
       {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
       <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
       {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
-      <span>{{ $mins }} min read</span>
       <i class="lang">{{ $lang }}</i>
     </div>
   </div>
