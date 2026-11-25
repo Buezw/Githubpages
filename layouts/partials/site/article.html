@@ -73,9 +73,9 @@
 {{- /* ---------- 正文处理 ---------- */ -}}
 {{- $content := $p.Content -}}
 {{- $lastEdit := "" -}}
-{{- with findRESubmatch `<blockquote>\s*<p>\s*Last Edit:\s*([^<]*?)\s*</p>\s*</blockquote>` $content -}}
+{{- with findRESubmatch `<blockquote>\s*<p>\s*Last Edit\s*[:：]?\s*([^<]*?)\s*</p>\s*</blockquote>` $content -}}
   {{- $lastEdit = index (index . (sub (len .) 1)) 1 -}}
-  {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit:[^<]*</p>\s*</blockquote>` "" $content -}}
+  {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit[^<]*</p>\s*</blockquote>` "" $content -}}
 {{- end -}}
 {{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
 {{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
