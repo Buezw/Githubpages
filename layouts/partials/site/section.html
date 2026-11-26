@@ -68,6 +68,16 @@
 .list .rs .t span .lang{margin-right:6px;vertical-align:1px}
 .empty{color:var(--dim)}
 @media (max-width:760px){.banner h1{font-size:1.8rem}}
+/* 学期页课程卡片 */
+.ccards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.ccard{display:flex;flex-direction:column;gap:10px;border:1px solid var(--line);border-top:3px solid var(--d);padding:22px 26px 20px;background:#fff;min-height:190px}
+.ccard:hover{border-color:var(--text);border-top-color:var(--d)}
+.ccard .ca{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--dim)}
+.ccard b{font-size:2rem;font-weight:500;line-height:1.15;letter-spacing:-.01em}
+.ccard .cs{display:flex;gap:18px;flex-wrap:wrap;font-size:.92rem;color:var(--dim)}
+.ccard em{margin-top:auto;font-style:normal;font-size:.92rem;color:var(--c)}
+.ccard:hover em{text-decoration:underline}
+@media (max-width:760px){.ccards{grid-template-columns:minmax(0,1fr)}.ccard b{font-size:1.6rem}}
 /* 目录页整体放大一号 */
 .banner h1{font-size:3rem}
 .banner .meta{font-size:.95rem}
@@ -97,8 +107,10 @@
   <h1 class="serif">{{ $title }}</h1>
   <div class="meta">
     {{- with $src.area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-    {{- with $ordered }}<span>{{ len . }} {{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}</span>{{ end }}
-    <span>{{ len $s.RegularPagesRecursive }} {{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}</span>
+    {{- $isTerm := findRE `^(Winter|Fall|Summer) \d{4}$` $s.Title }}
+    {{- $noteish := or $isTerm $src (eq $s.Title "UofT Coursework") }}
+    {{- with $ordered }}<span>{{ len . }} {{ if $isTerm }}{{ if eq (len .) 1 }}course{{ else }}courses{{ end }}{{ else if eq $s.Title "UofT Coursework" }}terms{{ else }}{{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}{{ end }}</span>{{ end }}
+    <span>{{ len $s.RegularPagesRecursive }} {{ if $noteish }}{{ if eq (len $s.RegularPagesRecursive) 1 }}note{{ else }}notes{{ end }}{{ else }}{{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}{{ end }}</span>
   </div>
 </section>
 
@@ -108,19 +120,25 @@
   {{- range $ordered -}}{{- if .Sections -}}{{- $leafSubs = false -}}{{- end -}}{{- end -}}
 
   {{- if and $ordered $leafSubs (not $isResearch) }}
-  <div class="blocks">
+  {{- /* 学期页：每门课一张大卡片，只放概要，不列具体笔记 */}}
+  <div class="ccards">
     {{- range $ordered }}
       {{- $sub := . }}
-      {{- $sc := "#999" }}{{ $name := partial "site/nice-title.html" .Title }}
-      {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $sc = $v }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
-      {{- $rs := slice }}
-      {{- range .RegularPages }}{{ $rs = $rs | append (dict "page" . "k" (partial "site/lecture-key.html" .Title) "d" .Date.Unix) }}{{ end }}
-    <section class="block">
-      <div class="lab"><b style="{{ printf "--d:%s" $sc | safeCSS }}"><i></i><a href="{{ .RelPermalink }}">{{ $name }}</a></b><span>{{ len $rs }} notes</span></div>
-      {{- range sort (sort $rs "d" "asc") "k" "asc" }}
-      {{ partial "site/note-row.html" (dict "item" (dict "page" .page) "compact" true) }}
+      {{- $sc := "#999" }}{{ $area := "" }}{{ $name := partial "site/nice-title.html" .Title }}
+      {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ $area = .area }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $sc = $v }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
+      {{- $ps := .RegularPages.ByDate }}
+      {{- $n := len $ps }}
+    <a class="ccard" href="{{ .RelPermalink }}" style="{{ printf "--d:%s" $sc | safeCSS }}">
+      <div class="ca">{{ with $area }}<i class="area" style="{{ printf "--d:%s" $sc | safeCSS }}">{{ . }}</i>{{ end }}<span>{{ $n }} {{ if eq $n 1 }}note{{ else }}notes{{ end }}</span></div>
+      <b class="serif">{{ $name }}</b>
+      {{- with $ps }}
+      <div class="cs">
+        <span>{{ (index . 0).Date.Format "Jan 2" }} – {{ (index . (sub (len .) 1)).Date.Format "Jan 2, 2006" }}</span>
+        <span>Updated {{ (index . (sub (len .) 1)).Date.Format "Jan 2" }}</span>
+      </div>
       {{- end }}
-    </section>
+      <em>Open course →</em>
+    </a>
     {{- end }}
   </div>
 
