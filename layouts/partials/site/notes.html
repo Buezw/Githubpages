@@ -1,18 +1,14 @@
 {{- /*
-  收集 Notebook 里所有课程 / 书（见 partials/site/sources.html）的笔记，按日期从新到旧。
+  收集 content/docs 下所有发布的文章（有日期的），按日期从新到旧：最新发布的都上首页。
+  属于某门课 / 某本书的（见 partials/site/sources.html）带上课程名和领域；
+  其他的（Sample、Displays、Projects 等）用所在文件夹的标题，没有领域（灰点）。
   返回：slice of dict{ page, name, area, dir }
 */ -}}
 {{- $sources := partialCached "site/sources.html" . "all" -}}
 {{- $pages := slice -}}
 {{- with site.GetPage "/docs" -}}
   {{- range $p := .RegularPagesRecursive -}}
-    {{- if and $p.File (not $p.Date.IsZero) -}}
-      {{- $hit := false -}}
-      {{- range $sources -}}
-        {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $hit = true -}}{{- end -}}
-      {{- end -}}
-      {{- if $hit -}}{{- $pages = $pages | append $p -}}{{- end -}}
-    {{- end -}}
+    {{- if and $p.File (not $p.Date.IsZero) -}}{{- $pages = $pages | append $p -}}{{- end -}}
   {{- end -}}
 {{- end -}}
 {{- $items := slice -}}
@@ -21,6 +17,12 @@
   {{- range $sources -}}
     {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}
   {{- end -}}
-  {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area "dir" $src.dir) -}}
+  {{- if $src -}}
+    {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area "dir" $src.dir) -}}
+  {{- else -}}
+    {{- $name := "" -}}
+    {{- with $p.CurrentSection -}}{{- if ne .RelPermalink "/docs/" -}}{{- $name = partial "site/nice-title.html" .Title -}}{{- end -}}{{- end -}}
+    {{- $items = $items | append (dict "page" $p "name" $name "area" "" "dir" "") -}}
+  {{- end -}}
 {{- end -}}
 {{- return $items -}}
