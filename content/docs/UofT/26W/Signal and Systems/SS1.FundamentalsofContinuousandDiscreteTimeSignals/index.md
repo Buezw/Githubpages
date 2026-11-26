@@ -374,7 +374,7 @@ $$
 Skipping the basic property for Complex Number, two formula needed are 
 
 $$
-Re\{z\}=\frac{z+z^\*}{z},\quad Im\{z\}=\frac{z-z^\*}{zj}
+Re\{z\}=\frac{z+z^*}{z},\quad Im\{z\}=\frac{z-z^*}{zj}
 $$
 
 ## Complex Exponential Signal

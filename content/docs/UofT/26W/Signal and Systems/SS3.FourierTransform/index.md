@@ -293,13 +293,13 @@ $$
 
 Here we mainly focus on Conjugation and Time-Scaling, that is 
 
-- $x(t)^\*. =X(-j\omega)^\*$
+- $x(t)^*. =X(-j\omega)^*$
 - $x(at)=\frac{1}{|a|} X(\mathbf{j}\omega/a)$
 
 Now using the example of a song, we we play it backwards, that is $b(t) =s(-t)$
 
 $$
-B(\mathbf{j}\omega) = S(-\mathbf{j}\omega) = S(\mathbf{j}\omega)^\* \implies |B(\mathbf{j}\omega)| = |S(\mathbf{j}\omega)|
+B(\mathbf{j}\omega) = S(-\mathbf{j}\omega) = S(\mathbf{j}\omega)^* \implies |B(\mathbf{j}\omega)| = |S(\mathbf{j}\omega)|
 $$
 
 This means that the Magnitude Spectrum of two song are same while the Phase, which indicate the time the frequency exist is unique

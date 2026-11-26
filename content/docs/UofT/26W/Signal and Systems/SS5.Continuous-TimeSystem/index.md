@@ -183,7 +183,7 @@ This implies that, once we give LTI system a Unit Impulse Signal $\delta(t)$, to
 The convolution of two signals can be defined as
 
 $$
-y(t) = (h \* x)(t) = \int_{-\infty}^{\infty} h(t - \tau)x(\tau) \text{d}\tau
+y(t) = (h * x)(t) = \int_{-\infty}^{\infty} h(t - \tau)x(\tau) \text{d}\tau
 $$
 
 ## Observations of Convolution
@@ -208,7 +208,7 @@ At any time t, the output $y(t)$ depends on the input $x$ and $h$’ s entire si
 A case where Convolution doesn’t work can be $v(t)=1$, and 
 
 $$
-(v \* v)(t) = \int_{-\infty}^{\infty} (1)(1) \, d\tau = \int_{-\infty}^{\infty} 1 \, d\tau = +\infty
+(v * v)(t) = \int_{-\infty}^{\infty} (1)(1) \, d\tau = \int_{-\infty}^{\infty} 1 \, d\tau = +\infty
 $$
 
 A result of Infinite doesn’t make sense, such is then undefined

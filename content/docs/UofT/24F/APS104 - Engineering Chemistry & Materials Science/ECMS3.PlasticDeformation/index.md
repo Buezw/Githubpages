@@ -42,7 +42,7 @@ math: mathjax
 
 #### Beyond Elastic Region
 
-- 在Elastic Region外，便是完整的[[ECMS 2. Elastic Behavior#Young's Modulus 杨氏模量]]的模型
+- 在Elastic Region外，便是完整的[ECMS 2. Elastic Behavior]({{< ref "/docs/UofT/24F/APS104 - Engineering Chemistry & Materials Science/ECMS2.ElasticBehavior" >}}#young's-modulus-杨氏模量)的模型
 
 ![](/docs/EMCS_Static/ECMS3.PlasticDeformations/ECMS3.PlasticDeformations-3.png)
 

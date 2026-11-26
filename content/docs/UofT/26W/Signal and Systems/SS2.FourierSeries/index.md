@@ -273,7 +273,7 @@ $$
 Known that all signals in real life are **Real-Valued**, that means
 
 $$
-x(t)=x(t)^\*
+x(t)=x(t)^*
 $$
 
 Known this property, we can then conclude the Symmetry of Real-Valued Signal in Frequency Domain, recall the CTFS coefficients
@@ -285,11 +285,11 @@ $$
 - It has the conjugate of
 
 $$
-a_k^\* = \frac{1}{T_0} \int_{0}^{T_0} x(t)^\* (e^{-\mathbf{j}k\omega_0 t})^\* \, dt= \frac{1}{T_0} \int_{0}^{T_0} x(t) e^{\mathbf{j}k\omega_0 t} \, dt\
+a_k^* = \frac{1}{T_0} \int_{0}^{T_0} x(t)^* (e^{-\mathbf{j}k\omega_0 t})^* \, dt= \frac{1}{T_0} \int_{0}^{T_0} x(t) e^{\mathbf{j}k\omega_0 t} \, dt\
 = a_{-k}
 $$
 
-- Known that $a_k^\* = a_{-k}$, then we know that $|a_{-k}| = |a_k|$, and $\angle a_{-k} = -\angle a_k$
+- Known that $a_k^* = a_{-k}$, then we know that $|a_{-k}| = |a_k|$, and $\angle a_{-k} = -\angle a_k$
 
 # Existence of  CTFS
 

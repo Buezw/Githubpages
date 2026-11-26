@@ -30,7 +30,7 @@ $$
 - $\rho_v$
 : Charge Density
 - $u_v$: Charge Drifting Speed
-- This means $Current ~Density = Charge~Density \* Velocity$
+- This means $Current ~Density = Charge~Density * Velocity$
 
 ## Conduction Current
 

@@ -26,7 +26,7 @@ w = torch.normal(0, 0.01, size=(2,1), requires_grad=True)
 b = torch.zeros(1, requires_grad=True)
 ```
 - 在初始化参数之后，我们的任务是更新这些参数，直到这些参数足够拟合我们的数据
-- 并运用[[2.5 自动微分]]来计算梯度
+- 并运用2.5 自动微分来计算梯度
 
 ## 3.2.4 定义模型
 
@@ -40,11 +40,11 @@ def linreg(X, w, b):  #@save
 ## 3.2.5 定义损失函数
 
 - 模型建立后，开始使用对原函数的损失函数进行梯度下降
-- 这里我们使用[[3.1_LinearRegression#平方误差函数]]
+- 这里我们使用3.1_LinearRegression
 
 ## 3.2.6 定义优化算法
 
-- 使用[[3.1_LinearRegression#Minibatch Stochastic Gradient Descent 小批量随机梯度下降]]
+- 使用3.1_LinearRegression
 
 ## 3.2.7 训练
 

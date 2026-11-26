@@ -36,7 +36,7 @@ $$\lim_{n \to \infty} \frac{a_n}{b_n} = \frac{L}{K}$$
 
 #### ex. Sequence Convergence by Squeeze Theorem
 
-- 证明Sequence $\{ c_n \} = \left\{ (-1)^n \frac{1}{n!} \right\}$收敛
+- 证明Sequence \\(\{ c_n \} = \left\{ (-1)^n \frac{1}{n!} \right\}\\)收敛
 - 使用两个序列\\(a_n=\frac{1}{2^n}\\)，已知Factorial的扩散速度小于Exponential，有
 $$-\frac{1}{2^n} \leq (-1)^n \frac{1}{n!} \leq \frac{1}{2^n}, \quad n \geq 4$$
 ### Monotonic Sequences
@@ -330,7 +330,7 @@ $$f'(x) = \sum_{n=1}^{\infty} n a_n (x - c)^{n-1} = a_1 + 2a_2(x - c) + 3a_3(x -
 $$\int f(x) \, dx = C + \sum_{n=0}^{\infty} a_n \frac{(x - c)^{n+1}}{n+1} 
 = C + a_0 (x - c) + \frac{a_1 (x - c)^2}{2} + \frac{a_2 (x - c)^3}{3} + \cdots$$
 - 其Integral和Derivative会有和原函数相同的Radius of convergency，但是由于Series本身发生了改变，导致End Point Behavior可能不同
-$$$$
+
 ## Representation of Functions by Power Series
 
 - 考虑一个function \\(f(x) = \frac{1}{1 - x}\\)

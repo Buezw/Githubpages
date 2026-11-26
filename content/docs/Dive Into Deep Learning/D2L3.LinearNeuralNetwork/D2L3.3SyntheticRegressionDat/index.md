@@ -8,7 +8,7 @@ math: mathjax
 pageStyle : "normal"
 ---
 
-本节将介绍如何通过使用深度学习框架来简洁地实现[[3.2_Object-OrientedDesignforImplementation]]中的线性回归模型
+本节将介绍如何通过使用深度学习框架来简洁地实现3.2_Object-OrientedDesignforImplementation中的线性回归模型
 
 ## 3.3.1 生成数据集
 ```

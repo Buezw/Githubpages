@@ -159,7 +159,7 @@ $$
 When there’s Complex Root and there time is more than one, in the form of
 
 $$
-F(s) = \frac{K}{(s-p_j)^2(s-p_j^\*)^2} = \frac{k}{(s+\alpha-j\beta)^2} + \frac{k^\*}{(s+\alpha+j\beta)^2}
+F(s) = \frac{K}{(s-p_j)^2(s-p_j^*)^2} = \frac{k}{(s+\alpha-j\beta)^2} + \frac{k^*}{(s+\alpha+j\beta)^2}
 $$
 
 It’s Laplace Inverse in time domain will then be a sinusoid signal with time linear decay 

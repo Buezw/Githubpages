@@ -14,11 +14,11 @@ pageStyle : "normal"
 
 ## 3.4.1 分类问题
 
-- [[One-hot encoding 独热编码]]
+- One-hot encoding 独热编码
 
 ## 3.4.2 网格架构
 
-- 为了估计所有可能类别的条件概率，我们需要一个有多个输出的模型，每个类别对应一个输出。 为了解决线性模型的分类问题，我们需要和输出一样多的[[Affine Function 仿射函数]]
+- 为了估计所有可能类别的条件概率，我们需要一个有多个输出的模型，每个类别对应一个输出。 为了解决线性模型的分类问题，我们需要和输出一样多的Affine Function 仿射函数
 
 *E.X.*
 - 假设现在有3个未规范化的预测(Logit)：\\(o_1,o_2和o_3\\)
@@ -28,7 +28,7 @@ pageStyle : "normal"
 
 ## 3.4.3 全连接层的参数开销
 
-- 对于任何具有d个输入和q个输出的全连接层[[3.1_LinearRegression#Fully-Connected Layer 全连接层]]，其参数开销为\\(O(dq)\\)，但可以通过超参数减少到\\(O(\frac{dq}{n})\\)
+- 对于任何具有d个输入和q个输出的全连接层3.1_LinearRegression，其参数开销为\\(O(dq)\\)，但可以通过超参数减少到\\(O(\frac{dq}{n})\\)
 
 ## 3.4.4 softmax 运算
 
@@ -40,7 +40,7 @@ pageStyle : "normal"
 - 因为将线性层的输出直接视为概率时存在一些问题
 - 我们没有限制这些输出数字的总和为1
 - 根据输入的不同，它们可以为负值
-- 其违反了[[概率论公理]]
+- 其违反了概率论公理
 
 ## 概率论
 
@@ -67,18 +67,18 @@ pageStyle : "normal"
 
 ## 3.4.6 损失函数
 
-- 使用[[Maximum Likehood Estimation 极大似然估计]]
+- 使用Maximum Likehood Estimation 极大似然估计
 
 ### 3.4.6.1 对数似然
 
 - softmax函数给出了一个向量\\(\hat y\\)， 我们可以将其视为“对给定任意输入x的每个类的条件概率
 - 通过计算softmax的对数似然，可以推导出他的损失函数
 - 假设现在有一个数据集 \\({X,Y}\\)，其具有n个样本，其中索引i的样本由特征向量\\(x^{(i)}\\)和独热标签向量\\(y^{(i)}\\)组成，可以将估计值与实际值进行比较$$P(Y|X)=\prod^n_{i=1}P(y^{(i)}|x^{(i)})$$
-- 根据[[3.1_LinearRegression#Likehood 似然]]，已知最大化$P(Y|X)，相当于最小化负对数似然
+- 根据3.1_LinearRegression，已知最大化$P(Y|X)，相当于最小化负对数似然
 $$P(Y|X)=\sum^n_{i=1}-logP(y^{(i)}|x^{(i)})=\sum^n_{i=1}l(y^{(i)},\hat y^{(i)})$$
 
 - 其中对于任何标签y和预测模型\\(\hat y\\)，损失函数为$$l(y,\hat y)=-\sum^{q}_{j=1}y_j\log \hat y_j$$
-- 这个[[3.1_LinearRegression#Loss Function 损失函数]]并没有介绍过，他的名字为Cross-entropy Loss交叉熵损失，将在后面介绍到
+- 这个3.1_LinearRegression并没有介绍过，他的名字为Cross-entropy Loss交叉熵损失，将在后面介绍到
 
 #### 为什么要加入对数，而不是直接取负数
 
@@ -99,16 +99,16 @@ $$\begin{align}l(y,\hat y)=-\sum^{q}_{j=1}y_j\log \frac{e^{o_j}}{{\sum^{q}_{k=1}
 
 
 
-- 得到[[Home Page]]
+- 得到Home Page
 ![](/docs/D2L_Static/3.4_SoftmaxRegression/3.4_SoftmaxRegression-1.png)
 
 ### 3.4.6.3 交叉熵损失
 
-- [[Cross-Entropy 交叉熵]]
+- Cross-Entropy 交叉熵
 
 ### 3.4.7.1 熵
 
-- [[Cross-Entropy 交叉熵#2. 熵]]
+- Cross-Entropy 交叉熵
 
 
 

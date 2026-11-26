@@ -11,7 +11,7 @@ pageStyle : "normal"
 >Last Edit 4/15/24
 
 Regression 回归，是能为一个或多个自变量与因变量之间关系建模的一种方式
-- [[Regression 回归]]
+- Regression 回归
 
 ## 3.1.1 线性回归的基本元素
 
@@ -21,7 +21,7 @@ Regression 回归，是能为一个或多个自变量与因变量之间关系建
 
 ### 3.1.1.1 线性模型
 
-- [[线性模型]]
+- 线性模型
 - 线性假设是指目标可以表示为特征的加权和，如下例子
 
 *E.X.*
@@ -29,13 +29,13 @@ $$Price=w_{area}\cdot area+w_{age}\cdot age+b$$
 - w称为Weight权重
 - b称为Bias，Offset或者Intercept偏置，即特征为0时的预测值
 
-严格来说，上式为输入特征的一个[[Affine Transformation 仿射变换]]
+严格来说，上式为输入特征的一个Affine Transformation 仿射变换
 
 - 给定一个数据集，我们的目标即为寻找模型的Weight和Offset
 
 ### 高维数据集
 
-- 在Deep Learning 领域，我们通常使用的是高纬数据集，建模时采用[[2.3 线性代数]]的表示方法会比较方便。
+- 在Deep Learning 领域，我们通常使用的是高纬数据集，建模时采用2.3 线性代数的表示方法会比较方便。
 - 当我们的输入包含多个特征时，我们将预测结果表示为\\(\hat{y}\\)
 
 ###  点积形式
@@ -152,7 +152,7 @@ f'{timer.stop():.5f} sec'
 
 ### 正态分布
 
-- [[Normal Distribution 正态分布]]
+- Normal Distribution 正态分布
 
 ### 均方误差损失函数
 
@@ -162,7 +162,7 @@ $$y=w^Tx+b+\epsilon$$
 
 ## Likehood 似然
 
-- [[Likehood 似然]]
+- Likehood 似然
 - 通过给定的x观测到特定y的似然（likelihood）
 $$p(y|x)=\frac{1}{\sqrt{2\pi \sigma^2}}exp(-\frac{1}{2\sigma^2}(y-w^Tx-b)^2)$$
 - 对于似然函数\\(L(\theta|data)=P(data|\theta)= \Pi^N_{i=1}P(x_i|\theta)\\)
@@ -170,7 +170,7 @@ $$p(y|x)=\frac{1}{\sqrt{2\pi \sigma^2}}exp(-\frac{1}{2\sigma^2}(y-w^Tx-b)^2)$$
 - 要求得给定x（\\(\theta\\)）（其不固定，但遵循正态分布）观测到特点y的似然，得到公式 \\(L(x|y)=P(y|x)\\)
 - 已知\\(p(y|x)=\frac{1}{\sqrt{2\pi \sigma^2}}exp(-\frac{1}{2\sigma^2}(y-w^Tx-b)^2)\\)
 - 由于\\(P(y|x)=\Pi^N_{i=1}P(y^{(i)}|x^{(i)})\\)（由x的参数条件下观测到y的可能性为独立的N个子事件的乘积）
-- 根据[[Maximum Likehood Estimation 极大似然估计]]，参数w和b的最优值是使整个数据集的[[Likehood 似然]]最大的值
+- 根据Maximum Likehood Estimation 极大似然估计，参数w和b的最优值是使整个数据集的Likehood 似然最大的值
 - 但又因为乘积最大化问题十分复杂，并且由于历史遗留问题，优化常说的不是最大化，而是最小化
 -  所以我们需要通过最小化对数似然\\(-logP(y|x)\\)，由此可以得到的数学公式为
 $$-logP(y|x)=\sum\limits^n_{i=1}\frac{1}{2}log(2\pi\sigma^2)+\frac{1}{2\sigma^2}(y^{(i)}-w^Tx^{(i)}-b)^2$$

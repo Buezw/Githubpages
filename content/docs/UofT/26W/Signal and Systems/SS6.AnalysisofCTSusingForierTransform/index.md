@@ -101,7 +101,7 @@ Now take a look at this output $y(t)$, it means, the output of the LTI system is
 Notice in the previous part “Response of a LTI System to a periodic Input”, we used the CTFT and i-CTFT to only do calculations in Frequency Domain, this is because it’s more easy to do multiplication in Frequency Domain than do Convolution in Time Domain, as
 
 $$
-y(t) = (h \* x)(t) \iff Y(\mathbf{j}\omega) = H(\mathbf{j}\omega)X(\mathbf{j}\omega)
+y(t) = (h * x)(t) \iff Y(\mathbf{j}\omega) = H(\mathbf{j}\omega)X(\mathbf{j}\omega)
 $$
 
 ### Ex. Computing the output for the RC circuit

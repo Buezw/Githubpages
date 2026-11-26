@@ -42,7 +42,7 @@ Although the Transfer Function can be developed, **here we only analysis cases w
 
 ![image.png](image.png)
 
-A Right Sided CT signal $x$ is of Exponential Class if $|x(t)| \le Me^{\sigma t}$ for $t\geq 0$, $M>0$, $\sigma\in \mathbb R$, where the smaller $\sigma$ is labelled $\sigma^\*(x)$
+A Right Sided CT signal $x$ is of Exponential Class if $|x(t)| \le Me^{\sigma t}$ for $t\geq 0$, $M>0$, $\sigma\in \mathbb R$, where the smaller $\sigma$ is labelled $\sigma^*(x)$
 
 ## The right-sided Laplace Transform
 
