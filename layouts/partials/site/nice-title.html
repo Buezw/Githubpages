@@ -11,5 +11,6 @@
 {{- $t = replaceRE `\b([A-Za-z]{3,}tion)to\b` "$1 to" $t -}}
 {{- $t = replaceRE `\b([A-Z]+) S(using|of|and)\b` "${1}S $2" $t -}}
 {{- $t = replaceRE `([A-Za-z])&([A-Za-z])` "$1 & $2" $t -}}
+{{- $t = replace $t "Uof T" "UofT" -}}
 {{- $t = replaceRE `\s+` " " $t -}}
 {{- return (trim $t " ") -}}

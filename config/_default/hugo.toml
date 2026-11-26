@@ -5,7 +5,8 @@
 theme = "blowfish"
 baseURL = "https://buezw.github.io/"
 defaultContentLanguage = "en"
-disableLanguages = [] #to allow translation work requiring shipping to production
+disableLanguages = ["zh-cn"] # 中文版本没有内容，关掉
+disableKinds = ["taxonomy", "term"] # 不生成 tags / categories / series / authors 页面
 
 # pluralizeListTitles = "true" # hugo function useful for non-english languages, find out more in  https://gohugo.io/getting-started/configuration/#pluralizelisttitles
 

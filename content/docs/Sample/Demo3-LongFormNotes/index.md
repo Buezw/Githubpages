@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "Demo 3. Long-form Notes with a Table"
 date: 2026-09-05
 tags: ["Docs","Sample"]

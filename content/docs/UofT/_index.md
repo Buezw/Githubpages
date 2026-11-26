@@ -1,5 +1,5 @@
 ---
-title: "U of T"
+title: "UofT Coursework"
 tags: ["UofT"]
 math: mathjax
 showWordCount: false

@@ -1,5 +1,5 @@
 ---
-title: "Projectile Motion when air resisitance is propftional to velocity"
+title: "Projectile Motion when Air Resistance is Proportional to Velocity"
 date: 2024-10-22
 tags: ["Docs"]
 math: mathjax

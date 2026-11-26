@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ partial "site/head.html" (dict "title" "Page not found · Jingnan Huang") }}
+<style>
+.nf{flex:1;padding:80px var(--px);max-width:760px}
+.nf h1{font-size:3rem;margin:0 0 10px}
+.nf p{color:#4a4741;font-size:1.05rem;line-height:1.7}
+.nf .go{display:flex;gap:12px;margin-top:22px}
+.nf .go a{border:1px solid var(--text);padding:7px 15px}
+.nf .go a:hover{background:var(--text);color:#fff}
+</style>
+</head>
+<body>
+{{ partial "site/header.html" (dict "active" "") }}
+<main class="nf">
+  <h1 class="serif">Page not found</h1>
+  <p>This page may have moved. Try the search box above, or start from one of these:</p>
+  <div class="go"><a href="/">Home</a><a href="/student/">Notebook</a><a href="/utefa/">Research</a></div>
+</main>
+{{ partial "site/footer.html" . }}
+</body>
+</html>

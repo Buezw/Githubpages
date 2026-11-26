@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "Sample"
 description: "Preview articles — safe to delete"
 tags: ["Docs","Sample"]
