@@ -26,12 +26,12 @@
 {{- if .compact -}}
 {{- /* 紧凑版（课程页里用）：课程和领域已在标题里，只留标题、日期、摘要、语言 */ -}}
 <a class="rs" href="{{ $p.RelPermalink }}">
-  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span><i class="lang">{{ $lang }}</i> {{ $p.Date.Format "Jan 2, 2006" }}</span></div>
+  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span><i class="lang">{{ $lang }}</i> {{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
   {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
 </a>
 {{- else -}}
 <a class="rs" href="{{ $p.RelPermalink }}">
-  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span>{{ $p.Date.Format "Jan 2, 2006" }}</span></div>
+  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span>{{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
   {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
   <div class="mrow">
     <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ $it.area }}</i><span>{{ $it.name }}</span></span>

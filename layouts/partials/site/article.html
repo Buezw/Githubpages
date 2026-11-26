@@ -220,7 +220,7 @@
     {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
     <div class="meta">
       {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-      <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
+      {{ if not $p.Date.IsZero }}<span>{{ $p.Date.Format "Jan 2, 2006" }}</span>{{ end }}
       {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
       <i class="lang">{{ $lang }}</i>
     </div>
