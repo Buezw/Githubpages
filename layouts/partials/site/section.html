@@ -15,8 +15,8 @@
 {{- else if $isBuildDir -}}
   {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") (dict "t" "Demos & projects" "u" "/utefa/#builds") -}}
 {{- else if eq $s.Section "docs" -}}
-  {{- $crumbs = slice (dict "t" "Notebook" "u" "/student/") -}}
-  {{- range $s.Ancestors.Reverse -}}{{- if and (not .IsHome) .RelPermalink (ne .Section "") (ne .RelPermalink "/docs/") (ne .RelPermalink "/docs/uoft/") -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+  {{- if ne $s.RelPermalink "/docs/" -}}{{- $crumbs = slice (dict "t" "Notebook" "u" "/docs/") -}}{{- end -}}
+  {{- range $s.Ancestors.Reverse -}}{{- if and (not .IsHome) .RelPermalink (ne .Section "") (ne .RelPermalink "/docs/") -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
 {{- else -}}
   {{- range $s.Ancestors.Reverse -}}{{- if not .IsHome -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
 {{- end -}}

@@ -1,6 +1,8 @@
 ---
-title: "Notebook"
-aliases: ["/docs/", "/docs/uoft/"]
+title: "Notebook (old list)"
+build:
+  render: never
+  list: never
 description: ""
 cascade:
   showDate: false
