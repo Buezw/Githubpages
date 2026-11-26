@@ -22,9 +22,6 @@
   {{- end -}}
 {{- end -}}
 
-{{- $areasUsed := dict -}}
-{{- range $items -}}{{- if .area -}}{{- $areasUsed = merge $areasUsed (dict (lower .area) true) -}}{{- end -}}{{- end -}}
-
 {{- /* ========== Research ========== */ -}}
 {{- $systems := site.Data.systems | default slice -}}
 {{- $shipped := len (where $systems "status" "shipped") -}}
@@ -183,7 +180,7 @@
   {{- /* ===== Notebook ===== */}}
   <section class="col nb" style="--c:var(--blue)">
     <h2 class="serif">Notebook</h2>
-    <div class="lab"><b>Latest</b><span>{{ len $items }} notes · {{ len $areasUsed }} areas</span></div>
+    <div class="lab"><b>Latest</b></div>
     {{- range $shown }}
     {{ partial "site/note-row.html" (dict "item" .) }}
     {{- end }}
