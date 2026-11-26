@@ -7,8 +7,19 @@
 {{- $isResearch := eq $s.Section "finance" -}}
 
 {{- /* 面包屑：从上到下的父级目录（不含首页） */ -}}
+{{- /* 笔记相关的目录统一挂在 Notebook 下；Docs、UofT Coursework 两层已合并进 Notebook，不再显示 */ -}}
+{{- $isBuildDir := and $s.File (or (hasPrefix $s.File.Dir "docs/Displays/") (hasPrefix $s.File.Dir "docs/Projects/")) -}}
 {{- $crumbs := slice -}}
-{{- range $s.Ancestors.Reverse -}}{{- if not .IsHome -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+{{- if $isResearch -}}
+  {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") -}}
+{{- else if $isBuildDir -}}
+  {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") (dict "t" "Demos & projects" "u" "/utefa/#builds") -}}
+{{- else if eq $s.Section "docs" -}}
+  {{- $crumbs = slice (dict "t" "Notebook" "u" "/student/") -}}
+  {{- range $s.Ancestors.Reverse -}}{{- if and (not .IsHome) .RelPermalink (ne .Section "") (ne .RelPermalink "/docs/") (ne .RelPermalink "/docs/uoft/") -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+{{- else -}}
+  {{- range $s.Ancestors.Reverse -}}{{- if not .IsHome -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+{{- end -}}
 
 {{- /* 如果是某门课 / 某本书，用 notebook.yaml 里的名字和领域 */ -}}
 {{- $src := dict -}}
@@ -100,7 +111,7 @@
 </style>
 </head>
 <body style="{{ printf "--c:%s" (cond $isResearch "var(--red)" "var(--blue)") | safeCSS }}">
-{{ partial "site/header.html" (dict "active" (cond $isResearch "research" "")) }}
+{{ partial "site/header.html" (dict "active" (cond (or $isResearch $isBuildDir) "research" (cond (eq $s.Section "docs") "notebook" ""))) }}
 
 <section class="banner">
   <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}</div>

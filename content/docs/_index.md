@@ -1,4 +1,7 @@
 ---
+build:
+  render: never
+  list: always
 title: "Docs"
 description: ""
 cascade:

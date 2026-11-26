@@ -18,7 +18,6 @@
   <nav>
     <a href="/student/"{{ if eq .active "notebook" }} class="on"{{ end }}>Notebook</a>
     <a href="/utefa/"{{ if eq .active "research" }} class="on"{{ end }}>Research</a>
-    <a href="/docs/">Docs</a>
     <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu</a>
     <a href="https://github.com/Buezw" target="_blank" rel="noopener">GitHub ↗</a>
     {{- if fileExists "static/cv.pdf" }}
