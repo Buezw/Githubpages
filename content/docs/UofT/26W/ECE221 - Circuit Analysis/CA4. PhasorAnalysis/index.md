@@ -307,7 +307,7 @@ To make this formula largest, we can reduce the denominator
 Thus we can get, to maximum the power, we need a pair of Conjugate Impedance
 
 $$
-Z_L = Z_T^\*
+Z_L = Z_T^*
 $$
 
 Thus the final Power formula will become

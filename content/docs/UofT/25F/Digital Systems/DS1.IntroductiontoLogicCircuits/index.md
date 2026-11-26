@@ -39,7 +39,7 @@ showWordCount: true
 ### Logic Function 逻辑方程
 
 - 总结上面的规律，可以总结一个表达式
-- 用 + 表示 OR，用 $$ \\(\cdot\\) 表示 AND
+- 用 + 表示 OR，用 \\(\cdot\\) 表示 AND
 - 在上面的 Series-Parallel Connection 中，则可以表达为
 
  

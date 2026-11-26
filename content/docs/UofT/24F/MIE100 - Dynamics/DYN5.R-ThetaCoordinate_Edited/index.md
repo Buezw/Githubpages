@@ -58,7 +58,7 @@ $$
 
 **Extracted Problem Statement:**
 
-A shuttle is launched vertically and tracked by a radar station. At the instant when $\theta = 60^\circ$, $r = 9 km, $\ddot{r} = 21 \text{ m/s}^2$, and $\dot{\theta} = 0.02 \text{ s}^{-1}$, determine the acceleration vector $\vec{a}$
+A shuttle is launched vertically and tracked by a radar station. At the instant when $\theta = 60^\circ$, $r = 9$ km, $\ddot{r} = 21 \text{ m/s}^2$, and $\dot{\theta} = 0.02 \text{ s}^{-1}$, determine the acceleration vector $\vec{a}$
 
 ![image.png](image1.png)
 

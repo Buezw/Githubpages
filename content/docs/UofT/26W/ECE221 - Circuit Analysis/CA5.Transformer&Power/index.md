@@ -419,10 +419,10 @@ $$
 \Rightarrow \overline S=V_{rms} \angle \phi_v \cdot I_{rms} \angle -\phi_I
 $$
 
-Known that $I_{rms} \angle -\phi_I = I^\*_{rms}$, thus we get the final formula is
+Known that $I_{rms} \angle -\phi_I = I^*_{rms}$, thus we get the final formula is
 
 $$
-\bar{S} = \bar{V}_{rms} \cdot \bar{I}_{rms}^\*
+\bar{S} = \bar{V}_{rms} \cdot \bar{I}_{rms}^*
 $$
 
 ## The Power Triangle
@@ -470,7 +470,7 @@ Use Active Power to find the Apparent Power $|\bar{S}_L| = \frac{P_L}{pf}$, then
 ## Given Impedance and RMS
 
 $$
-\bar{S}_L = Z_L \cdot I_{rms}^2 = \frac{V_{rms}^2}{Z_L^\*}
+\bar{S}_L = Z_L \cdot I_{rms}^2 = \frac{V_{rms}^2}{Z_L^*}
 $$
 
 ## Ex. Source Voltage and Complex Power

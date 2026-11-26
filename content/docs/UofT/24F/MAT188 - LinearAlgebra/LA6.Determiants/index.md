@@ -22,7 +22,7 @@ showWordCount: true
 
 - Determinant计算的是Linear Transformation改变的Basis Vector所围成的面积的大小
 - 而对于一个Linear Transformation，大部分情况下Basis Vector围成的面积都是一个长方形
-- 而[[MAT188 Chapter 2 Linear Transformations#2.2 Linear Transformations in Geometry]]中存在一种Sheer Transformation，即对于一个Basis Vector来说，其出现了不属于其方向上的分量
+- 而MAT188 Chapter 2 Linear Transformations中存在一种Sheer Transformation，即对于一个Basis Vector来说，其出现了不属于其方向上的分量
 - 如上图中的\\(\vec e_2\\)来说，其为<2,2>，即产生了Sheer
 - 在这种情况下，所围成的面积便成为了Parallelogram
 - 于是就有了两种计算\\(\mathbb R^2\\)行列式的办法
@@ -30,7 +30,7 @@ $$det(A)=|A||B|sin\theta$$
 ![Img](/docs/LinearAlgebra_Static/LA6.Determinants/LA6.Determinats-3.png)
 
 - 这个平行四边形同时适用于Cross Product于Determinate
-- 这一个公式同样也是[[Cross Product 向量叉乘]]的大小（Norm），同时也是一个3x3Determinate的大小（体积）
+- 这一个公式同样也是Cross Product 向量叉乘的大小（Norm），同时也是一个3x3Determinate的大小（体积）
 - 如果说Cross Product要找的是一个向量，Determinate要找的则是一个体积
 - 总的来说，要找\\(R^2\\)中的Determinate的值，其本质在求Linear Transformation后Basis Vector围成的面积
 - 而这一个面积可以通过\\(|A||B|sin\theta\\)求，其同时也可以通过

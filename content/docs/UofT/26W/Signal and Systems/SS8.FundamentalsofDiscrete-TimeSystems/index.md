@@ -104,7 +104,7 @@ $$
 
 # LTI System Properties and the Impulse Response
 
-Overall, to summarise, the output of **DT LTI system** is the **convolution of impulse response with input signal $y = h \* x$**
+Overall, to summarise, the output of **DT LTI system** is the **convolution of impulse response with input signal $y = h * x$**
 
 $$
 y[n] = \sum_{k=-\infty}^{\infty} h[n - k]x[k]

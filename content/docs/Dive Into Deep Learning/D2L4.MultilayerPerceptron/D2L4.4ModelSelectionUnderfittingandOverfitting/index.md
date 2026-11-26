@@ -9,7 +9,7 @@ pageStyle : "normal"
 ---
 深度学习的目的是发现Pattern，即做到模型的Generalization 泛化
 
-- [[Overfitting Problem]]
+- Overfitting Problem
 
 > 原因很简单：当我们将来部署该模型时，模型需要判断从未见过的患者。 只有当模型真正发现了一种泛化模式时，才会作出有效的预测
 
@@ -32,7 +32,7 @@ pageStyle : "normal"
 # Regularization 正则化
 
 - 对抗过拟合的技术称为正则化
-- [[Regularization 正则化]]
+- Regularization 正则化
 
 
 # 4.4.1 训练误差和泛化误差
@@ -129,7 +129,7 @@ z
 
 - 拟合一个多项式
 
-- [[4.4 Overfitting Normal & Underfitting - Pytorch]]
+- 4.4 Overfitting Normal & Underfitting - Pytorch
 - 
 ## 4.4.4.1 生成数据集
 

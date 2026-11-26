@@ -110,7 +110,7 @@ Tensile(Tension) Test
 - Low strain to fracture, almost no deformation before breaking：在断裂之间，几乎不发生Elastic Deformation
 - hard to grip：对于Tensile Test所必须的Grip Region，由于一些Material的特殊性，他们无法在Grip Region内被夹住，继而无法进一步测试 
 - Hard to load on Axis: 当Grip Region滑动的时候，无法使力沿轴拉伸
-- 关于为什么这些会发生，如为什么Ceramics会直接断裂等，参考[[ECMS 3. Plastic Deformations]]
+- 关于为什么这些会发生，如为什么Ceramics会直接断裂等，参考ECMS 3. Plastic Deformations
 
 
 

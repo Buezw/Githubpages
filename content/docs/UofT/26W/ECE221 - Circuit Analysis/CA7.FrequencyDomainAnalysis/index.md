@@ -216,21 +216,21 @@ $$
 This part contains a derivation, and its final claim is
 
 $$
-Y(s) = H(s)X(s) \iff y(t) = h(t) \* x(t)
+Y(s) = H(s)X(s) \iff y(t) = h(t) * x(t)
 $$
 
 ## Convolution Integral
 
 $$
-h(t) \* x(t) = \int_{0}^{t} h(t-\tau) x(\tau) d\tau
+h(t) * x(t) = \int_{0}^{t} h(t-\tau) x(\tau) d\tau
 $$
 
 ### Property of convolution
 
-1. **Commutative**: $f(t) \* g(t) = g(t) \* f(t)$
-2. **Associative**: $f(t) \* [g(t) \* w(t)] = [f(t) \* g(t)] \* w(t)$
-3. **Distributive**: $f(t) \* [g(t) + w(t)] = [f(t) \* g(t)] + [f(t) \* w(t)]$
-4. **Convolution** with an **impulse**: $f(t) \* \delta(t-t_0) = f(t-t_0)$
+1. **Commutative**: $f(t) * g(t) = g(t) * f(t)$
+2. **Associative**: $f(t) * [g(t) * w(t)] = [f(t) * g(t)] * w(t)$
+3. **Distributive**: $f(t) * [g(t) + w(t)] = [f(t) * g(t)] + [f(t) * w(t)]$
+4. **Convolution** with an **impulse**: $f(t) * \delta(t-t_0) = f(t-t_0)$
 
 ### Ex. Finding the time domain output of LTI System using Convolution
 
@@ -315,12 +315,12 @@ Notice the poles are **$(s - j\omega)(s + j\omega)$ on Complex Plane**
 
 Recall the Response **contains Forced Poles and natural Poles**
 
-- **Forced Poles**: $s = j\omega$ and $s = -j\omega$, in the form of **$\frac{k}{s - j\omega} + \frac{k^\*}{s + j\omega}$,** taking the **Inverse Lapalce** will give us $y(t) = k e^{j\omega t} + k^\* e^{-j\omega t}$
+- **Forced Poles**: $s = j\omega$ and $s = -j\omega$, in the form of **$\frac{k}{s - j\omega} + \frac{k^*}{s + j\omega}$,** taking the **Inverse Lapalce** will give us $y(t) = k e^{j\omega t} + k^* e^{-j\omega t}$
 - **Natural Poles**: Due to the System itself
 - **Steady-State Response**: When **Natural Response decay to zero**, then we get
 
 $$
-y_{ss}(t) = k e^{j\omega t} + k^\* e^{-j\omega t}
+y_{ss}(t) = k e^{j\omega t} + k^* e^{-j\omega t}
 $$
 
 Then we shall we Cover-up Algorithm to calculate $k$, that will be $k = (s - j\omega) Y(s) \big|_{s = j\omega}$, and the result will be 
