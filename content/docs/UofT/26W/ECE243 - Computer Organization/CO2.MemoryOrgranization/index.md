@@ -1,5 +1,5 @@
 ---
-title: "CO 2. MemoryOrgranization"
+title: "CO 2. MemoryOrganization"
 date: 2026-01-13
 tags: ["CO", "Docs"]
 math: mathjax

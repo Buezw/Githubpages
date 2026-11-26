@@ -1,0 +1,97 @@
+{{- /*
+  目录页（/docs/ 及其下的各个文件夹、/finance/ 等）：
+  横幅 + 子目录卡片 + 本目录下的文章列表
+*/ -}}
+{{- $s := . -}}
+{{- $nb := site.Data.notebook -}}
+{{- $isResearch := eq $s.Section "finance" -}}
+
+{{- /* 面包屑：从上到下的父级目录（不含首页） */ -}}
+{{- $crumbs := slice -}}
+{{- range $s.Ancestors.Reverse -}}{{- if not .IsHome -}}{{- $crumbs = $crumbs | append (dict "t" (partial "site/nice-title.html" .Title) "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+
+{{- /* 如果是某门课 / 某本书，用 notebook.yaml 里的名字和领域 */ -}}
+{{- $src := dict -}}
+{{- with $s.File -}}{{- range $nb.sources -}}{{- if eq (printf "%s/" .dir) $s.File.Dir -}}{{- $src = . -}}{{- end -}}{{- end -}}{{- end -}}
+{{- $title := $src.name | default (partial "site/nice-title.html" $s.Title) -}}
+{{- $color := "" -}}
+{{- with $src.area -}}{{- $a := . -}}{{- range $k, $v := $nb.areas -}}{{- if eq (lower $k) (lower $a) -}}{{- $color = $v -}}{{- end -}}{{- end -}}{{- end -}}
+
+{{- $subs := sort $s.Sections "Title" -}}
+{{- /* UofT 放最前面，学期按时间倒序 */ -}}
+{{- $ordered := slice -}}
+{{- range $subs -}}{{- if eq .Title "UofT Coursework" -}}{{- $ordered = $ordered | append . -}}{{- end -}}{{- end -}}
+{{- $terms := slice -}}
+{{- range $subs -}}{{- if findRE `^(Winter|Fall|Summer) \d{4}$` .Title -}}{{- $terms = $terms | append (dict "p" . "d" .Date) -}}{{- end -}}{{- end -}}
+{{- range sort $terms "d" "desc" -}}{{- $ordered = $ordered | append .p -}}{{- end -}}
+{{- range $subs -}}{{- if and (ne .Title "UofT Coursework") (not (findRE `^(Winter|Fall|Summer) \d{4}$` .Title)) -}}{{- $ordered = $ordered | append . -}}{{- end -}}{{- end -}}
+
+{{- /* 本目录下直接的文章，按讲次排序（没有讲次的按日期） */ -}}
+{{- $rows := slice -}}
+{{- range $s.RegularPages -}}{{- $rows = $rows | append (dict "page" . "k" (partial "site/lecture-key.html" .Title) "d" .Date.Unix) -}}{{- end -}}
+{{- $rows = sort (sort $rows "d" "asc") "k" "asc" -}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ partial "site/head.html" (dict "title" (printf "%s · Jingnan Huang" $title) "description" (printf "%s — notes by Jingnan Huang" $title)) }}
+<style>
+.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:28px var(--px) 22px}
+.banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 10px}
+.banner .meta{font-size:.86rem}
+.wrap{flex:1;padding:26px var(--px) 50px;max-width:1240px;width:100%;box-sizing:border-box}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:34px}
+.card{display:block;border:1px solid var(--line);padding:16px 18px 14px;background:#fff}
+.card:hover{border-color:var(--text)}
+.card b{display:block;font-family:var(--serif);font-weight:500;font-size:1.2rem;line-height:1.25}
+.card span{display:block;margin-top:6px;font-size:.8rem;color:var(--dim)}
+.card i.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--d);margin-right:6px;vertical-align:1px}
+.list{max-width:900px;--c:var(--blue)}
+.list .rs .t span .lang{margin-right:6px;vertical-align:1px}
+.empty{color:var(--dim)}
+@media (max-width:760px){.banner h1{font-size:1.8rem}}
+</style>
+</head>
+<body style="{{ printf "--c:%s" (cond $isResearch "var(--red)" "var(--blue)") | safeCSS }}">
+{{ partial "site/header.html" (dict "active" (cond $isResearch "research" "")) }}
+
+<section class="banner">
+  <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}</div>
+  <h1 class="serif">{{ $title }}</h1>
+  <div class="meta">
+    {{- with $src.area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
+    {{- with $ordered }}<span>{{ len . }} {{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}</span>{{ end }}
+    <span>{{ len $s.RegularPagesRecursive }} {{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}</span>
+  </div>
+</section>
+
+<main class="wrap">
+  {{- with $ordered }}
+  <div class="cards">
+    {{- range . }}
+      {{- $sub := . }}
+      {{- $sc := "" }}
+      {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $sc = $v }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
+      {{- $name := partial "site/nice-title.html" .Title }}
+      {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ end }}{{ end }}{{ end }}
+      {{- $n := len .RegularPagesRecursive }}
+    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}</span></a>
+    {{- end }}
+  </div>
+  {{- end }}
+
+  {{- with $rows }}
+  <div class="list">
+    <div class="lab"><b>Pages</b><span>{{ len . }}</span></div>
+    {{- range . }}
+    {{ partial "site/note-row.html" (dict "item" (dict "page" .page) "compact" true) }}
+    {{- end }}
+  </div>
+  {{- else }}{{ if not $ordered }}
+  <p class="empty">Nothing here yet.</p>
+  {{- end }}{{ end }}
+</main>
+
+{{ partial "site/footer.html" . }}
+</body>
+</html>

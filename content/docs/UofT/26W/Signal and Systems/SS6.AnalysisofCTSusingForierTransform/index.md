@@ -1,5 +1,5 @@
 ---
-title: "SS 6. AnalysisofCTSusingForierTransform"
+title: "SS 6. AnalysisofCTSusingFourierTransform"
 date: 2026-03-11
 tags: ["SS", "Docs"]
 math: mathjax

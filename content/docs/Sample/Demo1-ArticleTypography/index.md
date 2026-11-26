@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "Demo 1. Article Typography"
 date: 2026-09-13
 tags: ["Docs","Sample"]

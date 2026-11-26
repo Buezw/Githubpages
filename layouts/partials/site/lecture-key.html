@@ -1,0 +1,10 @@
+{{- /* 从标题里取讲次用来排序："CA 2." → 2，"D2L 6.6" → 6.06，"EI0." → 0；没有编号返回 999 */ -}}
+{{- $k := 999.0 -}}
+{{- $m := findRESubmatch `^\S+\s+(\d+)(?:\.(\d+))?` . 1 -}}
+{{- if not $m -}}{{- $m = findRESubmatch `^[A-Za-z]+(\d+)()` . 1 -}}{{- end -}}
+{{- with $m -}}
+  {{- $g := index . 0 -}}
+  {{- $k = float (index $g 1) -}}
+  {{- with index $g 2 -}}{{- $k = add $k (div (float .) 100.0) -}}{{- end -}}
+{{- end -}}
+{{- return $k -}}

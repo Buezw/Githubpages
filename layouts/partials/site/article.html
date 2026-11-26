@@ -259,6 +259,22 @@
 
 {{ partial "site/footer.html" . }}
 <script>
+/* 中文加粗：Markdown 遇到 **…（…）** 这类紧挨中文标点的写法不认，
+   这里把正文里剩下的成对 ** 改成粗体（跳过代码块和行内代码，文章文件本身不改） */
+(function(){
+  var root=document.querySelector('.prose'); if(!root) return;
+  var re=/\*\*((?:(?!\*\*)[\s\S]){1,400}?)\*\*/g;
+  root.querySelectorAll('p,li,td,th,h1,h2,h3,h4,h5,blockquote').forEach(function(el){
+    if(el.closest('pre,code')) return;
+    if(el.querySelector('p,li,ul,ol,table')) return;
+    if(el.innerHTML.indexOf('**')<0) return;
+    var parts=el.innerHTML.split(/(<code[\s\S]*?<\/code>)/);
+    for(var i=0;i<parts.length;i+=2){ parts[i]=parts[i].replace(/\*{4}/g,'').replace(re,'<strong>$1</strong>').replace(/\*\*/g,''); }
+    el.innerHTML=parts.join('');
+  });
+})();
+</script>
+<script>
 /* 标题只占一行：放不下时逐步缩小字号（最小 1.5rem），仍放不下就换行 */
 (function(){
   var h=document.getElementById('atitle'); if(!h) return;

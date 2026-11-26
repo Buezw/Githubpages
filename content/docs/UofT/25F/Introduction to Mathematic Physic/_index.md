@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Mathematic Physic"
+title: "Introduction to Mathematical Physics"
 tags: ["IMP"]
 math: mathjax
 showWordCount: false
