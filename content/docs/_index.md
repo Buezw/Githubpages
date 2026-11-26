@@ -1,8 +1,6 @@
 ---
-build:
-  render: never
-  list: always
-title: "Docs"
+title: "Notebook"
+aliases: ["/student/"]
 description: ""
 cascade:
   showDate: false

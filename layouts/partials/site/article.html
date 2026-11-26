@@ -25,12 +25,16 @@
   {{- $m := findRESubmatch `UofT/(\d\d)([FWS])` $src.dir 1 -}}
   {{- $term := "Self-study" -}}
   {{- with $m -}}{{- $term = printf "%s 20%s" (index $termNames (index (index . 0) 2)) (index (index . 0) 1) -}}{{- end -}}
-  {{- $termURL := "/student/" -}}
-  {{- $courseURL := printf "/student/#%s" (anchorize $src.name) -}}
+  {{- $termURL := "/docs/" -}}
+  {{- $courseURL := "/docs/" -}}
   {{- with site.GetPage (printf "/%s" $src.dir) -}}{{- with .RelPermalink -}}{{- $courseURL = . -}}{{- end -}}
     {{- with .Parent -}}{{- if and .RelPermalink (findRE `^(Winter|Fall|Summer) \d{4}$` .Title) -}}{{- $termURL = .RelPermalink -}}{{- end -}}{{- end -}}
   {{- end -}}
-  {{- $crumbs = slice (dict "t" "Notebook" "u" "/student/") (dict "t" $term "u" $termURL) -}}
+  {{- if $m -}}
+    {{- $crumbs = slice (dict "t" "Notebook" "u" "/docs/") (dict "t" "UofT Coursework" "u" "/docs/uoft/") (dict "t" $term "u" $termURL) -}}
+  {{- else -}}
+    {{- $crumbs = slice (dict "t" "Notebook" "u" "/docs/") -}}
+  {{- end -}}
   {{- $groupName = $src.name -}}{{- $groupURL = $courseURL -}}
   {{- $area = $src.area -}}
   {{- range $k, $v := $nb.areas -}}{{- if eq (lower $k) (lower $src.area) -}}{{- $color = $v -}}{{- end -}}{{- end -}}
@@ -55,7 +59,7 @@
     {{- if $isBuild -}}
       {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") (dict "t" "Demos & projects" "u" "/utefa/#builds") -}}
     {{- else -}}
-      {{- $crumbs = slice (dict "t" "Notebook" "u" "/student/") -}}
+      {{- $crumbs = slice (dict "t" "Notebook" "u" "/docs/") -}}
     {{- end -}}
     {{- $groupName = .Title -}}{{- $groupURL = .RelPermalink -}}
     {{- range sort .RegularPages "Date" "asc" -}}{{- $siblings = $siblings | append (dict "page" .) -}}{{- end -}}
