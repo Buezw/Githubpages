@@ -1,4 +1,6 @@
+{{- /* 最后更新时间 = 网站这次发布（构建）的时间，按多伦多时间（UTC−5）显示 */ -}}
+{{- $t := now.UTC.Add (time.ParseDuration "-5h") -}}
 <footer>
-  <span>© {{ now.Format "2006" }} Jingnan Huang</span>
-  <span>buezw.github.io</span>
+  <span>© {{ $t.Format "2006" }} Jingnan Huang</span>
+  <span>Last updated <time datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ $t.Format "Jan 2, 2006" }}</time> · buezw.github.io</span>
 </footer>
