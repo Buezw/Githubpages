@@ -1,0 +1,48 @@
+{{- $disableImageOptimization := .Page.Site.Params.disableImageOptimization | default false }}
+{{- $url := urls.Parse .Destination }}
+{{- $altText := .Text }}
+{{- $caption := .Title }}
+{{- if findRE "^https?" $url.Scheme }}
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="{{ $url.String }}" alt="{{ $altText }}" />
+    {{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+  </figure>
+{{- else }}
+  {{- $resource := "" }}
+  {{- if $.Page.Resources.GetMatch ($url.String) }}
+    {{- $resource = $.Page.Resources.GetMatch ($url.String) }}
+  {{- else if resources.GetMatch ($url.String) }}
+    {{- $resource = resources.Get ($url.String) }}
+  {{- end }}
+  {{- with $resource }}
+    <figure>
+      {{- /* 只有真正的图片文件才缩放；扩展名不对的文件（例如 "x.png-5"）直接原样显示，避免整站构建失败 */}}
+      {{- if or $disableImageOptimization (eq .MediaType.SubType "svg") (ne .ResourceType "image") }}
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="{{ .RelPermalink }}"
+        alt="{{ $altText }}"
+      />
+      {{- else }}
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        {{ (.Resize "330x").RelPermalink }} 330w,
+        {{ (.Resize "660x").RelPermalink }} 660w,
+        {{ (.Resize "1024x").RelPermalink }} 1024w,
+        {{ (.Resize "1320x").RelPermalink }} 2x"
+        src="{{ (.Resize "660x").RelPermalink }}"
+        alt="{{ $altText }}"
+      />
+      {{- end }}
+      {{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+    </figure>
+  {{- else }}
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="{{ $url.String }}" alt="{{ $altText }}" />
+      {{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+    </figure>
+  {{- end }}
+{{- end }}
