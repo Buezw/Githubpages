@@ -75,7 +75,7 @@
       {{- $name := partial "site/nice-title.html" .Title }}
       {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ end }}{{ end }}{{ end }}
       {{- $n := len .RegularPagesRecursive }}
-    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}</span></a>
+    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }}{{ if not .Date.IsZero }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}{{ end }}</span></a>
     {{- end }}
   </div>
   {{- end }}
