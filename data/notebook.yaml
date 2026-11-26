@@ -80,3 +80,8 @@ sources:
   - dir: docs/Reads/EfficientlyInefficient
     name: Efficiently Inefficient
     area: Finance
+
+  # ---- 测试（连接器全属性测试，测完删掉这一段）----
+  - dir: docs/Connector Test
+    name: Connector Test
+    area: Programming
