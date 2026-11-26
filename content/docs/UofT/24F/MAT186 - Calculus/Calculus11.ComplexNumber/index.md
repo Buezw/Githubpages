@@ -342,7 +342,7 @@ $$\left(\sqrt[n]{|u|}\right)^n = |u|，\left(e^{i\left(\frac{\theta + 2k\pi}{n}\
 $$\zeta_k^n = |u| e^{i\theta} = u$$
 - 这表明每个\\(\zeta_k\\)都是\\(z^n = u\\)的解
 - 在这之后还需要验证解是不同的\\(\zeta_k \neq \zeta_j\\)，假设\\(\zeta_k = \zeta_j\\)，那么\\(\frac{\zeta_k}{\zeta_j} = 1\\)
-$$\frac{\zeta_k}{\zeta_j} = \frac{\sqrt[n]{|u|} e^{i\left(\frac{\theta + 2k\pi}{n}\right)}}{\sqrt[n]{|u|} e^{i\left(\frac{\theta + $2j\pi}{n}\right)}} = e^{i\left(\frac{2(k-j)\pi}{n}\right)}$$
+$$\frac{\zeta_k}{\zeta_j} = \frac{\sqrt[n]{|u|} e^{i\left(\frac{\theta + 2k\pi}{n}\right)}}{\sqrt[n]{|u|} e^{i\left(\frac{\theta + 2j\pi}{n}\right)}} = e^{i\left(\frac{2(k-j)\pi}{n}\right)}$$
 - 若\\(\frac{\zeta_k}{\zeta_j} = 1\\)，则必须有：
 $$\frac{2(k-j)\pi}{n} = 2m\pi \quad (m \in \mathbb{Z})$$
 - 这意味着：

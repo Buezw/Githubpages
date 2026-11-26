@@ -374,7 +374,7 @@ $$||\vec x^2+\vec y^2||=||\vec x^2||+||\vec y^2||$$
 </div>
 
 - 需要证明\\(\|T(\vec{v}) + T(\vec{w})\|^2 = \|T(\vec{v})\|^2 + \|T(\vec{w})\|^2\\)
-- 对于两个Orthogonal Vector \\(\vec v ~\& ~\vec w\\)，T是Linear Transformation，有
+- 对于两个Orthogonal Vector $\vec v ~\&~ \vec w$，T是Linear Transformation，有
 <div>
 $$\|T(\vec{v}) + T(\vec{w})\|^2 = \|T(\vec{v} + \vec{w})\|^2$$
 </div>
@@ -585,7 +585,7 @@ $$
 
 - 在不存在Outlier 离群值的时候是一种非常好的Regression way
 - \\(C+Dt分别为p1，p2和p3\\)，它们是满足方程并最接近于b的结果
-- 现在需要求解\\(\hat x= \left[\begin{array}{c}C \\D \\\end{array}\right]\\)和p
+- 现在需要求解$\hat x= \left[\begin{array}{c}C \\ D\end{array}\right]$和p
 - \\(A^TA\hat x=A^Tb\\)
 > 因为\\(A^T(b-A\hat x)=0\\)
 <div>
