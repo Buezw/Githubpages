@@ -39,17 +39,64 @@
 .banner{background:var(--paper);border-bottom:1px solid var(--text);padding:28px var(--px) 22px}
 .banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 10px}
 .banner .meta{font-size:.86rem}
-.wrap{flex:1;padding:26px var(--px) 50px;max-width:1240px;width:100%;box-sizing:border-box}
+.wrap{flex:1;padding:26px var(--px) 50px;width:100%;box-sizing:border-box}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:34px}
 .card{display:block;border:1px solid var(--line);padding:16px 18px 14px;background:#fff}
 .card:hover{border-color:var(--text)}
 .card b{display:block;font-family:var(--serif);font-weight:500;font-size:1.2rem;line-height:1.25}
 .card span{display:block;margin-top:6px;font-size:.8rem;color:var(--dim)}
 .card i.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--d);margin-right:6px;vertical-align:1px}
-.list{max-width:900px;--c:var(--blue)}
+.list{--c:var(--blue)}
+.card ul{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);font-size:.84rem;color:#4a4741;line-height:1.7}
+.card ul li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 学期页：每门课一块，两栏排 */
+.blocks{columns:2;column-gap:48px}
+.block{break-inside:avoid;padding-bottom:26px}
+.block .lab b{display:flex;align-items:center;gap:8px}
+.block .lab b i{width:8px;height:8px;border-radius:50%;background:var(--d)}
+.block .lab b a:hover{color:var(--c)}
+/* 课程页：列表 + 右侧信息栏 */
+.leaf{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:48px;align-items:start}
+.about{position:sticky;top:20px;display:flex;flex-direction:column;gap:24px}
+.kv{display:grid;grid-template-columns:86px minmax(0,1fr);font-size:.88rem;margin-top:4px}
+.kv dt,.kv dd{margin:0;padding:7px 0;border-bottom:1px solid var(--line)}
+.kv dt{color:var(--dim)}
+.sibs a{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.sibs a span{color:var(--dim);font-size:.8rem}
+.sibs a:hover{color:var(--c)}
+@media (max-width:1000px){.blocks{columns:1}.leaf{grid-template-columns:minmax(0,1fr)}.about{position:static}}
 .list .rs .t span .lang{margin-right:6px;vertical-align:1px}
 .empty{color:var(--dim)}
 @media (max-width:760px){.banner h1{font-size:1.8rem}}
+/* 学期页课程卡片 */
+.ccards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.ccard{display:flex;flex-direction:column;gap:10px;border:1px solid var(--line);border-top:3px solid var(--d);padding:22px 26px 20px;background:#fff;min-height:190px}
+.ccard:hover{border-color:var(--text);border-top-color:var(--d)}
+.ccard .ca{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--dim)}
+.ccard b{font-size:2rem;font-weight:500;line-height:1.15;letter-spacing:-.01em}
+.ccard .cs{display:flex;gap:18px;flex-wrap:wrap;font-size:.92rem;color:var(--dim)}
+.ccard em{margin-top:auto;font-style:normal;font-size:.92rem;color:var(--c)}
+.ccard:hover em{text-decoration:underline}
+@media (max-width:760px){.ccards{grid-template-columns:minmax(0,1fr)}.ccard b{font-size:1.6rem}}
+/* 目录页整体放大一号 */
+.banner h1{font-size:3rem}
+.banner .meta{font-size:.95rem}
+.wrap{font-size:16.5px}
+.wrap .lab{font-size:.88rem;padding-bottom:9px}
+.wrap .lab b{font-size:1.05rem}
+.wrap .rs{padding:12px 0 13px!important}
+.wrap .rs .t b{font-size:1.12rem;line-height:1.4}
+.wrap .rs .t span{font-size:.92rem}
+.wrap .rs p{font-size:.95rem;margin-top:5px}
+.wrap .lang{font-size:.72rem}
+.kv{font-size:.98rem}
+.kv dt,.kv dd{padding:10px 0}
+.kv dt{}
+.sibs a{font-size:.98rem;padding:10px 0}
+@media (min-width:1001px){.leaf{grid-template-columns:minmax(0,1fr) 320px;gap:56px}}
+.card b{font-size:1.35rem}
+.card span,.card ul{font-size:.9rem}
+@media (max-width:760px){.banner h1{font-size:2rem}.wrap{font-size:15px}}
 </style>
 </head>
 <body style="{{ printf "--c:%s" (cond $isResearch "var(--red)" "var(--blue)") | safeCSS }}">
@@ -60,32 +107,108 @@
   <h1 class="serif">{{ $title }}</h1>
   <div class="meta">
     {{- with $src.area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-    {{- with $ordered }}<span>{{ len . }} {{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}</span>{{ end }}
-    <span>{{ len $s.RegularPagesRecursive }} {{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}</span>
+    {{- $isTerm := findRE `^(Winter|Fall|Summer) \d{4}$` $s.Title }}
+    {{- $noteish := or $isTerm $src (eq $s.Title "UofT Coursework") }}
+    {{- with $ordered }}<span>{{ len . }} {{ if $isTerm }}{{ if eq (len .) 1 }}course{{ else }}courses{{ end }}{{ else if eq $s.Title "UofT Coursework" }}terms{{ else }}{{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}{{ end }}</span>{{ end }}
+    <span>{{ len $s.RegularPagesRecursive }} {{ if $noteish }}{{ if eq (len $s.RegularPagesRecursive) 1 }}note{{ else }}notes{{ end }}{{ else }}{{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}{{ end }}</span>
   </div>
 </section>
 
 <main class="wrap">
-  {{- with $ordered }}
+  {{- /* 子文件夹里是否还有下一层文件夹：没有的话（如学期页）直接把每个文件夹的文章列出来 */ -}}
+  {{- $leafSubs := true -}}
+  {{- range $ordered -}}{{- if .Sections -}}{{- $leafSubs = false -}}{{- end -}}{{- end -}}
+
+  {{- if and $ordered $leafSubs (not $isResearch) }}
+  {{- /* 学期页：每门课一张大卡片，只放概要，不列具体笔记 */}}
+  <div class="ccards">
+    {{- range $ordered }}
+      {{- $sub := . }}
+      {{- $sc := "#999" }}{{ $area := "" }}{{ $name := partial "site/nice-title.html" .Title }}
+      {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ $area = .area }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $sc = $v }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
+      {{- $ps := .RegularPages.ByDate }}
+      {{- $n := len $ps }}
+    <a class="ccard" href="{{ .RelPermalink }}" style="{{ printf "--d:%s" $sc | safeCSS }}">
+      <div class="ca">{{ with $area }}<i class="area" style="{{ printf "--d:%s" $sc | safeCSS }}">{{ . }}</i>{{ end }}<span>{{ $n }} {{ if eq $n 1 }}note{{ else }}notes{{ end }}</span></div>
+      <b class="serif">{{ $name }}</b>
+      {{- with $ps }}
+      <div class="cs">
+        <span>{{ (index . 0).Date.Format "Jan 2" }} – {{ (index . (sub (len .) 1)).Date.Format "Jan 2, 2006" }}</span>
+        <span>Updated {{ (index . (sub (len .) 1)).Date.Format "Jan 2" }}</span>
+      </div>
+      {{- end }}
+      <em>Open course →</em>
+    </a>
+    {{- end }}
+  </div>
+
+  {{- else if $ordered }}
   <div class="cards">
-    {{- range . }}
+    {{- range $ordered }}
       {{- $sub := . }}
       {{- $sc := "" }}
       {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $a := .area }}{{ range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $sc = $v }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
       {{- $name := partial "site/nice-title.html" .Title }}
       {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ end }}{{ end }}{{ end }}
       {{- $n := len .RegularPagesRecursive }}
-    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }}{{ if not .Date.IsZero }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}{{ end }}</span></a>
+    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }}{{ if not .Date.IsZero }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}{{ end }}</span>
+      <ul>
+        {{- if .Sections }}
+          {{- range first 5 (sort .Sections "Title") }}
+            {{- $c := . }}{{ $cn := partial "site/nice-title.html" .Title }}
+            {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $c.File.Dir }}{{ $cn = .name }}{{ end }}{{ end }}{{ end }}
+        <li>{{ $cn }}</li>
+          {{- end }}
+        {{- else }}
+          {{- range first 3 .RegularPages.ByDate.Reverse }}<li>{{ partial "site/nice-title.html" .Title }}</li>{{ end }}
+        {{- end }}
+      </ul>
+    </a>
     {{- end }}
   </div>
   {{- end }}
 
   {{- with $rows }}
-  <div class="list">
-    <div class="lab"><b>Pages</b><span>{{ len . }}</span></div>
-    {{- range . }}
-    {{ partial "site/note-row.html" (dict "item" (dict "page" .page) "compact" true) }}
+  {{- /* 课程页信息栏 */ -}}
+  {{- $en := 0 }}{{ $cn := 0 }}{{ $first := "" }}{{ $last := "" }}
+  {{- range . }}
+    {{- if gt (len (findRE `\p{Han}` .page.RawContent)) 200 }}{{ $cn = add $cn 1 }}{{ else }}{{ $en = add $en 1 }}{{ end }}
+    {{- if not .page.Date.IsZero }}
+      {{- if or (not $first) (.page.Date.Before $first) }}{{ $first = .page.Date }}{{ end }}
+      {{- if or (not $last) (.page.Date.After $last) }}{{ $last = .page.Date }}{{ end }}
     {{- end }}
+  {{- end }}
+  <div class="leaf">
+    <div class="list">
+      <div class="lab"><b>{{ if $src }}Notes{{ else }}Pages{{ end }}</b><span>{{ len . }}</span></div>
+      {{- range . }}
+      {{ partial "site/note-row.html" (dict "item" (dict "page" .page) "compact" true) }}
+      {{- end }}
+    </div>
+    <aside class="about">
+      <div>
+        <div class="lab"><b>About</b></div>
+        <dl class="kv">
+          {{- with $s.Parent }}{{ if findRE `^(Winter|Fall|Summer) \d{4}$` .Title }}<dt>Term</dt><dd>{{ .Title }}</dd>{{ end }}{{ end }}
+          {{- with $src.area }}<dt>Area</dt><dd><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i></dd>{{ end }}
+          <dt>{{ if $src }}Notes{{ else }}Pages{{ end }}</dt><dd>{{ len . }}</dd>
+          {{- if $first }}<dt>Span</dt><dd>{{ $first.Format "Jan 2" }} – {{ $last.Format "Jan 2, 2006" }}</dd>{{ end }}
+          <dt>Language</dt><dd>{{ with $en }}{{ . }} EN{{ end }}{{ if and $en $cn }} · {{ end }}{{ with $cn }}{{ . }} CN{{ end }}</dd>
+        </dl>
+      </div>
+      {{- with $s.Parent }}{{ $others := where .Sections "RelPermalink" "ne" $s.RelPermalink }}{{ with $others }}
+      <div>
+        <div class="lab"><b>Also in {{ partial "site/nice-title.html" $s.Parent.Title }}</b></div>
+        <nav class="sibs">
+          {{- range sort . "Title" }}
+            {{- $c := . }}{{ $cn2 := partial "site/nice-title.html" .Title }}
+            {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $c.File.Dir }}{{ $cn2 = .name }}{{ end }}{{ end }}{{ end }}
+          <a href="{{ .RelPermalink }}">{{ $cn2 }}<span>{{ len .RegularPagesRecursive }}</span></a>
+          {{- end }}
+        </nav>
+      </div>
+      {{- end }}{{ end }}
+    </aside>
   </div>
   {{- else }}{{ if not $ordered }}
   <p class="empty">Nothing here yet.</p>
