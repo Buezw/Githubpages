@@ -34,7 +34,9 @@
       {{- end -}}
       {{- $keyed = $keyed | append (merge . (dict "k" $k)) -}}
     {{- end -}}
-    {{- $courses = $courses | append (dict "src" $src "notes" (sort $keyed "k" "asc") "id" (anchorize $src.name)) -}}
+    {{- $curl := "" -}}{{- $turl := "" -}}
+    {{- with site.GetPage (printf "/%s" $src.dir) -}}{{- $curl = .RelPermalink -}}{{- with .Parent -}}{{- if findRE `^(Winter|Fall|Summer) \d{4}$` .Title -}}{{- $turl = .RelPermalink -}}{{- end -}}{{- end -}}{{- end -}}
+    {{- $courses = $courses | append (dict "src" $src "notes" (sort $keyed "k" "asc") "id" (anchorize $src.name) "url" $curl "turl" $turl) -}}
   {{- end -}}
 {{- end -}}
 {{- with $courses -}}{{- $groups = $groups | append (dict "name" $cur "courses" .) -}}{{- end -}}
@@ -80,6 +82,7 @@
 .course .rs .t span .lang{margin-right:6px;vertical-align:1px}
 .course .lab b{display:flex;align-items:center;gap:8px}
 .course .lab b i{width:8px;height:8px;border-radius:50%;background:var(--d)}
+.course .lab b a:hover,.term>h2 a:hover{color:var(--blue)}
 .course.hide,.term.hide{display:none}
 .nb .rs p{-webkit-line-clamp:1}
 @media (max-width:1100px){
@@ -130,13 +133,14 @@
 
     {{- range $groups }}
     <section class="term">
-      <h2 class="serif">{{ .name }}<span>{{ len .courses }} {{ if eq .name "Self-study" }}books{{ else }}courses{{ end }}</span></h2>
+      {{- $tu := (index .courses 0).turl }}
+      <h2 class="serif">{{ if $tu }}<a href="{{ $tu }}">{{ .name }}</a>{{ else }}{{ .name }}{{ end }}<span>{{ len .courses }} {{ if eq .name "Self-study" }}books{{ else }}courses{{ end }}</span></h2>
       <div class="courses">
         {{- range .courses }}
           {{- $color := "#999" }}{{ $a := .src.area }}
           {{- range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $color = $v }}{{ end }}{{ end }}
         <div class="course" id="{{ .id }}" data-area="{{ .src.area }}">
-          <div class="lab"><b style="{{ printf "--d:%s" $color | safeCSS }}"><i></i>{{ .src.name }}</b><span>{{ len .notes }} notes</span></div>
+          <div class="lab"><b style="{{ printf "--d:%s" $color | safeCSS }}"><i></i>{{ if .url }}<a href="{{ .url }}">{{ .src.name }}</a>{{ else }}{{ .src.name }}{{ end }}</b><span>{{ len .notes }} notes</span></div>
           {{- range .notes }}
           {{ partial "site/note-row.html" (dict "item" . "compact" true) }}
           {{- end }}
