@@ -1,6 +1,17 @@
-{{- /* 最后更新时间 = 网站这次发布（构建）的时间，按多伦多时间（UTC−5）显示 */ -}}
+{{- /* 最后更新时间 = 网站这次发布（构建）的时间。
+       页面里先写多伦多时间（按 UTC−5 算），浏览器再用 America/Toronto 时区精确换算（自动处理夏令时） */ -}}
 {{- $t := now.UTC.Add (time.ParseDuration "-5h") -}}
 <footer>
   <span>© {{ $t.Format "2006" }} Jingnan Huang</span>
-  <span>Last updated <time datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ $t.Format "Jan 2, 2006" }}</time> · buezw.github.io</span>
+  <span>Last updated <time id="updated" datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ $t.Format "Jan 2, 2006, 3:04 PM" }} ET</time> · buezw.github.io</span>
 </footer>
+<script>
+(function(){
+  var el=document.getElementById('updated'); if(!el||!window.Intl) return;
+  try{
+    var d=new Date(el.getAttribute('datetime'));
+    var s=new Intl.DateTimeFormat('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(d);
+    el.textContent=s;
+  }catch(e){}
+})();
+</script>
