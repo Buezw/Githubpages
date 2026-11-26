@@ -11,7 +11,7 @@
 {{- /* ---------- 这篇文章属于哪里 ---------- */ -}}
 {{- $src := dict -}}
 {{- if $p.File -}}
-  {{- range $nb.sources -}}{{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}{{- end -}}
+  {{- range partialCached "site/sources.html" . "all" -}}{{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}{{- end -}}
 {{- end -}}
 {{- $isReport := eq $p.Section "finance" -}}
 {{- /* 演示和项目归在 Research 下 */ -}}

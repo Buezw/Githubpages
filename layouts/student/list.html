@@ -1,6 +1,6 @@
 {{- /*
   Notebook 页（/student/）：所有笔记，按学期 → 课程分组。
-  课程列表和领域来自 data/notebook.yaml，笔记来自 partials/site/notes.html。
+  课程列表来自 partials/site/sources.html（notebook.yaml 登记的 + 自动发现的），笔记来自 partials/site/notes.html。
 */ -}}
 {{- $nb := site.Data.notebook -}}
 {{- $items := partial "site/notes.html" . -}}
@@ -10,7 +10,7 @@
 {{- $groups := slice -}}
 {{- $cur := "" -}}
 {{- $courses := slice -}}
-{{- range $src := $nb.sources -}}
+{{- range $src := partialCached "site/sources.html" . "all" -}}
   {{- $notes := where $items "dir" $src.dir -}}
   {{- if $notes -}}
     {{- $m := findRESubmatch `UofT/(\d\d)([FWS])` $src.dir 1 -}}

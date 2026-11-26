@@ -1,7 +1,7 @@
 {{- /*
   首页 —— 独立页面，不使用 persona 共用样式。
   内容全部自动生成：
-    · Notebook：data/notebook.yaml 里列出的文件夹中的笔记
+    · Notebook：所有课程 / 书的笔记（partials/site/sources.html：notebook.yaml 登记的 + 自动发现的）
     · Research：data/systems.yaml（交易系统）+ content/finance 里的文章
     · Activity：上面两类内容的发布日期
 */ -}}
@@ -23,7 +23,7 @@
 {{- end -}}
 
 {{- $areasUsed := dict -}}
-{{- range $items -}}{{- $areasUsed = merge $areasUsed (dict (lower .area) true) -}}{{- end -}}
+{{- range $items -}}{{- if .area -}}{{- $areasUsed = merge $areasUsed (dict (lower .area) true) -}}{{- end -}}{{- end -}}
 
 {{- /* ========== Research ========== */ -}}
 {{- $systems := site.Data.systems | default slice -}}

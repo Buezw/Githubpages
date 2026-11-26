@@ -1,0 +1,47 @@
+{{- /*
+  Notebook 的全部「课程 / 书」：
+    · data/notebook.yaml 里登记过的（名字、领域颜色以那里为准）
+    · 加上 content/docs 下其他有笔记、但还没登记的文件夹，自动加入：
+        docs/UofT/<学期>/<课程>/…  → 这门课
+        docs/<书或自学主题>/…       → 这个文件夹
+      名字取那个文件夹页面的标题，没有领域（灰点）。想要领域颜色就在 notebook.yaml 里登记。
+  不算 Notebook 的：docs/Displays、docs/Projects（归在 Research）和 docs/Sample（预览）。
+  返回：slice of dict{ dir, name, area }，新学期的自动课程排在最前面。
+*/ -}}
+{{- $nb := site.Data.notebook -}}
+{{- $registered := $nb.sources | default slice -}}
+{{- $excluded := slice "docs/Displays/" "docs/Projects/" "docs/Sample/" -}}
+{{- $auto := dict -}}
+{{- with site.GetPage "/docs" -}}
+  {{- range $p := .RegularPagesRecursive -}}
+    {{- if $p.File -}}
+      {{- $d := $p.File.Dir -}}
+      {{- $skip := false -}}
+      {{- range $excluded -}}{{- if hasPrefix $d . -}}{{- $skip = true -}}{{- end -}}{{- end -}}
+      {{- range $registered -}}{{- if hasPrefix $d (printf "%s/" .dir) -}}{{- $skip = true -}}{{- end -}}{{- end -}}
+      {{- if not $skip -}}
+        {{- $parts := split (strings.TrimSuffix "/" $d) "/" -}}
+        {{- $dir := "" -}}
+        {{- if and (ge (len $parts) 4) (eq (index $parts 1) "UofT") -}}
+          {{- $dir = delimit (first 4 $parts) "/" -}}
+        {{- else if ge (len $parts) 2 -}}
+          {{- $dir = delimit (first 2 $parts) "/" -}}
+        {{- end -}}
+        {{- if $dir -}}
+          {{- $name := index $parts (sub (cond (hasPrefix $dir "docs/UofT/") 4 2) 1) -}}
+          {{- with site.GetPage (printf "/%s" $dir) -}}{{- with .Title -}}{{- $name = . -}}{{- end -}}{{- end -}}
+          {{- $auto = merge $auto (dict $dir (dict "dir" $dir "name" $name "area" "")) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $autoUofT := slice -}}{{- $autoOther := slice -}}
+{{- range $k, $v := $auto -}}
+  {{- if hasPrefix $k "docs/UofT/" -}}{{- $autoUofT = $autoUofT | append $v -}}{{- else -}}{{- $autoOther = $autoOther | append $v -}}{{- end -}}
+{{- end -}}
+{{- $all := slice -}}
+{{- range $autoUofT -}}{{- $all = $all | append . -}}{{- end -}}
+{{- range $registered -}}{{- $all = $all | append (dict "dir" .dir "name" .name "area" .area) -}}{{- end -}}
+{{- range $autoOther -}}{{- $all = $all | append . -}}{{- end -}}
+{{- return $all -}}

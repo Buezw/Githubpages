@@ -1,14 +1,14 @@
 {{- /*
-  收集 data/notebook.yaml 里列出的文件夹中的所有笔记，按日期从新到旧。
+  收集 Notebook 里所有课程 / 书（见 partials/site/sources.html）的笔记，按日期从新到旧。
   返回：slice of dict{ page, name, area, dir }
 */ -}}
-{{- $nb := site.Data.notebook -}}
+{{- $sources := partialCached "site/sources.html" . "all" -}}
 {{- $pages := slice -}}
 {{- with site.GetPage "/docs" -}}
   {{- range $p := .RegularPagesRecursive -}}
     {{- if and $p.File (not $p.Date.IsZero) -}}
       {{- $hit := false -}}
-      {{- range $nb.sources -}}
+      {{- range $sources -}}
         {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $hit = true -}}{{- end -}}
       {{- end -}}
       {{- if $hit -}}{{- $pages = $pages | append $p -}}{{- end -}}
@@ -18,7 +18,7 @@
 {{- $items := slice -}}
 {{- range $p := sort $pages "Date" "desc" -}}
   {{- $src := dict -}}
-  {{- range $nb.sources -}}
+  {{- range $sources -}}
     {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}
   {{- end -}}
   {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area "dir" $src.dir) -}}
