@@ -68,6 +68,25 @@
 .list .rs .t span .lang{margin-right:6px;vertical-align:1px}
 .empty{color:var(--dim)}
 @media (max-width:760px){.banner h1{font-size:1.8rem}}
+/* 目录页整体放大一号 */
+.banner h1{font-size:3rem}
+.banner .meta{font-size:.95rem}
+.wrap{font-size:16.5px}
+.wrap .lab{font-size:.88rem;padding-bottom:9px}
+.wrap .lab b{font-size:1.05rem}
+.wrap .rs{padding:12px 0 13px!important}
+.wrap .rs .t b{font-size:1.12rem;line-height:1.4}
+.wrap .rs .t span{font-size:.92rem}
+.wrap .rs p{font-size:.95rem;margin-top:5px}
+.wrap .lang{font-size:.72rem}
+.kv{font-size:.98rem}
+.kv dt,.kv dd{padding:10px 0}
+.kv dt{}
+.sibs a{font-size:.98rem;padding:10px 0}
+@media (min-width:1001px){.leaf{grid-template-columns:minmax(0,1fr) 320px;gap:56px}}
+.card b{font-size:1.35rem}
+.card span,.card ul{font-size:.9rem}
+@media (max-width:760px){.banner h1{font-size:2rem}.wrap{font-size:15px}}
 </style>
 </head>
 <body style="{{ printf "--c:%s" (cond $isResearch "var(--red)" "var(--blue)") | safeCSS }}">
