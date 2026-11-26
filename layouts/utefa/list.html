@@ -1,95 +1,153 @@
+{{- /*
+  Research 页（/utefa/）：交易系统 + 研究报告 + 演示与项目。
+  交易系统来自 data/systems.yaml（首页也用这一份），报告来自 content/finance，
+  演示与项目来自 content/docs/Displays 和 content/docs/Projects。
+*/ -}}
+{{- $systems := site.Data.systems | default slice -}}
+{{- $shipped := len (where $systems "status" "shipped") -}}
+{{- $wip := len (where $systems "status" "wip") -}}
+{{- $reports := sort (where site.RegularPages "Section" "finance") "Date" "desc" -}}
+{{- $stopTags := slice "Finance" "Commentary" "Notes" "Algo" "Docs" -}}
+{{- $builds := slice -}}
+{{- range slice "/docs/displays" "/docs/projects" -}}
+  {{- with site.GetPage . -}}{{- range .RegularPages -}}{{- $builds = $builds | append . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $builds = sort $builds "Date" "desc" -}}
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jingnan Huang | UTEFA Analyst</title>
-    {{ partial "persona/styles.html" (dict "Accent" "#cc0000") }}
+{{ partial "site/head.html" (dict "title" "Research · Jingnan Huang" "description" "Trading systems, market research and side projects by Jingnan Huang — UTEFA Sales & Trading.") }}
+<style>
+.page{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,10fr)}
+.sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:26px}
+.side h1{font-size:2.6rem;line-height:1;margin:0}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--paper2);border-bottom:1px solid var(--paper2)}
+.nums div{padding:9px 0;color:var(--dim);font-size:.78rem}
+.nums div+div{padding-left:12px;border-left:1px solid var(--paper2)}
+.nums b{display:block;font-family:var(--serif);font-weight:500;font-size:1.6rem;line-height:1.1;color:var(--text)}
+.toc{font-size:.9rem}
+.toc a{display:flex;justify-content:space-between;padding:4px 0}
+.toc a span{color:var(--dim);font-size:.78rem}
+.toc a:hover{color:var(--red)}
+.main{border-left:1px solid var(--line);padding:10px var(--px) 40px;--c:var(--red)}
+.sec{padding-top:26px;scroll-margin-top:20px}
+.sec>h2{font-size:1.9rem;line-height:1.1;margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline}
+.sec>h2 span{font-family:'Inter Tight',sans-serif;font-size:.85rem;font-weight:400;color:var(--dim);letter-spacing:0}
+
+/* 交易系统：一行一个，左边编号和日期，中间名称和说明，右边状态 */
+.sysrow{display:grid;grid-template-columns:120px minmax(0,1fr) 110px;gap:24px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
+.sysrow:first-of-type{border-top:1px solid var(--text)}
+.sysrow .id{font-size:.8rem;color:var(--dim);line-height:1.5}
+.sysrow .id b{display:block;color:var(--red);font-weight:500;font-size:.85rem}
+.sysrow h3{margin:0;font-size:1.25rem;line-height:1.2}
+.sysrow p{margin:4px 0 8px;color:#4a4741;font-size:.92rem;line-height:1.55}
+.sysrow .chips span{font-size:.76rem;background:#faf9f6;border-color:var(--line)}
+.sysrow .st{justify-self:end;margin-top:4px}
+
+/* 报告 */
+.rep{display:block;padding:16px 0 15px;border-bottom:1px solid var(--line)}
+.reps .rep:first-child{border-top:1px solid var(--text)}
+.rep .t{display:flex;justify-content:space-between;gap:20px;align-items:baseline}
+.rep h3{margin:0;font-size:1.25rem;line-height:1.3}
+.rep .t span{color:var(--dim);font-size:.86rem;white-space:nowrap}
+.rep p{margin:6px 0 6px;color:#4a4741;font-size:.94rem;line-height:1.6;max-width:72ch}
+.rep .m{font-size:.8rem;color:var(--red)}
+.rep:hover h3{color:var(--red)}
+
+/* 演示与项目 */
+.builds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1px solid var(--text)}
+.bld{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.bld b{font-weight:500}
+.bld span{color:var(--dim);font-size:.82rem;white-space:nowrap}
+.bld em{font-style:normal;color:var(--dim);font-size:.78rem;margin-right:10px}
+.bld:hover b{color:var(--red)}
+@media (max-width:1100px){
+  .builds{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .page{display:flex;flex-direction:column}
+  .side{padding:22px var(--px)}
+  .sticky{position:static}
+  .toc{display:none}
+  .main{border-left:none}
+  .sysrow{grid-template-columns:minmax(0,1fr);gap:6px}
+  .sysrow .id{display:flex;gap:10px}
+  .sysrow .id b{display:inline}
+  .sysrow .st{justify-self:start;margin-top:0}
+}
+</style>
 </head>
-<body class="theme-utefa">
+<body>
+{{ partial "site/header.html" (dict "active" "research") }}
 
-    {{ partial "persona/header.html" . }}
-
-    <div class="fluid-wrapper">
-        <main>
-            <section id="projects">
-                <h2 class="section-header">Systems Log <span>DESK BUILD NOTES</span></h2>
-                <div class="table-scroll">
-                <table class="ledger-table">
-                    <thead>
-                        <tr>
-                            <th>Ticket</th>
-                            <th>Date</th>
-                            <th>System</th>
-                            <th>Stack</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    {{- /* 系统列表来自 data/systems.yaml（首页 Research 栏也用这一份） */}}
-                    {{- $systems := site.Data.systems | default slice }}
-                    <tbody>
-                        {{- range $systems }}
-                        <tr>
-                            <td class="ledger-idx">{{ .ticket }}</td>
-                            <td class="ledger-date">{{ (time.AsTime .date).Format "2006.01.02" }}</td>
-                            <td class="ledger-name">
-                                {{ .name }}
-                                <div class="ledger-desc">{{ .desc }}</div>
-                            </td>
-                            <td class="ledger-stack">{{ delimit .stack " · " }}</td>
-                            <td>{{ if eq .status "shipped" }}<span class="ledger-status status-live">SHIPPED</span>{{ else }}<span class="ledger-status status-wip">IN PROGRESS</span>{{ end }}</td>
-                        </tr>
-                        {{- end }}
-                    </tbody>
-                    <tfoot>
-                        <tr class="ledger-summary">
-                            <td colspan="5">{{ len $systems }} SYSTEMS LOGGED · {{ len (where $systems "status" "shipped") }} SHIPPED · {{ len (where $systems "status" "wip") }} IN PROGRESS</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                </div>
-            </section>
-
-            <h2 class="section-header">Market Insights <span>DESK COMMENTARY</span></h2>
-            {{ $entries := where .Site.RegularPages "Section" "finance" }}
-            {{ $entries = sort $entries "Date" "desc" }}
-            {{ if $entries }}
-            {{ $shown := first 8 $entries }}
-            <div class="table-scroll">
-            <table class="ledger-table">
-                <thead>
-                    <tr>
-                        <th>Note</th>
-                        <th>Date</th>
-                        <th>Tag</th>
-                        <th>Headline</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{ range $i, $e := $shown }}
-                    <tr>
-                        <td class="ledger-idx">{{ printf "NOTE-%02d" (add $i 1) }}</td>
-                        <td class="ledger-date">{{ $e.Date.Format "2006.01.02" }}</td>
-                        <td><span class="ledger-tag">MACRO</span></td>
-                        <td class="ledger-name"><a href="{{ $e.RelPermalink }}">{{ $e.Title }}</a></td>
-                    </tr>
-                    {{ end }}
-                </tbody>
-                <tfoot>
-                    <tr class="ledger-summary">
-                        <td colspan="4">{{ len $shown }} NOTES ON FILE</td>
-                    </tr>
-                </tfoot>
-            </table>
-            </div>
-            <p><a href="/finance/market-commentary/" class="see-all-link">See all market insights →</a></p>
-            {{ else }}
-            <div class="empty-state">No market insights yet.</div>
-            {{ end }}
-        </main>
+<div class="page">
+  <aside class="side">
+    <div class="sticky">
+      <div>
+        <h1 class="serif">Research</h1>
+        <p class="blurb" style="margin-top:12px">Trading systems, market research and side projects — from the UTEFA Sales &amp; Trading desk and my own builds.</p>
+      </div>
+      <div class="nums">
+        <div><b>{{ len $systems }}</b>systems</div>
+        <div><b>{{ len $reports }}</b>reports</div>
+        <div><b>{{ len $builds }}</b>demos &amp; projects</div>
+      </div>
+      <nav class="toc" aria-label="Sections">
+        <a href="#systems">Trading systems<span>{{ len $systems }}</span></a>
+        <a href="#reports">Reports<span>{{ len $reports }}</span></a>
+        <a href="#builds">Demos &amp; projects<span>{{ len $builds }}</span></a>
+      </nav>
+      <div>
+        <div class="lab"><b>Focus</b></div>
+        <div class="chips" style="margin-top:10px"><span>Market microstructure</span><span>Low-latency systems</span><span>FPGA acceleration</span><span>Stochastic modelling</span></div>
+      </div>
     </div>
+  </aside>
 
-    {{ partial "persona/footer.html" . }}
+  <main class="main">
+    <section class="sec" id="systems">
+      <h2 class="serif">Trading systems<span>{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span></h2>
+      {{- range $systems }}
+      <div class="sysrow">
+        <div class="id"><b>{{ .ticket }}</b>{{ (time.AsTime .date).Format "Jan 2, 2006" }}</div>
+        <div>
+          <h3 class="serif">{{ .name }}</h3>
+          <p>{{ .desc }}</p>
+          <div class="chips">{{ range .stack }}<span>{{ . }}</span>{{ end }}</div>
+        </div>
+        {{- if eq .status "shipped" }}<span class="st ok">Shipped</span>{{ else }}<span class="st wip">In progress</span>{{ end }}
+      </div>
+      {{- end }}
+    </section>
 
+    <section class="sec" id="reports">
+      <h2 class="serif">Reports<span>{{ len $reports }} published</span></h2>
+      <div class="reps">
+      {{- range $reports }}
+        {{- $meta := slice }}
+        {{- range .Params.categories }}{{ $meta = $meta | append . }}{{ end }}
+        {{- range .Params.tags }}{{ if not (in $stopTags .) }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
+        <a class="rep" href="{{ .RelPermalink }}">
+          <div class="t"><h3 class="serif">{{ .Title }}</h3><span>{{ .Date.Format "Jan 2, 2006" }}</span></div>
+          {{- with (.Params.summary | default .Summary) }}<p>{{ . | plainify }}</p>{{ end }}
+          {{- with $meta }}<div class="m">{{ delimit . " · " }}</div>{{ end }}
+        </a>
+      {{- end }}
+      </div>
+    </section>
+
+    <section class="sec" id="builds">
+      <h2 class="serif">Demos &amp; projects<span>{{ len $builds }}</span></h2>
+      <div class="builds">
+      {{- range $builds }}
+        <a class="bld" href="{{ .RelPermalink }}"><b>{{ .Title }}</b><span><em>{{ if eq .CurrentSection.Title "Projects" }}Project{{ else }}Demo{{ end }}</em>{{ .Date.Format "Jan 2006" }}</span></a>
+      {{- end }}
+      </div>
+    </section>
+  </main>
+</div>
+
+{{ partial "site/footer.html" . }}
 </body>
 </html>

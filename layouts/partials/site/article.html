@@ -1,0 +1,292 @@
+{{- /*
+  文章页（笔记 / 研究报告 / 演示）共用模板。传入当前页面。
+  · 笔记：左栏显示所在课程的全部笔记 + 本文目录，上一篇 / 下一篇在课程内切换
+  · 研究报告：左栏显示所有报告 + 本文目录
+  · 其他（演示、项目等）：左栏显示同一栏目下的其他文章 + 本文目录
+*/ -}}
+{{- $p := . -}}
+{{- $nb := site.Data.notebook -}}
+{{- $termNames := dict "W" "Winter" "F" "Fall" "S" "Summer" -}}
+
+{{- /* ---------- 这篇文章属于哪里 ---------- */ -}}
+{{- $src := dict -}}
+{{- if $p.File -}}
+  {{- range $nb.sources -}}{{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $isReport := eq $p.Section "finance" -}}
+{{- /* 演示和项目归在 Research 下 */ -}}
+{{- $isBuild := and $p.File (or (hasPrefix $p.File.Dir "docs/Displays/") (hasPrefix $p.File.Dir "docs/Projects/")) -}}
+{{- $active := cond (or $isReport $isBuild) "research" "notebook" -}}
+{{- $crumbs := slice -}}
+{{- $groupName := "" -}}{{- $groupURL := "" -}}
+{{- $siblings := slice -}}
+{{- $color := "" -}}{{- $area := "" -}}
+{{- if $src -}}
+  {{- $m := findRESubmatch `UofT/(\d\d)([FWS])` $src.dir 1 -}}
+  {{- $term := "Self-study" -}}
+  {{- with $m -}}{{- $term = printf "%s 20%s" (index $termNames (index (index . 0) 2)) (index (index . 0) 1) -}}{{- end -}}
+  {{- $crumbs = slice (dict "t" "Notebook" "u" "/student/") (dict "t" $term "u" "/student/") -}}
+  {{- $groupName = $src.name -}}{{- $groupURL = printf "/student/#%s" (anchorize $src.name) -}}
+  {{- $area = $src.area -}}
+  {{- range $k, $v := $nb.areas -}}{{- if eq (lower $k) (lower $src.area) -}}{{- $color = $v -}}{{- end -}}{{- end -}}
+  {{- /* 同一课程的笔记，按讲次排序 */ -}}
+  {{- $items := where (partial "site/notes.html" .) "dir" $src.dir -}}
+  {{- range $items -}}
+    {{- $k := 999.0 -}}
+    {{- $mm := findRESubmatch `^\S+\s+(\d+)(?:\.(\d+))?` .page.Title 1 -}}
+    {{- if not $mm -}}{{- $mm = findRESubmatch `^[A-Za-z]+(\d+)()` .page.Title 1 -}}{{- end -}}
+    {{- with $mm -}}{{- $g := index . 0 -}}{{- $k = float (index $g 1) -}}{{- with index $g 2 -}}{{- $k = add $k (div (float .) 100.0) -}}{{- end -}}{{- end -}}
+    {{- $num := "" -}}{{- $short := .page.Title -}}
+    {{- with findRESubmatch `^\S+?\s*(\d+(?:\.\d+)?)\.?\s*(.+)$` .page.Title 1 -}}{{- $num = index (index . 0) 1 -}}{{- $short = index (index . 0) 2 -}}{{- end -}}
+    {{- $siblings = $siblings | append (dict "page" .page "k" $k "num" $num "short" $short) -}}
+  {{- end -}}
+  {{- $siblings = sort $siblings "k" "asc" -}}
+{{- else if $isReport -}}
+  {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") -}}
+  {{- $groupName = "Reports" -}}{{- $groupURL = "/utefa/#reports" -}}
+  {{- range sort (where site.RegularPages "Section" "finance") "Date" "desc" -}}{{- $siblings = $siblings | append (dict "page" .) -}}{{- end -}}
+{{- else -}}
+  {{- with $p.CurrentSection -}}
+    {{- if $isBuild -}}
+      {{- $crumbs = slice (dict "t" "Research" "u" "/utefa/") (dict "t" "Demos & projects" "u" "/utefa/#builds") -}}
+    {{- else -}}
+      {{- $crumbs = slice (dict "t" "Docs" "u" "/docs/") -}}
+    {{- end -}}
+    {{- $groupName = .Title -}}{{- $groupURL = .RelPermalink -}}
+    {{- range sort .RegularPages "Date" "asc" -}}{{- $siblings = $siblings | append (dict "page" .) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 上一篇 / 下一篇（在 siblings 里的位置） */ -}}
+{{- $idx := -1 -}}
+{{- range $i, $s := $siblings -}}{{- if eq $s.page.RelPermalink $p.RelPermalink -}}{{- $idx = $i -}}{{- end -}}{{- end -}}
+{{- $prev := "" -}}{{- $next := "" -}}
+{{- if $isReport -}}
+  {{- /* 报告按新到旧排，"上一篇"是更新的那篇 */ -}}
+  {{- if gt $idx 0 -}}{{- $next = (index $siblings (sub $idx 1)).page -}}{{- end -}}
+  {{- if and (ge $idx 0) (lt (add $idx 1) (len $siblings)) -}}{{- $prev = (index $siblings (add $idx 1)).page -}}{{- end -}}
+{{- else -}}
+  {{- if gt $idx 0 -}}{{- $prev = (index $siblings (sub $idx 1)).page -}}{{- end -}}
+  {{- if and (ge $idx 0) (lt (add $idx 1) (len $siblings)) -}}{{- $next = (index $siblings (add $idx 1)).page -}}{{- end -}}
+{{- end -}}
+
+{{- /* ---------- 正文处理 ---------- */ -}}
+{{- $content := $p.Content -}}
+{{- $lastEdit := "" -}}
+{{- with findRESubmatch `<blockquote>\s*<p>\s*Last Edit\s*[:：]?\s*([^<]*?)\s*</p>\s*</blockquote>` $content -}}
+  {{- $lastEdit = index (index . (sub (len .) 1)) 1 -}}
+  {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit[^<]*</p>\s*</blockquote>` "" $content -}}
+{{- end -}}
+{{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
+{{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
+
+{{- /* 目录：前两层标题（笔记里常用 # 作为章节） */ -}}
+{{- $toc := slice -}}
+{{- range $p.Fragments.Headings -}}
+  {{- if .Title -}}{{- $toc = $toc | append (dict "id" .ID "t" .Title "l" 1) -}}{{- end -}}
+  {{- range .Headings -}}
+    {{- if .Title -}}{{- $toc = $toc | append (dict "id" .ID "t" .Title "l" 2) -}}{{- end -}}
+    {{- range .Headings -}}{{- if .Title -}}{{- $toc = $toc | append (dict "id" .ID "t" .Title "l" 3) -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* 只有一个顶层标题时，把它下一层当顶层显示 */ -}}
+{{- $minL := 3 -}}{{- range $toc -}}{{- if lt .l $minL -}}{{- $minL = .l -}}{{- end -}}{{- end -}}
+
+{{- $desc := $p.Params.summary | default $p.Description | default (printf "%s — notes by Jingnan Huang" $p.Title) -}}
+<!DOCTYPE html>
+<html lang="{{ cond (eq $lang "CN") "zh-CN" "en" }}">
+<head>
+{{ partial "site/head.html" (dict "title" (printf "%s · Jingnan Huang" $p.Title) "description" $desc) }}
+{{- with resources.Get "css/chroma-github.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+{{- end }}
+{{- /* KaTeX：用主题自带的那份，发布到 /lib/katex/（字体一起发布），不依赖外部 CDN */ -}}
+{{- range resources.Match "lib/katex/fonts/*" }}{{ $_ := .Publish }}{{ end }}
+{{- with resources.Get "lib/katex/katex.min.css" }}
+<link rel="stylesheet" href="{{ .RelPermalink }}">
+{{- end }}
+{{- with resources.Get "lib/katex/katex.min.js" }}
+<script defer src="{{ .RelPermalink }}"></script>
+{{- end }}
+{{- with resources.Get "lib/katex/auto-render.min.js" }}
+<script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+{{- end }}
+<style>
+/* 横幅：左边和正文对齐（用和下方相同的两栏网格），标题可以向右延伸到目录栏上方 */
+.banner{background:var(--paper);border-bottom:1px solid var(--text);padding:28px 0 22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
+.banner>div{padding:0 clamp(24px,3.4vw,64px);max-width:calc(860px + 2*clamp(24px,3.4vw,64px));width:100%;margin:0 auto;box-sizing:border-box;min-width:0}
+.banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 12px;white-space:nowrap;width:max-content}
+.banner h1.wrap{white-space:normal;width:auto}
+.banner .meta{font-size:.86rem}
+.banner .lead{max-width:860px;margin:0 0 12px}
+.nav2{display:flex;gap:8px}
+.nav2 a{display:block;background:#fff;border:1px solid var(--paper2);padding:8px 14px;width:220px}
+.nav2 a:hover{border-color:var(--text)}
+.nav2 small{display:block;font-size:.72rem;color:var(--dim)}
+.nav2 b{display:block;font-weight:500;font-size:.86rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav2 .nx{text-align:right}
+.page{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
+.sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:18px;max-height:calc(100vh / var(--zoom) - 40px);overflow:auto;padding-right:4px}
+.side{padding:30px 22px 30px var(--px)}
+.crumb{font-size:.8rem;color:var(--dim)}
+.crumb a:hover{color:var(--text)}
+.crumb i{font-style:normal;margin:0 6px;color:#bdb7ac}
+.grp{font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.2;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--paper2)}
+.grp a:hover{color:var(--c)}
+.grp small{display:flex;align-items:center;gap:7px;font-family:'Inter Tight',sans-serif;font-size:.76rem;font-weight:400;color:var(--dim);margin-top:6px;letter-spacing:0}
+.grp small i{width:7px;height:7px;border-radius:50%;background:var(--d)}
+.sib{font-size:.88rem;line-height:1.35;counter-reset:n}
+.sib a{display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;align-items:baseline;padding:6px 8px 6px 0;color:#4a4741;border-radius:3px}
+.sib a em{font-style:normal;font-family:var(--serif);font-size:.95rem;color:var(--dim);text-align:right;padding-right:6px}
+.sib a span{overflow-wrap:anywhere}
+.sib a:hover{color:var(--text);background:rgba(255,255,255,.55)}
+.sib a.cur{background:#fff;color:var(--text);font-weight:500;box-shadow:inset 2px 0 0 var(--c)}
+.sib a.cur em{color:var(--c)}
+.rail{padding:30px var(--px) 30px 24px;border-left:1px solid var(--line)}
+.toc{font-size:.84rem;line-height:1.4;border-left:1px solid var(--line)}
+.toc a{display:block;padding:4px 0 4px 12px;margin-left:-1px;border-left:2px solid transparent;color:#5a5650}
+.toc a.l2{padding-left:24px;font-size:.8rem;color:var(--dim)}
+.toc a:hover{color:var(--text)}
+.toc a.on{color:var(--c);border-left-color:var(--c)}
+.totop{display:inline-block;margin-top:14px;font-size:.8rem;color:var(--dim)}
+.totop:hover{color:var(--text)}
+
+.art{padding:30px clamp(24px,3.4vw,64px) 50px;min-width:0}
+.art>*{margin-left:auto;margin-right:auto}
+.ahead{max-width:860px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--text)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.84rem;color:var(--dim)}
+.meta .area{font-size:.8rem}
+.ahead h1{font-size:2.6rem;line-height:1.12;margin:12px 0 0;overflow-wrap:anywhere}
+.ahead .crumb{margin-bottom:10px}
+.lead{margin:14px 0 0;font-size:1.05rem;line-height:1.65;color:#4a4741}
+
+/* ---------- 正文排版 ---------- */
+.prose{max-width:860px;font-size:1.02rem;line-height:1.8;color:#232220;overflow-wrap:break-word}
+.prose h1,.prose h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;font-size:1.65rem;line-height:1.25;margin:2.2em 0 .6em;padding-bottom:.25em;border-bottom:1px solid var(--line);scroll-margin-top:20px}
+.prose h3{font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.3;margin:1.8em 0 .5em;scroll-margin-top:20px}
+.prose h4{font-size:1.05rem;font-weight:600;margin:1.6em 0 .4em;scroll-margin-top:20px}
+.prose>*:first-child{margin-top:0}
+.prose h1>span,.prose h2>span,.prose h3>span,.prose h4>span{display:none}
+.prose .anchor{scroll-margin-top:20px}
+.prose p{margin:0 0 1em}
+.prose a{color:var(--c);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.prose strong{font-weight:600;color:var(--text)}
+.prose ul,.prose ol{padding-left:1.4em;margin:0 0 1em}
+.prose li{margin:.25em 0}
+.prose li>ul,.prose li>ol{margin:.2em 0}
+.prose blockquote{margin:1.2em 0;padding:.6em 1.1em;border-left:3px solid var(--c);background:#faf9f6;color:#4a4741}
+.prose blockquote p:last-child{margin-bottom:0}
+.prose img,.prose video{display:block;max-width:100%;height:auto;margin:1.2em auto;border:1px solid var(--line)}
+.prose hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+.prose table{display:block;overflow-x:auto;border-collapse:collapse;margin:1.2em 0;font-size:.92rem}
+.prose th,.prose td{border:1px solid var(--line);padding:6px 12px;text-align:left;vertical-align:top}
+.prose th{background:#f6f4ef;font-weight:600}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#f3f0ea;padding:.1em .35em;border-radius:3px}
+.prose pre{background:#faf9f6;border:1px solid var(--line);padding:14px 16px;overflow-x:auto;font-size:.86rem;line-height:1.6;margin:1.2em 0}
+.prose pre code{background:none;padding:0;font-size:inherit}
+.prose .highlight{margin:1.2em 0}
+.prose .highlight pre{margin:0}
+.prose .katex-display{overflow-x:auto;overflow-y:hidden;padding:.2em 0}
+.prose .katex{font-size:1.06em}
+
+.pn{max-width:860px;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px;padding-top:18px;border-top:1px solid var(--text)}
+.pn a{display:block;padding:12px 14px;border:1px solid var(--line)}
+.pn a:hover{border-color:var(--text)}
+.pn span{display:block;font-size:.78rem;color:var(--dim)}
+.pn b{font-weight:500;font-size:.95rem;overflow-wrap:anywhere}
+.pn .nx{text-align:right;grid-column:2}
+
+@media (max-width:1000px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  .rail{display:none}
+}
+@media (max-width:760px){
+  .banner{display:block;padding:22px 0 18px}
+  .banner h1{font-size:1.8rem!important;white-space:normal;width:auto}
+  .nav2{display:none}
+  .prose{font-size:.98rem}
+  .pn{grid-template-columns:1fr}
+  .pn .nx{grid-column:1}
+}
+</style>
+</head>
+<body style="{{ printf "--c:%s" (cond (eq $active "research") "var(--red)" "var(--blue)") | safeCSS }}">
+{{ partial "site/header.html" (dict "active" $active) }}
+
+<section class="banner">
+  <div>
+    <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
+    <h1 class="serif" id="atitle">{{ partial "site/nice-title.html" $p.Title }}</h1>
+    {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
+    <div class="meta">
+      {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
+      <span>{{ $p.Date.Format "Jan 2, 2006" }}</span>
+      {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
+      <i class="lang">{{ $lang }}</i>
+    </div>
+  </div>
+</section>
+
+<div class="page">
+  <article class="art">
+
+    <div class="prose">
+      {{ $content | safeHTML }}
+    </div>
+
+    {{- if or $prev $next }}
+    <nav class="pn">
+      {{- with $prev }}<a href="{{ .RelPermalink }}"><span>← Previous</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+      {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><span>Next →</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+    </nav>
+    {{- end }}
+  </article>
+
+  <aside class="rail">
+    <div class="sticky">
+      {{- if ge (len $toc) 2 }}
+      <div class="lab"><b>On this page</b></div>
+      <nav class="toc" id="toc">
+        {{- range $toc }}{{ if le .l (add $minL 1) }}
+        <a href="#{{ .id }}" class="l{{ add (sub .l $minL) 1 }}">{{ .t | plainify }}</a>
+        {{- end }}{{ end }}
+      </nav>
+      <a class="totop" href="#">↑ Back to top</a>
+      {{- end }}
+    </div>
+  </aside>
+</div>
+
+{{ partial "site/footer.html" . }}
+<script>
+/* 标题只占一行：放不下时逐步缩小字号（最小 1.5rem），仍放不下就换行 */
+(function(){
+  var h=document.getElementById('atitle'); if(!h) return;
+  function fit(){
+    h.classList.remove('wrap'); h.style.fontSize='';
+    if(window.innerWidth<=760) return;
+    var band=h.closest('.banner'), right=band.getBoundingClientRect().right-parseFloat(getComputedStyle(document.documentElement).fontSize)*2.5;
+    var size=parseFloat(getComputedStyle(h).fontSize), min=parseFloat(getComputedStyle(document.documentElement).fontSize)*1.5;
+    while(h.getBoundingClientRect().right>right && size>min){ size-=1; h.style.fontSize=size+'px'; }
+    if(h.getBoundingClientRect().right>right) h.classList.add('wrap');
+  }
+  fit(); window.addEventListener('resize',fit);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+})();
+</script>
+<script>
+/* 目录：滚动时高亮当前章节 */
+(function(){
+  var links=[].slice.call(document.querySelectorAll('#toc a')); if(!links.length) return;
+  var heads=links.map(function(a){var e=document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));return e&&(e.closest('h1,h2,h3,h4,h5,h6')||e);});
+  function on(){
+    var y=window.scrollY+80, k=0;
+    heads.forEach(function(h,i){ if(h && h.getBoundingClientRect().top+window.scrollY<=y) k=i; });
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4) k=heads.length-1;
+    links.forEach(function(a,i){a.classList.toggle('on',i===k);});
+  }
+  window.addEventListener('scroll',on,{passive:true}); on();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{{- /*
+  把连在一起的标题拆成好读的样子（只影响显示，不改文章本身）：
+  "SS 7. AnalysisofCTSystemusingLaplaceTransform" → "SS 7. Analysis of CT System using Laplace Transform"
+*/ -}}
+{{- $t := . -}}
+{{- $t = replaceRE `([a-z])([A-Z])` "$1 $2" $t -}}
+{{- $t = replaceRE `([A-Z])([A-Z][a-z])` "$1 $2" $t -}}
+{{- $t = replaceRE `\b([A-Za-z]{4,})(of|using)\b` "$1 $2" $t -}}
+{{- $t = replaceRE `\b([A-Za-z]{4,})and( [A-Z])` "$1 and$2" $t -}}
+{{- $t = replaceRE `\b([A-Za-z]{4,}s)in\b` "$1 in" $t -}}
+{{- $t = replaceRE `\b([A-Za-z]{3,}tion)to\b` "$1 to" $t -}}
+{{- $t = replaceRE `\b([A-Z]+) S(using|of|and)\b` "${1}S $2" $t -}}
+{{- $t = replaceRE `([A-Za-z])&([A-Za-z])` "$1 & $2" $t -}}
+{{- $t = replaceRE `\s+` " " $t -}}
+{{- return (trim $t " ") -}}

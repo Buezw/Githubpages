@@ -1,116 +1,164 @@
+{{- /*
+  Notebook 页（/student/）：所有笔记，按学期 → 课程分组。
+  课程列表和领域来自 data/notebook.yaml，笔记来自 partials/site/notes.html。
+*/ -}}
+{{- $nb := site.Data.notebook -}}
+{{- $items := partial "site/notes.html" . -}}
+{{- $termNames := dict "W" "Winter" "F" "Fall" "S" "Summer" -}}
+
+{{- /* 按 sources 的顺序整理出「组」：每个学期一组，自学/读书笔记一组 */ -}}
+{{- $groups := slice -}}
+{{- $cur := "" -}}
+{{- $courses := slice -}}
+{{- range $src := $nb.sources -}}
+  {{- $notes := where $items "dir" $src.dir -}}
+  {{- if $notes -}}
+    {{- $m := findRESubmatch `UofT/(\d\d)([FWS])` $src.dir 1 -}}
+    {{- $g := "Self-study" -}}
+    {{- with $m -}}{{- $g = printf "%s 20%s" (index $termNames (index (index . 0) 2)) (index (index . 0) 1) -}}{{- end -}}
+    {{- if and (ne $g $cur) $courses -}}
+      {{- $groups = $groups | append (dict "name" $cur "courses" $courses) -}}
+      {{- $courses = slice -}}
+    {{- end -}}
+    {{- $cur = $g -}}
+    {{- /* 课程内按标题里的讲次排序（"CA 2." → 2，"D2L 6.6" → 6.06），没有编号的排最后 */ -}}
+    {{- $keyed := slice -}}
+    {{- range $notes -}}
+      {{- $k := 999.0 -}}
+      {{- $m := findRESubmatch `^\S+\s+(\d+)(?:\.(\d+))?` .page.Title 1 -}}
+      {{- if not $m -}}{{- $m = findRESubmatch `^[A-Za-z]+(\d+)()` .page.Title 1 -}}{{- end -}}
+      {{- with $m -}}
+        {{- $g := index . 0 -}}
+        {{- $k = float (index $g 1) -}}
+        {{- with index $g 2 -}}{{- $k = add $k (div (float .) 100.0) -}}{{- end -}}
+      {{- end -}}
+      {{- $keyed = $keyed | append (merge . (dict "k" $k)) -}}
+    {{- end -}}
+    {{- $courses = $courses | append (dict "src" $src "notes" (sort $keyed "k" "asc") "id" (anchorize $src.name)) -}}
+  {{- end -}}
+{{- end -}}
+{{- with $courses -}}{{- $groups = $groups | append (dict "name" $cur "courses" .) -}}{{- end -}}
+
+{{- $areasUsed := slice -}}
+{{- range $k, $v := $nb.areas -}}
+  {{- if where $items "area" $k -}}{{- $areasUsed = $areasUsed | append (dict "name" $k "color" $v "n" (len (where $items "area" $k))) -}}{{- end -}}
+{{- end -}}
+{{- $courseCount := 0 -}}{{- range $groups -}}{{- $courseCount = add $courseCount (len .courses) -}}{{- end -}}
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jingnan Huang | UofT Student</title>
-    {{ partial "persona/styles.html" (dict "Accent" "#0033cc") }}
+{{ partial "site/head.html" (dict "title" "Notebook · Jingnan Huang" "description" "Lecture notes and self-study notes by Jingnan Huang — UofT Computer Engineering.") }}
+<style>
+.page{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,10fr)}
+.page>.side{position:relative}
+.sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:26px}
+.side h1{font-size:2.6rem;line-height:1;margin:0}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--paper2);border-bottom:1px solid var(--paper2)}
+.nums div{padding:9px 0;color:var(--dim);font-size:.78rem}
+.nums div+div{padding-left:12px;border-left:1px solid var(--paper2)}
+.nums b{display:block;font-family:var(--serif);font-weight:500;font-size:1.6rem;line-height:1.1;color:var(--text)}
+.toc{font-size:.88rem}
+.toc .tg{color:var(--dim);font-size:.78rem;margin:12px 0 4px}
+.toc .tg:first-child{margin-top:6px}
+.toc a{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.toc a span{color:var(--dim);font-size:.78rem}
+.toc a:hover{color:var(--blue)}
+.main{border-left:1px solid var(--line);padding:22px var(--px) 40px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.filters button{all:unset;cursor:pointer;font-size:.82rem;padding:4px 11px;border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px;background:#fff}
+.filters button i{width:7px;height:7px;border-radius:50%;background:var(--d)}
+.filters button em{font-style:normal;color:var(--dim);font-size:.74rem}
+.filters button:hover{border-color:var(--text)}
+.filters button.on{background:var(--text);color:#fff;border-color:var(--text)}
+.filters button.on em{color:#cfcac1}
+.term{margin-top:30px}
+.term>h2{font-size:1.9rem;line-height:1.1;margin:0 0 4px;display:flex;justify-content:space-between;align-items:baseline}
+.term>h2 span{font-family:'Inter Tight',sans-serif;font-size:.85rem;font-weight:400;color:var(--dim);letter-spacing:0}
+.courses{columns:2;column-gap:48px}
+.course{padding-top:16px;scroll-margin-top:20px;break-inside:avoid}
+.course .rs .t span .lang{margin-right:6px;vertical-align:1px}
+.course .lab b{display:flex;align-items:center;gap:8px}
+.course .lab b i{width:8px;height:8px;border-radius:50%;background:var(--d)}
+.course.hide,.term.hide{display:none}
+.nb .rs p{-webkit-line-clamp:1}
+@media (max-width:1100px){
+  .courses{columns:1}
+}
+@media (max-width:760px){
+  .page{display:flex;flex-direction:column}
+  .side{padding:22px var(--px)}
+  .sticky{position:static}
+  .toc{display:none}
+  .main{border-left:none;padding-top:18px}
+}
+</style>
 </head>
 <body>
+{{ partial "site/header.html" (dict "active" "notebook") }}
 
-    {{ partial "persona/header.html" . }}
+<div class="page">
+  <aside class="side">
+    <div class="sticky">
+      <div>
+        <h1 class="serif">Notebook</h1>
+        <p class="blurb" style="margin-top:12px">Lecture notes from UofT Computer Engineering, plus self-study and reading notes. Grouped by term and course.</p>
+      </div>
+      <div class="nums">
+        <div><b>{{ len $items }}</b>notes</div>
+        <div><b>{{ $courseCount }}</b>courses &amp; books</div>
+        <div><b>{{ len $areasUsed }}</b>areas</div>
+      </div>
+      <nav class="toc" aria-label="Courses">
+        {{- range $groups }}
+        <div class="tg">{{ .name }}</div>
+          {{- range .courses }}
+        <a href="#{{ .id }}">{{ .src.name }}<span>{{ len .notes }}</span></a>
+          {{- end }}
+        {{- end }}
+      </nav>
+    </div>
+  </aside>
 
-    <div class="fluid-wrapper">
-        <aside class="sidebar">
-            <a href="/" class="btn-back">← All Roles</a>
-            <h2 class="profile-name">Jingnan Huang</h2>
-
-            <div class="profile-bio">
-                <div class="bio-role">
-                    <strong>B.A.Sc Computer Engineering</strong><br>
-                    <span style="color: var(--dim)">University of Toronto</span>
-                </div>
-
-                <div class="bio-edu">
-                    + PEY Co-op<br>
-                    <span style="font-size: 0.85em; font-style: italic;">Intended Minor: Engineering Business and Entrepreneurship</span><br>
-                    <span style="font-size: 0.85em; color: #999;">Exp. Apr 2029</span>
-                </div>
-            </div>
-
-            <a href="/cv.pdf" class="btn-cv">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style="margin-right:8px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Download CV
-            </a>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Coordinates</div>
-                <ul class="contact-list">
-                    <li>
-                        <span class="contact-label">Academic Email</span>
-                        <span class="contact-val">
-                            <a href="mailto:jingnan.huang@mail.utoronto.ca">jingnan.huang@mail.utoronto.ca</a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="contact-label">Github</span>
-                        <span class="contact-val">
-                            <a href="https://github.com/Buezw" target="_blank">github.com/Buezw</a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Coursework Focus</div>
-                <div class="comp-tags">
-                    <span class="tag-pill">Circuits & Systems</span>
-                    <span class="tag-pill">Math & Physics</span>
-                    <span class="tag-pill">OOP / C++</span>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">DEV TOOLS</div>
-                <div class="comp-tags">
-                    <span class="tag-pill">Linux / Bash</span>
-                    <span class="tag-pill">Vim / Neovim</span>
-                    <span class="tag-pill">CMake</span>
-                    <span class="tag-pill">Git</span>
-                </div>
-            </div>
-        </aside>
-
-        <main>
-            <h2 class="section-header">UofT Coursework <span>STUDENT</span></h2>
-            <p class="persona-intro">
-                Lecture notes, lab writeups, and problem sets from the B.A.Sc Computer Engineering program at the University of Toronto — spanning circuits, digital systems, math, and programming courses.
-            </p>
-
-            {{ $uoft := .Site.GetPage "/docs/uoft" }}
-            {{ $entries := slice }}
-            {{ if $uoft }}
-                {{ $entries = sort $uoft.RegularPagesRecursive "Date" "desc" }}
-            {{ end }}
-
-            {{ if $entries }}
-            <div class="entry-list">
-                {{ range first 10 $entries }}
-                <a href="{{ .RelPermalink }}" class="entry-item">
-                    <div class="entry-meta">{{ .Date.Format "Jan 02, 2006" }}
-                        {{ range first 1 .Params.tags }}<span class="meta-tag-rl">{{ . | upper }}</span>{{ end }}
-                    </div>
-                    <div class="entry-title-mono">{{ .Title }}</div>
-                    <div class="entry-summary">
-                        {{ $regex := "(?m)^>\\s*Last Edit.*" }}
-                        {{ $match := findRE $regex .RawContent 1 }}
-                        {{ if $match }}
-                            {{ index $match 0 | replaceRE "^>\\s*" "" | plainify }}
-                        {{ else }}
-                            {{ .Summary | plainify | truncate 100 }}
-                        {{ end }}
-                    </div>
-                </a>
-                {{ end }}
-            </div>
-            <p><a href="/docs/uoft/" class="see-all-link">See all coursework →</a></p>
-            {{ else }}
-            <div class="empty-state">No coursework entries yet.</div>
-            {{ end }}
-        </main>
+  <main class="main nb">
+    <div class="filters" id="filters">
+      <button class="on" data-area="">All <em>{{ len $items }}</em></button>
+      {{- range $areasUsed }}
+      <button data-area="{{ .name }}" style="{{ printf "--d:%s" .color | safeCSS }}"><i></i>{{ .name }} <em>{{ .n }}</em></button>
+      {{- end }}
     </div>
 
-    {{ partial "persona/footer.html" . }}
+    {{- range $groups }}
+    <section class="term">
+      <h2 class="serif">{{ .name }}<span>{{ len .courses }} {{ if eq .name "Self-study" }}books{{ else }}courses{{ end }}</span></h2>
+      <div class="courses">
+        {{- range .courses }}
+          {{- $color := "#999" }}{{ $a := .src.area }}
+          {{- range $k, $v := $nb.areas }}{{ if eq (lower $k) (lower $a) }}{{ $color = $v }}{{ end }}{{ end }}
+        <div class="course" id="{{ .id }}" data-area="{{ .src.area }}">
+          <div class="lab"><b style="{{ printf "--d:%s" $color | safeCSS }}"><i></i>{{ .src.name }}</b><span>{{ len .notes }} notes</span></div>
+          {{- range .notes }}
+          {{ partial "site/note-row.html" (dict "item" . "compact" true) }}
+          {{- end }}
+        </div>
+        {{- end }}
+      </div>
+    </section>
+    {{- end }}
+  </main>
+</div>
 
+{{ partial "site/footer.html" . }}
+<script>
+(function(){
+  var bs=document.querySelectorAll('#filters button');
+  bs.forEach(function(b){ b.addEventListener('click',function(){
+    var a=b.dataset.area;
+    bs.forEach(function(x){x.classList.toggle('on',x===b);});
+    document.querySelectorAll('.course').forEach(function(c){ c.classList.toggle('hide', !!a && c.dataset.area!==a); });
+    document.querySelectorAll('.term').forEach(function(t){ t.classList.toggle('hide', !t.querySelector('.course:not(.hide)')); });
+  }); });
+})();
+</script>
 </body>
 </html>

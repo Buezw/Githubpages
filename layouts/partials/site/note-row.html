@@ -1,0 +1,41 @@
+{{- /*
+  一篇笔记的列表行。传入 dict：
+    item     —— partial "site/notes.html" 返回的一项
+    compact  —— true 时用紧凑版（不显示领域和课程名）
+*/ -}}
+{{- $nb := site.Data.notebook -}}
+{{- $it := .item -}}
+{{- $p := $it.page -}}
+{{- /* 摘要：笔记的前几个章节标题（去掉含公式的、和标题重复的） */ -}}
+{{- $norm := replaceRE `[^a-z0-9]` "" (lower $p.Title) -}}
+{{- $cand := slice -}}
+{{- range $p.Fragments.Headings -}}{{- $cand = $cand | append .Title -}}{{- end -}}
+{{- if lt (len $cand) 3 -}}
+  {{- range $p.Fragments.Headings -}}{{- range .Headings -}}{{- $cand = $cand | append .Title -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $hs := slice -}}
+{{- range $cand -}}
+  {{- $t := trim (. | plainify | htmlUnescape) " " -}}
+  {{- if and $t (not (findRE `[$\\]` $t)) (ne (replaceRE `[^a-z0-9]` "" (lower $t)) $norm) -}}{{- $hs = $hs | append $t -}}{{- end -}}
+{{- end -}}
+{{- /* 语言：正文里中文字多就标 CN */ -}}
+{{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
+{{- $color := "#999" -}}
+{{- range $k, $v := $nb.areas -}}{{- if eq (lower $k) (lower $it.area) -}}{{- $color = $v -}}{{- end -}}{{- end -}}
+{{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
+{{- if .compact -}}
+{{- /* 紧凑版（课程页里用）：课程和领域已在标题里，只留标题、日期、摘要、语言 */ -}}
+<a class="rs" href="{{ $p.RelPermalink }}">
+  <div class="t"><b>{{ $p.Title }}</b><span><i class="lang">{{ $lang }}</i> {{ $p.Date.Format "Jan 2, 2006" }}</span></div>
+  {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
+</a>
+{{- else -}}
+<a class="rs" href="{{ $p.RelPermalink }}">
+  <div class="t"><b>{{ $p.Title }}</b><span>{{ $p.Date.Format "Jan 2, 2006" }}</span></div>
+  {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
+  <div class="mrow">
+    <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ $it.area }}</i><span>{{ $it.name }}</span></span>
+    <i class="lang">{{ $lang }}</i>
+  </div>
+</a>
+{{- end -}}
