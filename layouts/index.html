@@ -116,9 +116,13 @@
   <aside class="side">
     <div>
       <h1 class="serif">Jingnan Huang</h1>
-      <div class="who"><b>Computer Engineering</b> · UofT<br><b>Sales &amp; Trading Analyst</b> · UTEFA</div>
+      <dl class="roles">
+        <dt>UofT</dt><dd>Computer Engineering</dd>
+        <dt>UTEFA</dt><dd>Sales &amp; Trading Analyst</dd>
+      </dl>
     </div>
-    <p class="blurb">I work on quantitative trading and low-latency systems — market microstructure, low-latency infrastructure and FPGA acceleration — and keep notes on every course I take.</p>
+    {{- /* ‑ 是不会断行的连字符，避免 "low-" 和 "latency" 被拆到两行 */}}
+    <p class="blurb">Quantitative trading and low‑latency systems: market microstructure, low‑latency infrastructure and FPGA acceleration. I keep notes on every course I take.</p>
     <div>
       <div class="lab"><b>Toolkit</b></div>
       <div class="kit"><span>Languages</span><div class="chips"><span>C++17</span><span>C</span><span>Python</span><span>Verilog</span></div></div>
