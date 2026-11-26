@@ -118,7 +118,7 @@
 <script defer src="{{ .RelPermalink }}"></script>
 {{- end }}
 {{- with resources.Get "lib/katex/auto-render.min.js" }}
-<script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+<script defer src="{{ .RelPermalink }}" onload="renderMathInElement(document.querySelector('.prose'),{delimiters:[{left:'\\\\[',right:'\\\\]',display:true},{left:'\\\\(',right:'\\\\)',display:false},{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
 {{- end }}
 <style>
 /* 横幅：左边和正文对齐（用和下方相同的两栏网格），标题可以向右延伸到目录栏上方 */
