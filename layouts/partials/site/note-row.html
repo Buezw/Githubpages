@@ -6,7 +6,7 @@
 {{- $nb := site.Data.notebook -}}
 {{- $it := .item -}}
 {{- $p := $it.page -}}
-{{- /* 摘要：笔记的前几个章节标题（去掉含公式的、和标题重复的） */ -}}
+{{- /* 摘要：front matter 里写了 summary 就用它；否则取笔记的前几个章节标题（去掉含公式的、和标题重复的） */ -}}
 {{- $norm := replaceRE `[^a-z0-9]` "" (lower $p.Title) -}}
 {{- $cand := slice -}}
 {{- range $p.Fragments.Headings -}}{{- $cand = $cand | append .Title -}}{{- end -}}
@@ -27,12 +27,12 @@
 {{- /* 紧凑版（课程页里用）：课程和领域已在标题里，只留标题、日期、摘要、语言 */ -}}
 <a class="rs" href="{{ $p.RelPermalink }}">
   <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span><i class="lang">{{ $lang }}</i> {{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
-  {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
+  {{- with $p.Params.summary }}<p>{{ . }}</p>{{ else }}{{ with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}{{ end }}
 </a>
 {{- else -}}
 <a class="rs" href="{{ $p.RelPermalink }}">
   <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span>{{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
-  {{- with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}
+  {{- with $p.Params.summary }}<p>{{ . }}</p>{{ else }}{{ with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}{{ end }}
   <div class="mrow">
     <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ $it.area }}</i><span>{{ $it.name }}</span></span>
     <i class="lang">{{ $lang }}</i>

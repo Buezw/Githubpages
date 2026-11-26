@@ -226,7 +226,7 @@
   <div>
     <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
     <h1 class="serif" id="atitle">{{ partial "site/nice-title.html" $p.Title }}</h1>
-    {{- if $isReport }}{{ with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}{{ end }}
+    {{- with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}
     <div class="meta">
       {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
       {{ if not $p.Date.IsZero }}<span>{{ $p.Date.Format "Jan 2, 2006" }}</span>{{ end }}
