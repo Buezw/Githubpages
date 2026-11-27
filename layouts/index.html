@@ -10,16 +10,22 @@
 {{- $nb := site.Data.notebook -}}
 {{- $items := partial "site/notes.html" . -}}
 
-{{- /* 首页显示：最新 4 篇，再补上其他领域各自最新的一篇，共 7 篇 */ -}}
-{{- $shown := slice -}}
-{{- $seen := dict -}}
-{{- range first 4 $items -}}
-  {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (lower .area) true) -}}
-{{- end -}}
-{{- range after 4 $items -}}
-  {{- if and (lt (len $shown) 7) (not (index $seen (lower .area))) -}}
-    {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (lower .area) true) -}}
+{{- /* 首页显示：最新 4 篇，再补上其他领域各自最新的一篇，共 7 篇。
+       英文界面只挑英文笔记，中文界面只挑中文笔记，各算一份（$shownBy.EN / $shownBy.CN） */ -}}
+{{- $shownBy := dict -}}
+{{- range $L := slice "EN" "CN" -}}
+  {{- $pool := where $items "lang" $L -}}
+  {{- $shown := slice -}}
+  {{- $seen := dict -}}
+  {{- range first 4 $pool -}}
+    {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (printf "a%s" (lower .area)) true) -}}
   {{- end -}}
+  {{- range after 4 $pool -}}
+    {{- if and (lt (len $shown) 7) (not (index $seen (printf "a%s" (lower .area)))) -}}
+      {{- $shown = $shown | append . -}}{{- $seen = merge $seen (dict (printf "a%s" (lower .area)) true) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $shownBy = merge $shownBy (dict $L $shown) -}}
 {{- end -}}
 
 {{- /* ========== Research ========== */ -}}
@@ -28,6 +34,12 @@
 {{- $wip := len (where $systems "status" "wip") -}}
 {{- $reports := sort (where site.RegularPages "Section" "finance") "Date" "desc" -}}
 {{- $stopTags := slice "Finance" "Commentary" "Notes" "Algo" "Docs" -}}
+{{- /* 报告也按语言分两份 */ -}}
+{{- $repBy := dict "EN" (slice) "CN" (slice) -}}
+{{- range $reports -}}
+  {{- $L := partialCached "site/lang.html" . .RelPermalink -}}
+  {{- $repBy = merge $repBy (dict $L ((index $repBy $L) | append .)) -}}
+{{- end -}}
 
 {{- /* ========== Activity 日历 ========== */ -}}
 {{- $blue := dict -}}
@@ -59,7 +71,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{ partial "site/head.html" (dict "title" "Jingnan Huang · Notes & Research" "description" "Jingnan Huang — Computer Engineering at the University of Toronto. Course notes, trading systems and market research.") }}
+{{ partial "site/head.html" (dict "title" "Jingnan Huang · Notes & Research" "title_zh" "Jingnan Huang · 笔记与研究" "description" "Jingnan Huang — Computer Engineering at the University of Toronto. Course notes, trading systems and market research.") }}
 <style>
 /* ---------- 版面：左栏 | 日历（横跨）/ Notebook | Research ---------- */
 .board{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,5fr);grid-template-rows:auto 1fr}
@@ -114,47 +126,47 @@
     <div>
       <h1 class="serif">Jingnan Huang</h1>
       <dl class="roles">
-        <dt>UofT</dt><dd>Computer Engineering</dd>
-        <dt>UTEFA</dt><dd>Sales &amp; Trading Analyst</dd>
+        <dt>UofT</dt><dd>{{ partial "site/tr.html" "Computer Engineering" }}</dd>
+        <dt>UTEFA</dt><dd>{{ partial "site/tr.html" "Sales & Trading Analyst" }}</dd>
       </dl>
     </div>
     {{- /* ‑ 是不会断行的连字符，避免 "low-" 和 "latency" 被拆到两行 */}}
-    <p class="blurb">Quantitative trading and low‑latency systems: market microstructure, low‑latency infrastructure and FPGA acceleration. I keep notes on every course I take.</p>
+    <p class="blurb"><span class="L-en">Quantitative trading and low‑latency systems: market microstructure, low‑latency infrastructure and FPGA acceleration. I keep notes on every course I take.</span><span class="L-zh">专注量化交易与低延迟系统：市场微观结构、低延迟基础设施和 FPGA 加速。我上的每一门课都有笔记。</span></p>
     <div>
-      <div class="lab"><b>Toolkit</b></div>
-      <div class="kit"><span>Languages</span><div class="chips"><span>C++17</span><span>C</span><span>Python</span><span>Verilog</span></div></div>
-      <div class="kit"><span>Hardware</span><div class="chips"><span>Xilinx FPGA</span><span>AVX2 SIMD</span></div></div>
-      <div class="kit"><span>Quant</span><div class="chips"><span>Monte Carlo</span><span>VPIN</span><span>Stochastic calculus</span></div></div>
-      <div class="kit"><span>Math</span><div class="chips"><span>Laplace &amp; Fourier</span><span>Linear algebra</span></div></div>
+      <div class="lab"><b>{{ partial "site/tr.html" "Toolkit" }}</b></div>
+      <div class="kit"><span>{{ partial "site/tr.html" "Languages" }}</span><div class="chips"><span>C++17</span><span>C</span><span>Python</span><span>Verilog</span></div></div>
+      <div class="kit"><span>{{ partial "site/tr.html" "Hardware" }}</span><div class="chips"><span>Xilinx FPGA</span><span>AVX2 SIMD</span></div></div>
+      <div class="kit"><span>{{ partial "site/tr.html" "Quant" }}</span><div class="chips"><span>{{ partial "site/tr.html" "Monte Carlo" }}</span><span>VPIN</span><span>{{ partial "site/tr.html" "Stochastic calculus" }}</span></div></div>
+      <div class="kit"><span>{{ partial "site/tr.html" "Math" }}</span><div class="chips"><span>{{ partial "site/tr.html" "Laplace & Fourier" }}</span><span>{{ partial "site/tr.html" "Linear algebra" }}</span></div></div>
     </div>
     <div>
-      <div class="lab"><b>Contact</b></div>
+      <div class="lab"><b>{{ partial "site/tr.html" "Contact" }}</b></div>
       <div class="contact">
         <a href="mailto:jingnan.huang@mail.utoronto.ca">jingnan.huang@mail.utoronto.ca</a>
         <div>
           <a href="https://github.com/Buezw" target="_blank" rel="noopener">GitHub ↗</a>
           <a href="https://linkedin.com/in/jingnan-huang-buezw/" target="_blank" rel="noopener">LinkedIn ↗</a>
-          <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu ↗</a>
+          <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">{{ partial "site/tr.html" "Zhihu" }} ↗</a>
         </div>
       </div>
     </div>
     {{- if fileExists "static/cv.pdf" }}
-    <a class="cv" href="/cv.pdf">Download CV ↓</a>
+    <a class="cv" href="/cv.pdf">{{ partial "site/tr.html" (slice "Download CV ↓" "下载简历 ↓") }}</a>
     {{- end }}
   </aside>
 
   {{- /* ===== Activity：每格一天 ===== */}}
   <section class="band">
     <div class="bh">
-      <b>Activity</b>
-      <span>{{ $start.Format "Jan 2006" }} — {{ $end.Format "Jan 2006" }} · <i class="lg b2"></i>notes <i class="lg r"></i>research &amp; systems</span>
+      <b>{{ partial "site/tr.html" "Activity" }}</b>
+      <span>{{ partial "site/date.html" (dict "d" $start "f" "month") }} — {{ partial "site/date.html" (dict "d" $end "f" "month") }} · <i class="lg b2"></i>{{ partial "site/tr.html" (slice "notes" "笔记") }} <i class="lg r"></i>{{ partial "site/tr.html" (slice "research & systems" "研究与系统") }}</span>
     </div>
     {{- $labels := slice }}
     <div class="hm">
       {{- range $w := seq 0 (sub $weeks 1) }}
         {{- $first := $start.AddDate 0 0 (int (mul $w 7)) }}
         {{- if and (le $first.Day 7) (in (slice "1" "5" "9") ($first.Format "1")) }}
-          {{- $labels = $labels | append (dict "pct" (div (mul $w 100.0) $weeks) "text" ($first.Format "Jan 06")) }}
+          {{- $labels = $labels | append (dict "pct" (div (mul $w 100.0) $weeks) "text" ($first.Format "Jan 06") "zh" (printf "%d年%d月" $first.Year (int $first.Month))) }}
         {{- end }}
         <span>
         {{- range $d := seq 0 6 }}
@@ -163,8 +175,9 @@
           {{- else }}
             {{- $k := $day.Format "2006-01-02" }}
             {{- $n := index $blue $k | default 0 }}
-            {{- if index $red $k }}<i class="r" title="{{ $day.Format "Jan 2, 2006" }} · research"></i>
-            {{- else if $n }}<i class="b{{ cond (gt $n 2) 3 $n }}" title="{{ $day.Format "Jan 2, 2006" }} · {{ $n }} note{{ if gt $n 1 }}s{{ end }}"></i>
+            {{- $zd := printf "%d年%d月%d日" $day.Year (int $day.Month) $day.Day }}
+            {{- if index $red $k }}<i class="r" title="{{ $day.Format "Jan 2, 2006" }} · research" data-zh-title="{{ $zd }} · 研究"></i>
+            {{- else if $n }}<i class="b{{ cond (gt $n 2) 3 $n }}" title="{{ $day.Format "Jan 2, 2006" }} · {{ $n }} note{{ if gt $n 1 }}s{{ end }}" data-zh-title="{{ $zd }} · {{ $n }} 篇笔记"></i>
             {{- else }}<i></i>
             {{- end }}
           {{- end }}
@@ -173,54 +186,62 @@
       {{- end }}
     </div>
     <div class="ml">
-      {{- range $labels }}<em style="left:{{ printf "%.2f" .pct }}%">{{ .text }}</em>{{ end -}}
+      {{- range $labels }}<em style="left:{{ printf "%.2f" .pct }}%">{{ partial "site/tr.html" (slice .text .zh) }}</em>{{ end -}}
     </div>
   </section>
 
   {{- /* ===== Notebook ===== */}}
   <section class="col nb" style="--c:var(--blue)">
-    <h2 class="serif">Notebook</h2>
-    <div class="lab"><b>Latest</b></div>
-    {{- range $shown }}
-    {{ partial "site/note-row.html" (dict "item" .) }}
+    <h2 class="serif">{{ partial "site/tr.html" "Notebook" }}</h2>
+    <div class="lab"><b>{{ partial "site/tr.html" "Latest" }}</b></div>
+    {{- range $L := slice "EN" "CN" }}
+    <div class="{{ cond (eq $L "EN") "L-en" "L-zh" }}">
+      {{- range index $shownBy $L }}
+      {{ partial "site/note-row.html" (dict "item" .) }}
+      {{- end }}
+    </div>
     {{- end }}
-    <a class="go" href="/docs/">Open the notebook →</a>
+    <a class="go" href="/docs/">{{ partial "site/tr.html" (slice "Open the notebook →" "打开笔记 →") }}</a>
   </section>
 
   {{- /* ===== Research ===== */}}
   <section class="col rsc" style="--c:var(--red)">
-    <h2 class="serif">Research</h2>
+    <h2 class="serif">{{ partial "site/tr.html" "Research" }}</h2>
     <div class="stack">
       {{- with $systems }}
       <div>
-        <div class="lab"><b>Systems</b><span>{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span></div>
+        <div class="lab"><b>{{ partial "site/tr.html" "Systems" }}</b><span><span class="L-en">{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span><span class="L-zh">已上线 {{ $shipped }}{{ if $wip }} · 进行中 {{ $wip }}{{ end }}</span></span></div>
         {{- range . }}
         <div class="sys">
           <div class="t"><b>{{ .name }}</b>
-            {{- if eq .status "shipped" }}<span class="st ok">Shipped</span>{{ else }}<span class="st wip">In progress</span>{{ end }}</div>
-          <div class="d">{{ .desc }}</div>
-          <div class="m">{{ delimit (first 2 .stack) " · " }} · {{ (time.AsTime .date).Format "Jan 2006" }}</div>
+            {{- if eq .status "shipped" }}<span class="st ok">{{ partial "site/tr.html" "Shipped" }}</span>{{ else }}<span class="st wip">{{ partial "site/tr.html" "In progress" }}</span>{{ end }}</div>
+          <div class="d">{{ partial "site/tr.html" (slice .desc (.desc_zh | default .desc)) }}</div>
+          <div class="m">{{ delimit (first 2 .stack) " · " }} · {{ partial "site/date.html" (dict "d" (time.AsTime .date) "f" "month") }}</div>
         </div>
         {{- end }}
       </div>
       {{- end }}
-      {{- with $reports }}
-      <div>
-        <div class="lab"><b>Reports</b><span>{{ len . }} published</span></div>
+      {{- range $L := slice "EN" "CN" }}
+      {{- /* 这种语言没有报告时，就显示全部报告 */}}
+      {{- $rl := index $repBy $L | default $reports }}
+      {{- with $rl }}
+      <div class="{{ cond (eq $L "EN") "L-en" "L-zh" }}">
+        <div class="lab"><b>{{ partial "site/tr.html" "Reports" }}</b><span>{{ if eq $L "EN" }}{{ len . }} published{{ else }}已发布 {{ len . }} 篇{{ end }}</span></div>
         {{- range first 2 . }}
           {{- $meta := slice }}
           {{- range .Params.categories }}{{ $meta = $meta | append . }}{{ end }}
           {{- range .Params.tags }}{{ if not (in $stopTags .) }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
         <a class="rs" href="{{ .RelPermalink }}">
-          <div class="t"><b>{{ .Title }}</b><span>{{ .Date.Format "Jan 2, 2006" }}</span></div>
+          <div class="t"><b>{{ .Title }}</b><span>{{ if eq $L "EN" }}{{ .Date.Format "Jan 2, 2006" }}{{ else }}{{ printf "%d年%d月%d日" .Date.Year (int .Date.Month) .Date.Day }}{{ end }}</span></div>
           {{- with (.Params.summary | default .Summary) }}<p>{{ . | plainify }}</p>{{ end }}
-          {{- with $meta }}<div class="m">{{ delimit (first 3 .) " · " }}</div>{{ end }}
+          {{- with $meta }}<div class="m">{{ range $i, $m := first 3 . }}{{ if $i }} · {{ end }}{{ if eq $L "EN" }}{{ $m }}{{ else }}{{ partial "site/zh.html" $m }}{{ end }}{{ end }}</div>{{ end }}
         </a>
         {{- end }}
       </div>
       {{- end }}
+      {{- end }}
     </div>
-    <a class="go" href="/utefa/">Open research →</a>
+    <a class="go" href="/utefa/">{{ partial "site/tr.html" (slice "Open research →" "查看研究 →") }}</a>
   </section>
 
 </div>

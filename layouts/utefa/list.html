@@ -13,11 +13,16 @@
   {{- with site.GetPage . -}}{{- range .RegularPages -}}{{- $builds = $builds | append . -}}{{- end -}}{{- end -}}
 {{- end -}}
 {{- $builds = sort $builds "Date" "desc" -}}
+{{- /* 报告、演示与项目按界面语言筛选（.lf）：数一下各有几篇中文 / 英文 */ -}}
+{{- $rc := dict "EN" 0 "CN" 0 -}}
+{{- range $reports -}}{{- $L := partialCached "site/lang.html" . .RelPermalink -}}{{- $rc = merge $rc (dict $L (add (index $rc $L) 1)) -}}{{- end -}}
+{{- $bc := dict "EN" 0 "CN" 0 -}}
+{{- range $builds -}}{{- $L := partialCached "site/lang.html" . .RelPermalink -}}{{- $bc = merge $bc (dict $L (add (index $bc $L) 1)) -}}{{- end -}}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{ partial "site/head.html" (dict "title" "Research · Jingnan Huang" "description" "Trading systems, market research and side projects by Jingnan Huang — UTEFA Sales & Trading.") }}
+{{ partial "site/head.html" (dict "title" "Research · Jingnan Huang" "title_zh" "研究 · Jingnan Huang" "description" "Trading systems, market research and side projects by Jingnan Huang — UTEFA Sales & Trading.") }}
 <style>
 .page{flex:1;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,10fr)}
 .sticky{position:sticky;top:20px;display:flex;flex-direction:column;gap:26px}
@@ -28,12 +33,12 @@
 .nums b{display:block;font-family:var(--serif);font-weight:500;font-size:1.6rem;line-height:1.1;color:var(--text)}
 .toc{font-size:.9rem}
 .toc a{display:flex;justify-content:space-between;padding:4px 0}
-.toc a span{color:var(--dim);font-size:.78rem}
+.toc a em{font-style:normal;color:var(--dim);font-size:.78rem}
 .toc a:hover{color:var(--red)}
 .main{border-left:1px solid var(--line);padding:10px var(--px) 40px;--c:var(--red)}
 .sec{padding-top:26px;scroll-margin-top:20px}
 .sec>h2{font-size:1.9rem;line-height:1.1;margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline}
-.sec>h2 span{font-family:'Inter Tight',sans-serif;font-size:.85rem;font-weight:400;color:var(--dim);letter-spacing:0}
+.sec>h2 small{font-family:'Inter Tight',sans-serif;font-size:.85rem;font-weight:400;color:var(--dim);letter-spacing:0}
 
 /* 交易系统：一行一个，左边编号和日期，中间名称和说明，右边状态 */
 .sysrow{display:grid;grid-template-columns:120px minmax(0,1fr) 110px;gap:24px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
@@ -42,7 +47,7 @@
 .sysrow .id b{display:block;color:var(--red);font-weight:500;font-size:.85rem}
 .sysrow h3{margin:0;font-size:1.25rem;line-height:1.2}
 .sysrow p{margin:4px 0 8px;color:#4a4741;font-size:.92rem;line-height:1.55}
-.sysrow .chips span{font-size:.76rem;background:#faf9f6;border-color:var(--line)}
+.sysrow .chips>span{font-size:.76rem;background:#faf9f6;border-color:var(--line)}
 .sysrow .st{justify-self:end;margin-top:4px}
 
 /* 报告 */
@@ -85,63 +90,73 @@
   <aside class="side">
     <div class="sticky">
       <div>
-        <h1 class="serif">Research</h1>
-        <p class="blurb" style="margin-top:12px">Trading systems, market research and side projects — from the UTEFA Sales &amp; Trading desk and my own builds.</p>
+        <h1 class="serif">{{ partial "site/tr.html" "Research" }}</h1>
+        <p class="blurb" style="margin-top:12px"><span class="L-en">Trading systems, market research and side projects — from the UTEFA Sales &amp; Trading desk and my own builds.</span><span class="L-zh">交易系统、市场研究和个人项目——来自 UTEFA 销售与交易部门，以及我自己做的东西。</span></p>
       </div>
       <div class="nums">
-        <div><b>{{ len $systems }}</b>systems</div>
-        <div><b>{{ len $reports }}</b>reports</div>
-        <div><b>{{ len $builds }}</b>demos &amp; projects</div>
+        <div><b>{{ len $systems }}</b>{{ partial "site/tr.html" (slice "systems" "个系统") }}</div>
+        <div><b>{{ len $reports }}</b>{{ partial "site/tr.html" (slice "reports" "篇报告") }}</div>
+        <div><b>{{ len $builds }}</b>{{ partial "site/tr.html" (slice "demos & projects" "个演示与项目") }}</div>
       </div>
       <nav class="toc" aria-label="Sections">
-        <a href="#systems">Trading systems<span>{{ len $systems }}</span></a>
-        <a href="#reports">Reports<span>{{ len $reports }}</span></a>
-        <a href="#builds">Demos &amp; projects<span>{{ len $builds }}</span></a>
+        <a href="#systems"><span>{{ partial "site/tr.html" "Trading systems" }}</span><em>{{ len $systems }}</em></a>
+        <a href="#reports"><span>{{ partial "site/tr.html" "Reports" }}</span><em>{{ len $reports }}</em></a>
+        <a href="#builds"><span>{{ partial "site/tr.html" "Demos & projects" }}</span><em>{{ len $builds }}</em></a>
       </nav>
       <div>
-        <div class="lab"><b>Focus</b></div>
-        <div class="chips" style="margin-top:10px"><span>Market microstructure</span><span>Low-latency systems</span><span>FPGA acceleration</span><span>Stochastic modelling</span></div>
+        <div class="lab"><b>{{ partial "site/tr.html" "Focus" }}</b></div>
+        <div class="chips" style="margin-top:10px">{{ range slice "Market microstructure" "Low-latency systems" "FPGA acceleration" "Stochastic modelling" }}<span>{{ partial "site/tr.html" . }}</span>{{ end }}</div>
       </div>
     </div>
   </aside>
 
   <main class="main">
     <section class="sec" id="systems">
-      <h2 class="serif">Trading systems<span>{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span></h2>
+      <h2 class="serif">{{ partial "site/tr.html" "Trading systems" }}<small><span class="L-en">{{ $shipped }} shipped{{ if $wip }} · {{ $wip }} in progress{{ end }}</span><span class="L-zh">已上线 {{ $shipped }}{{ if $wip }} · 进行中 {{ $wip }}{{ end }}</span></small></h2>
       {{- range $systems }}
       <div class="sysrow">
-        <div class="id"><b>{{ .ticket }}</b>{{ (time.AsTime .date).Format "Jan 2, 2006" }}</div>
+        <div class="id"><b>{{ .ticket }}</b>{{ partial "site/date.html" (dict "d" (time.AsTime .date)) }}</div>
         <div>
           <h3 class="serif">{{ .name }}</h3>
-          <p>{{ .desc }}</p>
+          <p>{{ partial "site/tr.html" (slice .desc (.desc_zh | default .desc)) }}</p>
           <div class="chips">{{ range .stack }}<span>{{ . }}</span>{{ end }}</div>
         </div>
-        {{- if eq .status "shipped" }}<span class="st ok">Shipped</span>{{ else }}<span class="st wip">In progress</span>{{ end }}
+        {{- if eq .status "shipped" }}<span class="st ok">{{ partial "site/tr.html" "Shipped" }}</span>{{ else }}<span class="st wip">{{ partial "site/tr.html" "In progress" }}</span>{{ end }}
       </div>
       {{- end }}
     </section>
 
     <section class="sec" id="reports">
-      <h2 class="serif">Reports<span>{{ len $reports }} published</span></h2>
-      <div class="reps">
+      <h2 class="serif">{{ partial "site/tr.html" "Reports" }}<small><span class="L-en">{{ len $reports }} published</span><span class="L-zh">已发布 {{ len $reports }} 篇</span></small></h2>
+      <div class="reps lf{{ if index $rc "CN" }} hz{{ end }}{{ if index $rc "EN" }} he{{ end }}">
       {{- range $reports }}
         {{- $meta := slice }}
         {{- range .Params.categories }}{{ $meta = $meta | append . }}{{ end }}
         {{- range .Params.tags }}{{ if not (in $stopTags .) }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
-        <a class="rep" href="{{ .RelPermalink }}">
-          <div class="t"><h3 class="serif">{{ .Title }}</h3><span>{{ .Date.Format "Jan 2, 2006" }}</span></div>
+        <a class="rep" href="{{ .RelPermalink }}" data-l="{{ partialCached "site/lang.html" . .RelPermalink }}">
+          <div class="t"><h3 class="serif">{{ .Title }}</h3><span>{{ partial "site/date.html" (dict "d" .Date) }}</span></div>
           {{- with (.Params.summary | default .Summary) }}<p>{{ . | plainify }}</p>{{ end }}
-          {{- with $meta }}<div class="m">{{ delimit . " · " }}</div>{{ end }}
+          {{- with $meta }}<div class="m">{{ range $i, $m := . }}{{ if $i }} · {{ end }}{{ partial "site/tr.html" $m }}{{ end }}</div>{{ end }}
         </a>
+      {{- end }}
+      {{- if and (index $rc "EN") (index $rc "CN") }}
+        <button type="button" class="more L-zh">显示另外 {{ index $rc "EN" }} 篇英文报告</button>
+        <button type="button" class="more L-en">Show {{ index $rc "CN" }} more in Chinese</button>
       {{- end }}
       </div>
     </section>
 
     <section class="sec" id="builds">
-      <h2 class="serif">Demos &amp; projects<span>{{ len $builds }}</span></h2>
+      <h2 class="serif">{{ partial "site/tr.html" "Demos & projects" }}<small>{{ len $builds }}</small></h2>
+      <div class="lf{{ if index $bc "CN" }} hz{{ end }}{{ if index $bc "EN" }} he{{ end }}">
       <div class="builds">
       {{- range $builds }}
-        <a class="bld" href="{{ .RelPermalink }}"><b>{{ .Title }}</b><span><em>{{ if eq .CurrentSection.Title "Projects" }}Project{{ else }}Demo{{ end }}</em>{{ .Date.Format "Jan 2006" }}</span></a>
+        <a class="bld" href="{{ .RelPermalink }}" data-l="{{ partialCached "site/lang.html" . .RelPermalink }}"><b>{{ .Title }}</b><span><em>{{ if eq .CurrentSection.Title "Projects" }}{{ partial "site/tr.html" (slice "Project" "项目") }}{{ else }}{{ partial "site/tr.html" (slice "Demo" "演示") }}{{ end }}</em>{{ partial "site/date.html" (dict "d" .Date "f" "month") }}</span></a>
+      {{- end }}
+      </div>
+      {{- if and (index $bc "EN") (index $bc "CN") }}
+        <button type="button" class="more L-zh">显示另外 {{ index $bc "EN" }} 个英文项目</button>
+        <button type="button" class="more L-en">Show {{ index $bc "CN" }} more in Chinese</button>
       {{- end }}
       </div>
     </section>

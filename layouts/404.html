@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{ partial "site/head.html" (dict "title" "Page not found · Jingnan Huang") }}
+{{ partial "site/head.html" (dict "title" "Page not found · Jingnan Huang" "title_zh" "页面不存在 · Jingnan Huang") }}
 <style>
 .nf{flex:1;padding:80px var(--px);max-width:760px}
 .nf h1{font-size:3rem;margin:0 0 10px}
@@ -14,9 +14,9 @@
 <body>
 {{ partial "site/header.html" (dict "active" "") }}
 <main class="nf">
-  <h1 class="serif">Page not found</h1>
-  <p>This page may have moved. Try the search box above, or start from one of these:</p>
-  <div class="go"><a href="/">Home</a><a href="/docs/">Notebook</a><a href="/utefa/">Research</a></div>
+  <h1 class="serif">{{ partial "site/tr.html" (slice "Page not found" "页面不存在") }}</h1>
+  <p>{{ partial "site/tr.html" (slice "This page may have moved. Try the search box above, or start from one of these:" "这个页面可能已经搬走了。试试上面的搜索框，或者从这里开始：") }}</p>
+  <div class="go"><a href="/">{{ partial "site/tr.html" "Home" }}</a><a href="/docs/">{{ partial "site/tr.html" "Notebook" }}</a><a href="/utefa/">{{ partial "site/tr.html" "Research" }}</a></div>
 </main>
 {{ partial "site/footer.html" . }}
 </body>

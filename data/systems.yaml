@@ -2,6 +2,7 @@
 #
 # 加一个新系统：照着下面复制一段，放在最上面（新的在前）
 #   date   —— 日期，格式 "YYYY-MM-DD"，要加引号
+#   desc_zh —— 中文界面显示的说明（不写就用英文 desc）
 #   stack  —— 技术栈，首页只显示前两个
 #   status —— shipped（已完成）或 wip（进行中）
 
@@ -9,6 +10,7 @@
   date: "2025-11-02"
   name: Option Pricer
   desc: High-performance Monte Carlo engine in C++ with variance reduction.
+  desc_zh: 用 C++ 写的高性能蒙特卡洛定价引擎，带方差缩减。
   stack: [C++17, Monte Carlo, AVX2, Asian Options]
   status: shipped
 
@@ -16,6 +18,7 @@
   date: "2025-09-15"
   name: FPGA Matching
   desc: Low-latency matching engine on Xilinx UltraScale+ with tick-to-trade optimization.
+  desc_zh: 基于 Xilinx UltraScale+ 的低延迟撮合引擎，针对 tick-to-trade 延迟做了优化。
   stack: [Verilog, Xilinx, TCP/IP Offload, HFT]
   status: wip
 
@@ -23,5 +26,6 @@
   date: "2025-07-01"
   name: Market Sim
   desc: Event-driven market simulator with realistic latency & queue models.
+  desc_zh: 事件驱动的市场模拟器，带贴近真实的延迟和排队模型。
   stack: [Python, Event-Driven, L3 Data]
   status: shipped

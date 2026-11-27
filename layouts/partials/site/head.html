@@ -1,7 +1,9 @@
 {{- /* 共用 <head>：传入 dict "title" "description" */ -}}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ .title }}</title>
+<title{{ with .title_zh }} data-zh="{{ . }}"{{ end }}>{{ .title }}</title>
+{{- /* 界面语言：localStorage 里记住的；第一次来按浏览器语言。要在页面画出来之前设好，避免闪一下 */}}
+<script>(function(){var l;try{l=localStorage.getItem('lang')}catch(e){}if(l!=='zh'&&l!=='en'){l=/^zh/i.test(navigator.language||'')?'zh':'en'}document.documentElement.setAttribute('data-lang',l)})();</script>
 {{- with .description }}
 <meta name="description" content="{{ . }}">
 {{- end }}
@@ -31,6 +33,20 @@ body{margin:0;min-height:calc(100vh / var(--zoom));display:flex;flex-direction:c
   font:15px/1.6 'Inter Tight','Noto Sans SC',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 .serif{font-family:var(--serif);font-weight:500;letter-spacing:-.015em}
+
+/* ---------- 中英切换：.L-en / .L-zh 只显示当前语言那个（partials/site/tr.html） ---------- */
+html[data-lang=zh] .L-en,html:not([data-lang=zh]) .L-zh{display:none!important}
+/* 笔记列表按语言筛选：.lf 容器里 data-l="EN|CN" 的行；.hz/.he = 这个列表里有中文/英文的，.all = 点了「显示全部」 */
+html[data-lang=zh] .lf.hz:not(.all) [data-l=EN],html:not([data-lang=zh]) .lf.he:not(.all) [data-l=CN]{display:none}
+.lf.all .more{display:none!important}
+/* 语言小标签只在「和界面语言不一样」的笔记上显示 */
+html[data-lang=zh] [data-l=CN] .lang,html:not([data-lang=zh]) [data-l=EN] .lang{display:none}
+.more{all:unset;cursor:pointer;display:block;margin-top:10px;font-size:.84rem;color:var(--dim)}
+.more:hover{color:var(--text);text-decoration:underline}
+.lsw{display:flex;align-items:center;gap:2px;font-size:.82rem;color:var(--line)}
+.lsw button{all:unset;cursor:pointer;padding:1px 5px;color:var(--dim)}
+.lsw button:hover{color:var(--text)}
+html:not([data-lang=zh]) .lsw [data-setlang=en],html[data-lang=zh] .lsw [data-setlang=zh]{color:var(--text);font-weight:500}
 
 /* ---------- 顶栏 / 页脚 ---------- */
 .topnav{position:relative;z-index:5;display:flex;align-items:center;gap:28px;padding:15px var(--px) 14px;border-bottom:1px solid var(--text);font-size:.9rem;background:#fff}
@@ -87,7 +103,7 @@ footer{display:flex;justify-content:space-between;padding:12px var(--px) 14px;bo
 .kit:last-child{border-bottom:none}
 .kit>span{display:block;color:var(--dim);font-size:.78rem;margin-bottom:5px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips span{background:#fff;border:1px solid var(--paper2);padding:2px 8px;font-size:.8rem}
+.chips>span{background:#fff;border:1px solid var(--paper2);padding:2px 8px;font-size:.8rem}
 .contact{font-size:.9rem;margin-top:8px}
 .contact>a{display:block;padding-bottom:6px;border-bottom:1px solid var(--paper2);overflow-wrap:anywhere}
 .contact div{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:6px}

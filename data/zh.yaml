@@ -1,0 +1,90 @@
+# 网站中文界面用的翻译表：英文原文 → 中文
+# 右上角切到「中」时，界面上这些英文会换成对应的中文；表里没有的保持英文。
+# 学期名（Winter 2026 / Fall 2025 …）会自动翻译，不用写在这里。
+# 新开一门课：在「课程 / 书」下面照着加一行，左边要和 notebook.yaml 里的 name 一模一样。
+
+# ---- 导航 / 栏目 ----
+Notebook: 笔记
+Research: 研究
+Zhihu: 知乎
+Home: 首页
+UofT Coursework: 多大课程
+Self-study: 自学
+Reports: 报告
+Demos & projects: 演示与项目
+Displays: 演示
+Projects: 项目
+Reads: 读书笔记
+Articles: 文章
+Market Commentary: 市场评论
+Trading systems: 交易系统
+Systems: 系统
+
+# ---- 首页 ----
+Activity: 动态
+Latest: 最新
+Toolkit: 技能
+Contact: 联系方式
+Languages: 编程语言
+Hardware: 硬件
+Quant: 量化
+Math: 数学
+Computer Engineering: 计算机工程
+Sales & Trading Analyst: 销售与交易分析师
+Monte Carlo: 蒙特卡洛
+Stochastic calculus: 随机微积分
+Laplace & Fourier: 拉普拉斯与傅里叶
+Linear algebra: 线性代数
+Market microstructure: 市场微观结构
+Low-latency systems: 低延迟系统
+FPGA acceleration: FPGA 加速
+Stochastic modelling: 随机建模
+Focus: 方向
+Shipped: 已上线
+In progress: 进行中
+
+# ---- 通用 ----
+Notes: 笔记
+Pages: 页面
+About: 概况
+Term: 学期
+Area: 领域
+Span: 时间
+Language: 语言
+CN: 中文
+EN: 英文
+On this page: 本页目录
+Last updated: 最后更新
+
+# ---- 领域（notebook.yaml 的 areas）----
+Circuits: 电路
+Signals: 信号
+Physics: 物理
+Programming: 编程
+ML: 机器学习
+Finance: 金融
+
+# ---- 课程 / 书（左边和 notebook.yaml 的 name 一样）----
+ECE221 Circuit Analysis: ECE221 电路分析
+ECE243 Computer Organization: ECE243 计算机组成
+Electric & Magnetic Fields: 电磁场
+Signals & Systems: 信号与系统
+Software Design: 软件设计
+Advanced Engineering Mathematics: 高等工程数学
+Digital Systems: 数字系统
+Introduction to Mathematical Physics: 数学物理导论
+Introductory Electronics: 电子学导论
+Object-Oriented Programming in C++: C++ 面向对象编程
+APS104 Engineering Chemistry & Materials Science: APS104 工程化学与材料科学
+APS105 Programming with C: APS105 C 语言程序设计
+ECE110 Electrical Fundamentals: ECE110 电学基础
+MAT186 Calculus: MAT186 微积分
+MAT188 Linear Algebra: MAT188 线性代数
+MIE100 Dynamics: MIE100 动力学
+Dive Into Deep Learning: 动手学深度学习
+Connector Test: 连接器测试
+
+# ---- 报告的分类 / 标签 ----
+Market Microstructure: 市场微观结构
+Market Research: 市场研究
+Stochastic: 随机过程

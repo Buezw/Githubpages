@@ -1,0 +1,13 @@
+{{- /*
+  英文 → 中文（纯文本）。传入英文字符串，返回中文；查不到就原样返回。
+  翻译表在 data/zh.yaml；「Winter 2026」这类学期名自动翻成「2026 冬季学期」。
+*/ -}}
+{{- $s := . -}}
+{{- $out := $s -}}
+{{- with index site.Data.zh $s -}}{{- $out = . -}}{{- else -}}
+  {{- with findRESubmatch `^(Winter|Fall|Summer) (\d{4})$` $s 1 -}}
+    {{- $g := index . 0 -}}
+    {{- $out = printf "%s %s学期" (index $g 2) (index (dict "Winter" "冬季" "Fall" "秋季" "Summer" "夏季") (index $g 1)) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

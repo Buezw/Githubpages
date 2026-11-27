@@ -86,8 +86,7 @@
   {{- $lastEdit = index (index . (sub (len .) 1)) 1 -}}
   {{- $content = replaceRE `<blockquote>\s*<p>\s*Last Edit[^<]*</p>\s*</blockquote>` "" $content -}}
 {{- end -}}
-{{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
-{{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
+{{- $lang := partialCached "site/lang.html" $p $p.RelPermalink -}}
 
 {{- /* 目录：前两层标题（笔记里常用 # 作为章节） */ -}}
 {{- $toc := slice -}}
@@ -224,14 +223,14 @@
 
 <section class="banner">
   <div>
-    <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ . }}</a>{{ end }}</div>
+    <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ partial "site/tr.html" $c.t }}</a>{{ end }}{{ with $groupName }}<i>/</i><a href="{{ $groupURL }}">{{ partial "site/tr.html" . }}</a>{{ end }}</div>
     <h1 class="serif" id="atitle">{{ partial "site/nice-title.html" $p.Title }}</h1>
     {{- with $p.Params.summary }}<p class="lead">{{ . }}</p>{{ end }}
-    <div class="meta">
-      {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
-      {{ if not $p.Date.IsZero }}<span>{{ $p.Date.Format "Jan 2, 2006" }}</span>{{ end }}
-      {{- with $lastEdit }}<span>Edited {{ . }}</span>{{ end }}
-      <i class="lang">{{ $lang }}</i>
+    <div class="meta" data-l="{{ $lang }}">
+      {{- with $area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ partial "site/tr.html" . }}</i>{{ end }}
+      {{ if not $p.Date.IsZero }}<span>{{ partial "site/date.html" (dict "d" $p.Date) }}</span>{{ end }}
+      {{- with $lastEdit }}<span>{{ partial "site/tr.html" (slice "Edited" "编辑于") }} {{ . }}</span>{{ end }}
+      <i class="lang">{{ partial "site/tr.html" $lang }}</i>
     </div>
   </div>
 </section>
@@ -245,8 +244,8 @@
 
     {{- if or $prev $next }}
     <nav class="pn">
-      {{- with $prev }}<a href="{{ .RelPermalink }}"><span>← Previous</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
-      {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><span>Next →</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+      {{- with $prev }}<a href="{{ .RelPermalink }}"><span>{{ partial "site/tr.html" (slice "← Previous" "← 上一篇") }}</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
+      {{- with $next }}<a class="nx" href="{{ .RelPermalink }}"><span>{{ partial "site/tr.html" (slice "Next →" "下一篇 →") }}</span><b>{{ partial "site/nice-title.html" .Title }}</b></a>{{ end }}
     </nav>
     {{- end }}
   </article>
@@ -254,13 +253,13 @@
   <aside class="rail">
     <div class="sticky">
       {{- if ge (len $toc) 2 }}
-      <div class="lab"><b>On this page</b></div>
+      <div class="lab"><b>{{ partial "site/tr.html" "On this page" }}</b></div>
       <nav class="toc" id="toc">
         {{- range $toc }}{{ if le .l (add $minL 1) }}
         <a href="#{{ .id }}" class="l{{ add (sub .l $minL) 1 }}">{{ .t | plainify }}</a>
         {{- end }}{{ end }}
       </nav>
-      <a class="totop" href="#">↑ Back to top</a>
+      <a class="totop" href="#">{{ partial "site/tr.html" (slice "↑ Back to top" "↑ 回到顶部") }}</a>
       {{- end }}
     </div>
   </aside>
