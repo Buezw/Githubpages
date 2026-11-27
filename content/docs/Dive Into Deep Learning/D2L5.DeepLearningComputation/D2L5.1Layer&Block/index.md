@@ -1,5 +1,6 @@
 ---
 title: "D2L 5.1 Layer & Block"
+lang: en
 date: 2024-12-21
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

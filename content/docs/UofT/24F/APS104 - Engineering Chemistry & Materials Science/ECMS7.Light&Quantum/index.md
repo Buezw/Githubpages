@@ -1,5 +1,6 @@
 ---
 title: "ECMS 7. Light and Quantum"
+lang: en
 date: 2024-11-18
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

@@ -1,5 +1,6 @@
 ---
 title: "EMF 4. Gauss’sLaw"
+lang: en
 date: 2026-01-21
 tags: ["EMF", "Docs"]
 math: mathjax

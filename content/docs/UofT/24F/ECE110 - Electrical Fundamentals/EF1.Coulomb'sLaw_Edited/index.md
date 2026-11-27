@@ -1,5 +1,6 @@
 ---
 title: "EF 1. Coulomb's Law Edited"
+lang: en
 date: 2025-03-21
 tags: ["Docs","EF"]
 math: mathjax

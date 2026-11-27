@@ -1,5 +1,6 @@
 ---
 title: "Calculus 10. Parametric Equations and Polar Coordinates"
+lang: en
 date: 2025-01-08
 tags: ["Calculus"]
 series_order: 10

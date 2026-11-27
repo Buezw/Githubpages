@@ -1,5 +1,6 @@
 ---
 title: "Black-Scholes：一份“权利”该值多少钱"
+lang: zh
 date: "2026-09-16"
 tags: ["Options", "Pricing"]
 summary: "五个输入、一个输出：Black-Scholes 定价公式、d₁ 与 d₂ 的含义，以及隐含波动率的由来。"

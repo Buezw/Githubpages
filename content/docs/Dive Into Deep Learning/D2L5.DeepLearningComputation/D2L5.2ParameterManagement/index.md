@@ -1,5 +1,6 @@
 ---
 title: "D2L 5.2 Parameter Management"
+lang: en
 date: 2025-01-17
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

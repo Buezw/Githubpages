@@ -1,5 +1,6 @@
 ---
 title: "EMF 2. Maxwell’sEquations"
+lang: en
 date: 2026-01-13
 tags: ["EMF", "Docs"]
 math: mathjax

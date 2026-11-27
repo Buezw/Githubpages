@@ -1,5 +1,6 @@
 ---
 title: "CA 4. PhasorAnalysis"
+lang: en
 date: 2026-02-22
 tags: ["CA", "Docs"]
 math: mathjax

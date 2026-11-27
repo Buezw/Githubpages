@@ -1,5 +1,6 @@
 ---
 title: "D2L 5.4 Custom Layer"
+lang: en
 date: 2025-01-19
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

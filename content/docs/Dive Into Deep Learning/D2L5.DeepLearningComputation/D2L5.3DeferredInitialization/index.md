@@ -1,5 +1,6 @@
 ---
 title: "D2L 5.3 Deferred Initialization"
+lang: en
 date: 2025-01-18
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

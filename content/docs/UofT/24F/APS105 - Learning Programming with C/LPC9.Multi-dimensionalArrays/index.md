@@ -1,5 +1,6 @@
 ---
 title: "LPC 9. Multi-dimensional Arrays"
+lang: en
 date: 2025-03-25
 tags: ["Docs","LPC"]
 math: mathjax

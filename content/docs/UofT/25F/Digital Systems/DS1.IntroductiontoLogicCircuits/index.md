@@ -1,5 +1,6 @@
 ---
 title: "DS 1. Introductionto Logic Circuits"
+lang: en
 date: 2025-10-02
 tags: ["Docs","DS"]
 math: mathjax

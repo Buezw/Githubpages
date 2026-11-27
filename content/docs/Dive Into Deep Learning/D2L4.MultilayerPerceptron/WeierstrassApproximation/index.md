@@ -1,5 +1,6 @@
 ---
 title: "D2L Weierstrass Approximation Theorem"
+lang: en
 date: 2024-12-19
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

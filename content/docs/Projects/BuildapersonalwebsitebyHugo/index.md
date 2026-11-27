@@ -1,5 +1,6 @@
 ---
 title: "Build a personal website by Hugo"
+lang: en
 date: 2025-01-19
 tags: ["Docs","MA"]
 math: mathjax

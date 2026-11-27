@@ -1,5 +1,6 @@
 ---
 title: "OOPC 2. Classes"
+lang: en
 date: 2025-09-27
 tags: ["Docs","OOPC"]
 math: mathjax

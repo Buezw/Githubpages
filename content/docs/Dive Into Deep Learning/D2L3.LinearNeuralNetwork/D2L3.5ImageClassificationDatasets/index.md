@@ -1,5 +1,6 @@
 ---
 title: "D2L 3.5 Image classification datasets"
+lang: en
 date: 2024-04-15
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

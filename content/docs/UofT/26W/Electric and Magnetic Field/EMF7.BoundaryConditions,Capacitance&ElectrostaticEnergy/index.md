@@ -1,5 +1,6 @@
 ---
 title: "EMF 7. BoundaryConditions, Capacitance& ElectrostaticEnergy"
+lang: en
 date: 2026-02-06
 tags: ["EMF", "Docs"]
 math: mathjax

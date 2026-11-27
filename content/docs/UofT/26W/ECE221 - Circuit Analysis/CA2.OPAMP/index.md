@@ -1,5 +1,6 @@
 ---
 title: "CA 2. OPAMP"
+lang: en
 date: 2026-01-22
 tags: ["CA", "Docs"]
 math: mathjax

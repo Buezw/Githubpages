@@ -1,5 +1,6 @@
 ---
 title: "EF 7. Magnetic Fields"
+lang: en
 date: 2025-02-08
 tags: ["Docs","EF"]
 math: mathjax

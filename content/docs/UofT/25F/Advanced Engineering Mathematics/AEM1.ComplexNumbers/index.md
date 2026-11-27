@@ -1,5 +1,6 @@
 ---
 title: "AEM 1. Complex Numbers"
+lang: en
 date: 2025-09-15
 tags: ["Docs","AEM"]
 math: mathjax

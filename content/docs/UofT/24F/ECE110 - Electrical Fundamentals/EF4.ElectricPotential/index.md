@@ -1,5 +1,6 @@
 ---
 title: "EF 4. Electric Potential"
+lang: en
 date: 2025-01-23
 tags: ["Docs","EF"]
 math: mathjax

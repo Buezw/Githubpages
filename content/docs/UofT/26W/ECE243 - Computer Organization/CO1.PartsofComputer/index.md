@@ -1,5 +1,6 @@
 ---
 title: "CO 1. PartsofComputer"
+lang: en
 date: 2026-01-12
 tags: ["CO", "Docs"]
 math: mathjax

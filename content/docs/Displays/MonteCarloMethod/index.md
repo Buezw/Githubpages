@@ -1,5 +1,6 @@
 ---
 title: "Monte Carlo Approach to Calculate π"
+lang: en
 date: 2024-10-17
 tags: ["Docs"]
 math: mathjax

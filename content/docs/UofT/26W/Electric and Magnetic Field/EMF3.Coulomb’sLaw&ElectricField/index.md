@@ -1,5 +1,6 @@
 ---
 title: "EMF 3. Coulomb’sLaw&ElectricField"
+lang: en
 date: 2026-01-19
 tags: ["EMF", "Docs"]
 math: mathjax

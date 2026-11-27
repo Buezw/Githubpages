@@ -1,5 +1,6 @@
 ---
 title: "Avellaneda–Stoikov 做市模型完整推导：从库存风险到最优双边报价"
+lang: zh
 date: "2026-09-16"
 tags: ["Market Making", "Avellaneda-Stoikov"]
 summary: "保留价格（报价中枢）与最优价差（中枢两边留多宽）的完整推导，并用蒙特卡洛回测验证定性结论。"

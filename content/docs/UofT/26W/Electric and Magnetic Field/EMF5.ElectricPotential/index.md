@@ -1,5 +1,6 @@
 ---
 title: "EMF 5. ElectricPotential"
+lang: en
 date: 2026-01-27
 tags: ["EMF", "Docs"]
 math: mathjax

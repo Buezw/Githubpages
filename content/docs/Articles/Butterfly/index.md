@@ -1,5 +1,6 @@
 ---
 title: "蝶式价差：从一个交易结构到一条概率密度曲线"
+lang: zh
 date: "2026-09-15"
 tags: ["Options", "Breeden-Litzenberger"]
 summary: "蝶式价差是测量市场隐含概率密度的量尺，翼展收缩到零就得到 Breeden–Litzenberger 公式。"

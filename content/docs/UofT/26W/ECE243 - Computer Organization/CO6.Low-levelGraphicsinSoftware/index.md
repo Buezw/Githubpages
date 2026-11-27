@@ -1,5 +1,6 @@
 ---
 title: "CO 6. Low-levelGraphicsinSoftware"
+lang: en
 date: 2026-03-09
 tags: ["CO", "Docs"]
 math: mathjax

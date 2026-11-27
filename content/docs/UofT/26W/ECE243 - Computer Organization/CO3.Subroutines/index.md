@@ -1,5 +1,6 @@
 ---
 title: "CO 3. Subroutines"
+lang: en
 date: 2026-01-20
 tags: ["CO", "Docs"]
 math: mathjax

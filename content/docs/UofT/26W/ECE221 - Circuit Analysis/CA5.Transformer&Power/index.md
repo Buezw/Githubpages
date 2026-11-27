@@ -1,5 +1,6 @@
 ---
 title: "CA 5. Transformer&Power"
+lang: en
 date: 2026-03-11
 tags: ["CA", "Docs"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "CO 8. Cache"
+lang: en
 date: 2026-04-25
 tags: ["CO", "Docs"]
 math: mathjax

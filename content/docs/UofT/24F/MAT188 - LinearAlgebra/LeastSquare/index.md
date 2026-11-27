@@ -1,5 +1,6 @@
 ---
 title: "LA Least Square"
+lang: en
 date: 2024-11-19
 tags: ["Docs","LA"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "CO 7. DesignofProcessor"
+lang: en
 date: 2026-03-10
 tags: ["CO", "Docs"]
 math: mathjax

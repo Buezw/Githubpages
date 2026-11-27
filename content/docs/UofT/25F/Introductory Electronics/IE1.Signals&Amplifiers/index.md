@@ -1,5 +1,6 @@
 ---
 title: "IE1.Signals&Amplifiers"
+lang: en
 date: 2025-09-04
 tags: ["UofT","IE"]
 math: mathjax

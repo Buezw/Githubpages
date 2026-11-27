@@ -1,5 +1,6 @@
 ---
 title: "EF 2. Electric Field Edited"
+lang: en
 date: 2025-03-21
 tags: ["Docs","EF"]
 math: mathjax

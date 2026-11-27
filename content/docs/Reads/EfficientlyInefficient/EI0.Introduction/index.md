@@ -1,5 +1,6 @@
 ---
 title: "EI0.Introduction"
+lang: en
 date: 2025-09-06
 tags: ["Reads","EI"]
 math: mathjax

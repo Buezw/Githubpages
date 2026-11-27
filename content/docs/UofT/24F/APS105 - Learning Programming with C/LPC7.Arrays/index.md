@@ -1,5 +1,6 @@
 ---
 title: "LPC 7. Arrays"
+lang: en
 date: 2025-02-22
 tags: ["Docs","LPC"]
 math: mathjax

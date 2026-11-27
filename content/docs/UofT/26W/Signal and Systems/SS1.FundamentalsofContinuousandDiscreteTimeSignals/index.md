@@ -1,5 +1,6 @@
 ---
 title: "SS 1. FundamentalsofContinuousandDiscreteTimeSignals"
+lang: en
 date: 2026-01-12
 tags: ["SS", "Docs"]
 math: mathjax

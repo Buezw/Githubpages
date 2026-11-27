@@ -1,5 +1,6 @@
 ---
 title: "期权做市商的核心业务闭环：从定价曲面到 PnL 归因的五层标准流程"
+lang: zh
 date: "2026-09-16"
 tags: ["Market Making", "Options"]
 summary: "定价 → 报价 → 成交 → 对冲 → PnL 归因：期权做市台通用的五层闭环与异常诊断表。"

@@ -1,5 +1,6 @@
 ---
 title: "EF 8. Induction & Inductance"
+lang: en
 date: 2025-02-20
 tags: ["Docs","EF"]
 math: mathjax

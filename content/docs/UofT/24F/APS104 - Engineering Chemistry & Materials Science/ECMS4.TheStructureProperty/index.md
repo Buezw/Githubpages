@@ -1,5 +1,6 @@
 ---
 title: "ECMS 4. The Structure Property"
+lang: en
 date: 2024-09-25
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

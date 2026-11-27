@@ -1,5 +1,6 @@
 ---
 title: "Binomial Probability Law: Practice Problems"
+lang: en
 date: "2026-09-21"
 tags: ["Probability"]
 summary: "20 practice questions on Bernoulli trials and the binomial law, easiest to hardest, with answer key and full worked solutions."

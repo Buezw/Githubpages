@@ -1,5 +1,6 @@
 ---
 title: "ECMS 2. Elastic Behavior"
+lang: en
 date: 2024-09-24
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

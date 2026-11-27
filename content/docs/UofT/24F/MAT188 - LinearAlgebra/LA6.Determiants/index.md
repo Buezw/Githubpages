@@ -1,5 +1,6 @@
 ---
 title: "LA 6. Determinants"
+lang: en
 date: 2024-10-24
 tags: ["Docs","LA"]
 math: mathjax

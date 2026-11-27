@@ -1,5 +1,6 @@
 ---
 title: "CO 5. CLanguage"
+lang: en
 date: 2026-02-23
 tags: ["CO", "Docs"]
 math: mathjax

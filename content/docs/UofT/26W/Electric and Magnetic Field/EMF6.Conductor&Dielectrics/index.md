@@ -1,5 +1,6 @@
 ---
 title: "EMF 6. Conductor&Dielectrics"
+lang: en
 date: 2026-02-03
 tags: ["EMF", "Docs"]
 math: mathjax

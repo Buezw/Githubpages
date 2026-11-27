@@ -1,5 +1,6 @@
 ---
 title: "D2L 6.2 Image Convolution"
+lang: en
 date: 2025-01-28
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

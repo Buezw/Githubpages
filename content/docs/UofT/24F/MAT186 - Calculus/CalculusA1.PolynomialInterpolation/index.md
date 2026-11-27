@@ -1,5 +1,6 @@
 ---
 title: "Calculus A1. Polynomial Interpolation"
+lang: en
 date: 2025-01-13
 tags: ["Docs","Cal"]
 math: mathjax

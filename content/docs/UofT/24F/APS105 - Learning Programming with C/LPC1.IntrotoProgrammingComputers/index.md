@@ -1,5 +1,6 @@
 ---
 title: "LPC 1. Intro to Programming Computers"
+lang: en
 date: 2025-01-08
 tags: ["Docs","LPC"]
 math: mathjax

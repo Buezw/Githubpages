@@ -1,5 +1,6 @@
 ---
 title: "Linear Regression Display"
+lang: en
 date: 2024-11-18
 tags: ["Docs"]
 math: mathjax

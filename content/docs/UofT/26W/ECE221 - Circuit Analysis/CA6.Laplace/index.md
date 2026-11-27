@@ -1,5 +1,6 @@
 ---
 title: "CA 6. Laplace"
+lang: en
 date: 2026-03-18
 tags: ["CA", "Docs"]
 math: mathjax

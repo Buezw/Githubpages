@@ -1,5 +1,6 @@
 ---
 title: "A-S 2. 最优价差 δ*：从零开始完整推导"
+lang: zh
 date: "2026-09-13"
 tags: ["Market Making", "Avellaneda-Stoikov"]
 summary: "从成交强度 λ(δ)=Ae^{−kδ} 出发，推导短视最优价差 1/k，再给出 HJB 动态最优价差并拼成完整双边报价。"

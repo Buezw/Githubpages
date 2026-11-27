@@ -1,5 +1,6 @@
 ---
 title: "LPC 2. Data & Operations"
+lang: en
 date: 2025-01-09
 tags: ["Docs","LPC"]
 math: mathjax

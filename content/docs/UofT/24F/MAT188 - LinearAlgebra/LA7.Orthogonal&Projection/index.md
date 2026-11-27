@@ -1,5 +1,6 @@
 ---
 title: "LA 7. Orthogonal and Projection"
+lang: en
 date: 2024-11-21
 tags: ["Docs","LA"]
 math: mathjax

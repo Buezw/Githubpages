@@ -1,5 +1,6 @@
 ---
 title: "EMF 8. MagnetostaticsForces&Fields"
+lang: en
 date: 2026-02-23
 tags: ["EMF", "Docs"]
 math: mathjax

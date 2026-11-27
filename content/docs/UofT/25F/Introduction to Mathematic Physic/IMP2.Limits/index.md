@@ -1,5 +1,6 @@
 ---
 title: "IMP 2. Limits"
+lang: en
 date: 2025-09-22
 tags: ["Docs","Econ"]
 math: mathjax

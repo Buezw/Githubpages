@@ -1,5 +1,6 @@
 ---
 title: "LPC 3. Decision Making Statements"
+lang: en
 date: 2025-01-13
 tags: ["Docs","LPC"]
 math: mathjax

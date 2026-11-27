@@ -1,5 +1,6 @@
 ---
 title: "Calculus 8. Methods of Integration"
+lang: en
 date: 2025-03-06
 tags: ["Docs","Cal"]
 math: mathjax

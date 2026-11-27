@@ -1,5 +1,6 @@
 ---
 title: "CA 7. FrequencyDomainAnalysis"
+lang: en
 date: 2026-03-23
 tags: ["CA", "Docs"]
 math: mathjax

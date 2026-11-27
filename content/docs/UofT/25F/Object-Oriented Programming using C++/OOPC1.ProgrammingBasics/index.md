@@ -1,5 +1,6 @@
 ---
 title: "OOPC 1. ProgrammingBasics"
+lang: en
 date: 2025-09-15
 tags: ["Docs","OOPCS"]
 math: mathjax

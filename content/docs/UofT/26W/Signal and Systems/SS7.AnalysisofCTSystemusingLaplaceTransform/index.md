@@ -1,5 +1,6 @@
 ---
 title: "SS 7. AnalysisofCTSystemusingLaplaceTransform"
+lang: en
 date: 2026-03-24
 tags: ["SS", "Docs"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "SS 3. FourierTransform"
+lang: en
 date: 2026-02-03
 tags: ["SS", "Docs"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "OLS Factor Models: CAPM and Fama–French Three-Factor"
+lang: en
 date: "2026-09-14"
 tags: ["Factor Models", "Regression"]
 summary: "Hand-calculated OLS examples for CAPM and FF3, then a real-data application to AAPL (2021-08 to 2026-07)."

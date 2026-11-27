@@ -1,5 +1,6 @@
 ---
 title: "DYN 5. R-Theta Coordinate Edited"
+lang: en
 date: 2025-03-25
 tags: ["Docs","DYN"]
 math: mathjax

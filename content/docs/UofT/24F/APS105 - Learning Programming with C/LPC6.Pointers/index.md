@@ -1,5 +1,6 @@
 ---
 title: "LPC 6. Pointers"
+lang: en
 date: 2025-02-20
 tags: ["Docs","LPC"]
 math: mathjax

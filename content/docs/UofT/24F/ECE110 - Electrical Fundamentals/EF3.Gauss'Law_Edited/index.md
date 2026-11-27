@@ -1,5 +1,6 @@
 ---
 title: "EF 3. Gauss' Law Edited"
+lang: en
 date: 2025-03-28
 tags: ["Docs","EF"]
 math: mathjax

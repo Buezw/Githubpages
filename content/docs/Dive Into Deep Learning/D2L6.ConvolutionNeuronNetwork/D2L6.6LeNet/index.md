@@ -1,5 +1,6 @@
 ---
 title: "D2L 6.6 LeNet"
+lang: en
 date: 2025-03-31
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

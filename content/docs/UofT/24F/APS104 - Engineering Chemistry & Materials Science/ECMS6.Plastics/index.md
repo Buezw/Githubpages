@@ -1,5 +1,6 @@
 ---
 title: "MCMS 6. Plastics"
+lang: en
 date: 2024-11-10
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

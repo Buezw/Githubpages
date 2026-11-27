@@ -1,5 +1,6 @@
 ---
 title: "Avellaneda-Stoikov 做市策略：模拟报告"
+lang: zh
 date: "2026-09-15"
 tags: ["Market Making", "Avellaneda-Stoikov", "Backtest"]
 summary: "从零实现 A-S 闭式做市模型的 Python 蒙特卡洛模拟，附毒性流冲击测试与 OFI 信号实验，如实报告结果。"

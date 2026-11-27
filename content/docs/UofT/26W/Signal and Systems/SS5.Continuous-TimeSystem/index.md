@@ -1,5 +1,6 @@
 ---
 title: "SS 5. Continuous-Time System"
+lang: en
 date: 2026-03-08
 tags: ["SS", "Docs"]
 math: mathjax

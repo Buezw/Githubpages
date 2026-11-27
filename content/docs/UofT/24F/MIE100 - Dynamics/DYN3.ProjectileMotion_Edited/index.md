@@ -1,5 +1,6 @@
 ---
 title: "DYN 3. Projectile Motion Edited"
+lang: en
 date: 2025-03-24
 tags: ["Docs","DYN"]
 math: mathjax

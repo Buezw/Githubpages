@@ -1,5 +1,6 @@
 ---
 title: "EMF 1. VectorCalculus"
+lang: en
 date: 2026-01-13
 tags: ["EMF", "Docs"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "OOPC 0. Introduction"
+lang: en
 date: 2025-09-02
 tags: ["Docs","OOPC"]
 math: mathjax

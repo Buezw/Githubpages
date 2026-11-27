@@ -1,5 +1,6 @@
 ---
 title: "CO 4. Input/Output"
+lang: en
 date: 2026-02-05
 tags: ["CO", "Docs"]
 math: mathjax

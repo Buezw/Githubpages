@@ -1,5 +1,6 @@
 ---
 title: "CA 3. RLCCircuit"
+lang: en
 date: 2026-02-09
 tags: ["CA", "Docs"]
 math: mathjax

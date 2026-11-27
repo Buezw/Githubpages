@@ -1,5 +1,6 @@
 ---
 title: "LPC 8. Dynamic Memory Allocation "
+lang: en
 date: 2025-03-07
 tags: ["Docs","LPC"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "EF 10. Nodal and Loop Analysis"
+lang: en
 date: 2025-04-07
 tags: ["Docs","EF"]
 math: mathjax

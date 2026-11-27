@@ -1,5 +1,6 @@
 ---
 title: "CA 1. DC Circuit Analysis"
+lang: en
 date: 2026-01-23
 tags: ["Docs","AEM"]
 math: mathjax

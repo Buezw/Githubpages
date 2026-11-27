@@ -1,5 +1,6 @@
 ---
 title: "MCMS 5. Further On Stress Strain"
+lang: en
 date: 2024-10-16
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

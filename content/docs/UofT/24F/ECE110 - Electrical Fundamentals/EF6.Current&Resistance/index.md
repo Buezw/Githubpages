@@ -1,5 +1,6 @@
 ---
 title: "EF 6. Current & Resistance"
+lang: en
 date: 2025-02-07
 tags: ["Docs","EF"]
 math: mathjax

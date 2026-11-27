@@ -1,5 +1,6 @@
 ---
 title: "SS 8. FundamentalsofDiscrete-Time Systems"
+lang: en
 date: 2026-03-26
 tags: ["SS", "Docs"]
 math: mathjax

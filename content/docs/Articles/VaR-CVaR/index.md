@@ -1,5 +1,6 @@
 ---
 title: "VaR 与 CVaR：从“最多亏多少”到“亏起来有多惨”"
+lang: zh
 date: "2026-09-13"
 tags: ["Risk Management"]
 summary: "VaR 划定“正常”与“异常”的边界，CVaR 度量越过边界后的平均亏损；正态假设下的推导、诊断表与完整体系。"

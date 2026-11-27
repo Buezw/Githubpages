@@ -1,5 +1,6 @@
 ---
 title: "ECMS 3. Plastic Deformation"
+lang: en
 date: 2024-09-23
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

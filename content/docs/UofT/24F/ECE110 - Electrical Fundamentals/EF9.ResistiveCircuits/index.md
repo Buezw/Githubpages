@@ -1,5 +1,6 @@
 ---
 title: "EF 9. Resistive Circuits"
+lang: en
 date: 2025-03-03
 tags: ["Docs","EF"]
 math: mathjax

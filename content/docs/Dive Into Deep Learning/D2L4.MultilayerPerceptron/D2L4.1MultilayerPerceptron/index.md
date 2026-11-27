@@ -1,5 +1,6 @@
 ---
 title: "D2L 4.1 Multilayer Perceptron"
+lang: en
 date: 2024-12-20
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

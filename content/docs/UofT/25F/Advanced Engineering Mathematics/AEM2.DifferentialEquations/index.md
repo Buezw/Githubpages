@@ -1,5 +1,6 @@
 ---
 title: "AEM 2. Differential Equations"
+lang: en
 date: 2025-10-06
 tags: ["Docs","AEM"]
 math: mathjax

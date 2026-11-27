@@ -1,5 +1,6 @@
 ---
 title: "DS 2. Circuit Module & Verilog"
+lang: en
 date: 2025-10-05
 tags: ["Docs","DS"]
 math: mathjax

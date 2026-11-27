@@ -1,5 +1,6 @@
 ---
 title: "Linear Regression"
+lang: en
 date: 2024-11-04
 tags: ["D2L","Computer Science","docs"]
 series: ["D2L"]

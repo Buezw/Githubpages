@@ -1,5 +1,6 @@
 ---
 title: "D2L 4.4 Model Selection, Underfitting, and Overfitting"
+lang: en
 date: 2024-04-15
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

@@ -1,5 +1,6 @@
 ---
 title: "DYN 4. N-T Coordinates Edited"
+lang: en
 date: 2025-03-24
 tags: ["Docs","DYN"]
 math: mathjax

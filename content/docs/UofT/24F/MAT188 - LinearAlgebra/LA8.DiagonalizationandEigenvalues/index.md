@@ -1,5 +1,6 @@
 ---
 title: "LA 8. Diagonalization and Eigenvalues"
+lang: en
 date: 2024-11-25
 tags: ["Docs","LA"]
 math: mathjax

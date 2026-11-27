@@ -1,5 +1,6 @@
 ---
 title: "IMP 1. Review of Vector"
+lang: en
 date: 2025-09-07
 tags: ["Docs","Econ"]
 math: mathjax

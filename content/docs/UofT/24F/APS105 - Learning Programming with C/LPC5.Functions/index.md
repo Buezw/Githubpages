@@ -1,5 +1,6 @@
 ---
 title: "LPC 5. Functions"
+lang: en
 date: 2025-01-28
 tags: ["Docs","LPC"]
 math: mathjax

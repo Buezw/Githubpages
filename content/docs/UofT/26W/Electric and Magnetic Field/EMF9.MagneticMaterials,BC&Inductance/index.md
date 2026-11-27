@@ -1,5 +1,6 @@
 ---
 title: "EMF 9. MagneticMaterials,BC&Inductance"
+lang: en
 date: 2026-03-09
 tags: ["EMF", "Docs"]
 math: mathjax

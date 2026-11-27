@@ -1,5 +1,6 @@
 ---
 title: "CAL 11. Complex Number"
+lang: en
 date: 2025-01-09
 tags: ["Calulus"]
 series_order: 11

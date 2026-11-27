@@ -1,5 +1,6 @@
 ---
 title: "D2L 6.3 Padding & Stride"
+lang: en
 date: 2025-03-25
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

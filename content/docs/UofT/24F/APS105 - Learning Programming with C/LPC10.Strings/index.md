@@ -1,5 +1,6 @@
 ---
 title: "LPC 10. Strings "
+lang: en
 date: 2025-03-27
 tags: ["Docs","LPC"]
 math: mathjax

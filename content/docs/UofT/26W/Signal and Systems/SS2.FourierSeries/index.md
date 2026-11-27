@@ -1,5 +1,6 @@
 ---
 title: "SS 2. FourierSeries"
+lang: en
 date: 2026-01-19
 tags: ["SS", "Docs"]
 math: mathjax

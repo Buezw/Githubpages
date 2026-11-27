@@ -1,5 +1,6 @@
 ---
 title: "Calculus 9. Series"
+lang: en
 date: 2025-01-22
 tags: ["Docs","Cal"]
 math: mathjax

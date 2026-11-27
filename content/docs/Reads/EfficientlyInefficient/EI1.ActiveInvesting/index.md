@@ -1,5 +1,6 @@
 ---
 title: "EI1.Active Investing"
+lang: en
 date: 2025-09-07
 tags: ["Reads","EI"]
 math: mathjax

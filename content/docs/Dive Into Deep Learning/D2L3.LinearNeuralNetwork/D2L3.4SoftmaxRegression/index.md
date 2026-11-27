@@ -1,5 +1,6 @@
 ---
 title: "D2L 3.4 Softmax Regression"
+lang: en
 date: 2024-04-15
 tags: ["D2L","Computer Science","Docs"]
 series: ["D2L"]

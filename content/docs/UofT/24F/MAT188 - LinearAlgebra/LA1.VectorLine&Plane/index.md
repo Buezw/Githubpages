@@ -1,5 +1,6 @@
 ---
 title: "LA 1. Vector Line & Plane"
+lang: en
 date: 2024-10-15
 tags: ["Docs","LA"]
 math: mathjax

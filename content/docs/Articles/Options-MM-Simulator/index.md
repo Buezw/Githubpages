@@ -1,5 +1,6 @@
 ---
 title: "Options Market-Making Simulator 项目报告：从 Deribit BTC 期权原始数据到 PnL 归因"
+lang: zh
 date: "2026-09-20"
 tags: ["Market Making", "Options", "Project"]
 summary: "Deribit BTC 期权做市回测系统的完整报告：Black-76 反解 IV、SVI 曲面与 TRF 求解、报价/成交/风控/对冲模块与 PnL 归因。"

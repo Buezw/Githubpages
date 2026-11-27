@@ -1,5 +1,6 @@
 ---
 title: "SS 6. AnalysisofCTSusingFourierTransform"
+lang: en
 date: 2026-03-11
 tags: ["SS", "Docs"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "OOPC 3. DynamicMemory Allocation & Classes"
+lang: en
 date: 2025-09-28
 tags: ["Docs","OOPC"]
 math: mathjax

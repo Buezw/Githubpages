@@ -1,5 +1,6 @@
 ---
 title: "DYN 2. Plane Curvilinear Motion and Rectangular Coordinate Edited"
+lang: en
 date: 2025-03-24
 tags: ["Docs","DYN"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "EF 5. Capacitance"
+lang: en
 date: 2025-02-06
 tags: ["Docs","EF"]
 math: mathjax

@@ -1,5 +1,6 @@
 ---
 title: "LPC 4. Repetition"
+lang: en
 date: 2025-01-20
 tags: ["Docs","LPC"]
 math: mathjax

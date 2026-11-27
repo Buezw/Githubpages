@@ -1,5 +1,6 @@
 ---
 title: "ECMS 8. Thermodynamics"
+lang: en
 date: 2024-11-25
 tags: ["ECMS","Chemistry","Docs"]
 series: ["ECMS"]

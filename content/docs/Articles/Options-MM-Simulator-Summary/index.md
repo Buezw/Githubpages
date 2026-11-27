@@ -1,5 +1,6 @@
 ---
 title: "Options Market-Making Simulator: Project Report (English Summary)"
+lang: en
 date: "2026-09-16"
 tags: ["Market Making", "Options", "Project"]
 summary: "A backtesting system from raw Deribit BTC options data to a full market-maker loop: SVI surface, quoting, fills, hedging and PnL attribution."

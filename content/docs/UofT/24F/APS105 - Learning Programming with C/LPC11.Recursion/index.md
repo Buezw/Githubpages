@@ -1,5 +1,6 @@
 ---
 title: "LPC 11. Recursion"
+lang: en
 date: 2025-03-31
 tags: ["Docs","LPC"]
 math: mathjax

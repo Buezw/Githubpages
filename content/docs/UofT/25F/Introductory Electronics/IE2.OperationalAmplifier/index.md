@@ -1,5 +1,6 @@
 ---
 title: "IE 2. Operational Amplifiers"
+lang: en
 date: 2025-10-07
 tags: ["UofT","IE"]
 math: mathjax
