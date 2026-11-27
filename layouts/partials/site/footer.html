@@ -1,17 +1,22 @@
 {{- /* 最后更新时间 = 网站这次发布（构建）的时间。
-       页面里先写多伦多时间（按 UTC−5 算），浏览器再用 America/Toronto 时区精确换算（自动处理夏令时） */ -}}
+       页面里先写多伦多时间（按 UTC−5 算），浏览器再用 America/Toronto 时区精确换算（自动处理夏令时），
+       中文界面显示成「2026年11月26日 13:19（多伦多时间）」 */ -}}
 {{- $t := now.UTC.Add (time.ParseDuration "-5h") -}}
 <footer>
   <span>© {{ $t.Format "2006" }} Jingnan Huang</span>
-  <span>Last updated <time id="updated" datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ $t.Format "Jan 2, 2006, 3:04 PM" }} ET</time> · buezw.github.io</span>
+  <span>{{ partial "site/tr.html" "Last updated" }} <time id="updated" datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ $t.Format "Jan 2, 2006, 3:04 PM" }} ET</time> · buezw.github.io</span>
 </footer>
 <script>
 (function(){
   var el=document.getElementById('updated'); if(!el||!window.Intl) return;
-  try{
-    var d=new Date(el.getAttribute('datetime'));
-    var s=new Intl.DateTimeFormat('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(d);
-    el.textContent=s;
-  }catch(e){}
+  function show(l){
+    try{
+      var d=new Date(el.getAttribute('datetime'));
+      el.textContent = l==='zh'
+        ? new Intl.DateTimeFormat('zh-CN',{timeZone:'America/Toronto',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(d)+'（多伦多时间）'
+        : new Intl.DateTimeFormat('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(d);
+    }catch(e){}
+  }
+  if(window.SiteLang) SiteLang.on(show); else show('en');
 })();
 </script>

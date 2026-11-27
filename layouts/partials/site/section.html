@@ -45,7 +45,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{ partial "site/head.html" (dict "title" (printf "%s · Jingnan Huang" $title) "description" (printf "%s — notes by Jingnan Huang" $title)) }}
+{{ partial "site/head.html" (dict "title" (printf "%s · Jingnan Huang" $title) "title_zh" (printf "%s · Jingnan Huang" (partial "site/zh.html" $title)) "description" (printf "%s — notes by Jingnan Huang" $title)) }}
 <style>
 .banner{background:var(--paper);border-bottom:1px solid var(--text);padding:28px var(--px) 22px}
 .banner h1{font-size:2.5rem;line-height:1.14;margin:10px 0 10px}
@@ -55,7 +55,7 @@
 .card{display:block;border:1px solid var(--line);padding:16px 18px 14px;background:#fff}
 .card:hover{border-color:var(--text)}
 .card b{display:block;font-family:var(--serif);font-weight:500;font-size:1.2rem;line-height:1.25}
-.card span{display:block;margin-top:6px;font-size:.8rem;color:var(--dim)}
+.card>span{display:block;margin-top:6px;font-size:.8rem;color:var(--dim)}
 .card i.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--d);margin-right:6px;vertical-align:1px}
 .list{--c:var(--blue)}
 .card ul{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);font-size:.84rem;color:#4a4741;line-height:1.7}
@@ -73,7 +73,7 @@
 .kv dt,.kv dd{margin:0;padding:7px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--dim)}
 .sibs a{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.88rem}
-.sibs a span{color:var(--dim);font-size:.8rem}
+.sibs a em{font-style:normal;color:var(--dim);font-size:.8rem}
 .sibs a:hover{color:var(--c)}
 @media (max-width:1000px){.blocks{columns:1}.leaf{grid-template-columns:minmax(0,1fr)}.about{position:static}}
 .list .rs .t span .lang{margin-right:6px;vertical-align:1px}
@@ -106,7 +106,7 @@
 .sibs a{font-size:.98rem;padding:10px 0}
 @media (min-width:1001px){.leaf{grid-template-columns:minmax(0,1fr) 320px;gap:56px}}
 .card b{font-size:1.35rem}
-.card span,.card ul{font-size:.9rem}
+.card>span,.card ul{font-size:.9rem}
 @media (max-width:760px){.banner h1{font-size:2rem}.wrap{font-size:15px}}
 </style>
 </head>
@@ -114,14 +114,14 @@
 {{ partial "site/header.html" (dict "active" (cond (or $isResearch $isBuildDir) "research" (cond (eq $s.Section "docs") "notebook" ""))) }}
 
 <section class="banner">
-  <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ $c.t }}</a>{{ end }}</div>
-  <h1 class="serif">{{ $title }}</h1>
+  <div class="crumb">{{ range $i, $c := $crumbs }}{{ if $i }}<i>/</i>{{ end }}<a href="{{ $c.u }}">{{ partial "site/tr.html" $c.t }}</a>{{ end }}</div>
+  <h1 class="serif">{{ partial "site/tr.html" $title }}</h1>
   <div class="meta">
-    {{- with $src.area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i>{{ end }}
+    {{- with $src.area }}<i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ partial "site/tr.html" . }}</i>{{ end }}
     {{- $isTerm := findRE `^(Winter|Fall|Summer) \d{4}$` $s.Title }}
     {{- $noteish := or $isTerm $src (eq $s.Title "UofT Coursework") }}
-    {{- with $ordered }}<span>{{ len . }} {{ if $isTerm }}{{ if eq (len .) 1 }}course{{ else }}courses{{ end }}{{ else if eq $s.Title "UofT Coursework" }}terms{{ else }}{{ if eq (len .) 1 }}folder{{ else }}folders{{ end }}{{ end }}</span>{{ end }}
-    <span>{{ len $s.RegularPagesRecursive }} {{ if $noteish }}{{ if eq (len $s.RegularPagesRecursive) 1 }}note{{ else }}notes{{ end }}{{ else }}{{ if eq (len $s.RegularPagesRecursive) 1 }}page{{ else }}pages{{ end }}{{ end }}</span>
+    {{- with $ordered }}<span>{{ if $isTerm }}{{ partial "site/count.html" (slice (len .) "course" "courses" "门课") }}{{ else if eq $s.Title "UofT Coursework" }}{{ partial "site/count.html" (slice (len .) "term" "terms" "个学期") }}{{ else }}{{ partial "site/count.html" (slice (len .) "folder" "folders" "个分类") }}{{ end }}</span>{{ end }}
+    <span>{{ if $noteish }}{{ partial "site/count.html" (slice (len $s.RegularPagesRecursive) "note" "notes" "篇笔记") }}{{ else }}{{ partial "site/count.html" (slice (len $s.RegularPagesRecursive) "page" "pages" "篇") }}{{ end }}</span>
   </div>
 </section>
 
@@ -140,15 +140,15 @@
       {{- $ps := .RegularPages.ByDate }}
       {{- $n := len $ps }}
     <a class="ccard" href="{{ .RelPermalink }}" style="{{ printf "--d:%s" $sc | safeCSS }}">
-      <div class="ca">{{ with $area }}<i class="area" style="{{ printf "--d:%s" $sc | safeCSS }}">{{ . }}</i>{{ end }}<span>{{ $n }} {{ if eq $n 1 }}note{{ else }}notes{{ end }}</span></div>
-      <b class="serif">{{ $name }}</b>
+      <div class="ca">{{ with $area }}<i class="area" style="{{ printf "--d:%s" $sc | safeCSS }}">{{ partial "site/tr.html" . }}</i>{{ end }}<span>{{ partial "site/count.html" (slice $n "note" "notes" "篇笔记") }}</span></div>
+      <b class="serif">{{ partial "site/tr.html" $name }}</b>
       {{- with $ps }}
       <div class="cs">
-        <span>{{ (index . 0).Date.Format "Jan 2" }} – {{ (index . (sub (len .) 1)).Date.Format "Jan 2, 2006" }}</span>
-        <span>Updated {{ (index . (sub (len .) 1)).Date.Format "Jan 2" }}</span>
+        <span>{{ partial "site/date.html" (dict "d" (index . 0).Date "f" "short") }} – {{ partial "site/date.html" (dict "d" (index . (sub (len .) 1)).Date) }}</span>
+        <span>{{ partial "site/tr.html" (slice "Updated" "更新于") }} {{ partial "site/date.html" (dict "d" (index . (sub (len .) 1)).Date "f" "short") }}</span>
       </div>
       {{- end }}
-      <em>Open course →</em>
+      <em>{{ partial "site/tr.html" (slice "Open course →" "查看课程 →") }}</em>
     </a>
     {{- end }}
   </div>
@@ -162,13 +162,13 @@
       {{- $name := partial "site/nice-title.html" .Title }}
       {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $sub.File.Dir }}{{ $name = .name }}{{ end }}{{ end }}{{ end }}
       {{- $n := len .RegularPagesRecursive }}
-    <a class="card" href="{{ .RelPermalink }}"><b>{{ $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ $n }} {{ if eq $n 1 }}page{{ else }}pages{{ end }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }}{{ if not .Date.IsZero }} · latest {{ .Date.Format "Jan 2006" }}{{ end }}{{ end }}</span>
+    <a class="card" href="{{ .RelPermalink }}"><b>{{ partial "site/tr.html" $name }}</b><span>{{ with $sc }}<i class="dot" style="{{ printf "--d:%s" . | safeCSS }}"></i>{{ end }}{{ partial "site/count.html" (slice $n "page" "pages" "篇") }}{{ with index (.RegularPagesRecursive.ByDate.Reverse) 0 }}{{ if not .Date.IsZero }} · {{ partial "site/tr.html" (slice "latest" "最近") }} {{ partial "site/date.html" (dict "d" .Date "f" "month") }}{{ end }}{{ end }}</span>
       <ul>
         {{- if .Sections }}
           {{- range first 5 (sort .Sections "Title") }}
             {{- $c := . }}{{ $cn := partial "site/nice-title.html" .Title }}
             {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $c.File.Dir }}{{ $cn = .name }}{{ end }}{{ end }}{{ end }}
-        <li>{{ $cn }}</li>
+        <li>{{ partial "site/tr.html" $cn }}</li>
           {{- end }}
         {{- else }}
           {{- range first 3 .RegularPages.ByDate.Reverse }}<li>{{ partial "site/nice-title.html" .Title }}</li>{{ end }}
@@ -183,38 +183,44 @@
   {{- /* 课程页信息栏 */ -}}
   {{- $en := 0 }}{{ $cn := 0 }}{{ $first := "" }}{{ $last := "" }}
   {{- range . }}
-    {{- if gt (len (findRE `\p{Han}` .page.RawContent)) 200 }}{{ $cn = add $cn 1 }}{{ else }}{{ $en = add $en 1 }}{{ end }}
+    {{- if eq (partialCached "site/lang.html" .page .page.RelPermalink) "CN" }}{{ $cn = add $cn 1 }}{{ else }}{{ $en = add $en 1 }}{{ end }}
     {{- if not .page.Date.IsZero }}
       {{- if or (not $first) (.page.Date.Before $first) }}{{ $first = .page.Date }}{{ end }}
       {{- if or (not $last) (.page.Date.After $last) }}{{ $last = .page.Date }}{{ end }}
     {{- end }}
   {{- end }}
   <div class="leaf">
-    <div class="list">
-      <div class="lab"><b>{{ if $src }}Notes{{ else }}Pages{{ end }}</b><span>{{ len . }}</span></div>
+    {{- /* 按界面语言筛选（.lf）：两种语言都有时只显示当前语言的，底下给一个「显示另外 N 篇」 */}}
+    <div class="list lf{{ if $cn }} hz{{ end }}{{ if $en }} he{{ end }}">
+      <div class="lab"><b>{{ partial "site/tr.html" (cond (not $src) "Pages" "Notes") }}</b><span>{{ len . }}</span></div>
       {{- range . }}
       {{ partial "site/note-row.html" (dict "item" (dict "page" .page) "compact" true) }}
+      {{- end }}
+      {{- if and $en $cn }}
+      <button type="button" class="more L-zh">显示另外 {{ $en }} 篇英文笔记</button>
+      <button type="button" class="more L-en">Show {{ $cn }} more in Chinese</button>
       {{- end }}
     </div>
     <aside class="about">
       <div>
-        <div class="lab"><b>About</b></div>
+        <div class="lab"><b>{{ partial "site/tr.html" "About" }}</b></div>
         <dl class="kv">
-          {{- with $s.Parent }}{{ if findRE `^(Winter|Fall|Summer) \d{4}$` .Title }}<dt>Term</dt><dd>{{ .Title }}</dd>{{ end }}{{ end }}
-          {{- with $src.area }}<dt>Area</dt><dd><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ . }}</i></dd>{{ end }}
-          <dt>{{ if $src }}Notes{{ else }}Pages{{ end }}</dt><dd>{{ len . }}</dd>
-          {{- if $first }}<dt>Span</dt><dd>{{ $first.Format "Jan 2" }} – {{ $last.Format "Jan 2, 2006" }}</dd>{{ end }}
-          <dt>Language</dt><dd>{{ with $en }}{{ . }} EN{{ end }}{{ if and $en $cn }} · {{ end }}{{ with $cn }}{{ . }} CN{{ end }}</dd>
+          {{- with $s.Parent }}{{ if findRE `^(Winter|Fall|Summer) \d{4}$` .Title }}<dt>{{ partial "site/tr.html" "Term" }}</dt><dd>{{ partial "site/tr.html" .Title }}</dd>{{ end }}{{ end }}
+          {{- with $src.area }}<dt>{{ partial "site/tr.html" "Area" }}</dt><dd><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ partial "site/tr.html" . }}</i></dd>{{ end }}
+          <dt>{{ partial "site/tr.html" (cond (not $src) "Pages" "Notes") }}</dt><dd>{{ len . }}</dd>
+          {{- if $first }}<dt>{{ partial "site/tr.html" "Span" }}</dt><dd>{{ partial "site/date.html" (dict "d" $first "f" "short") }} – {{ partial "site/date.html" (dict "d" $last) }}</dd>{{ end }}
+          <dt>{{ partial "site/tr.html" "Language" }}</dt><dd><span class="L-en">{{ with $en }}{{ . }} EN{{ end }}{{ if and $en $cn }} · {{ end }}{{ with $cn }}{{ . }} CN{{ end }}</span><span class="L-zh">{{ with $cn }}中文 {{ . }}{{ end }}{{ if and $en $cn }} · {{ end }}{{ with $en }}英文 {{ . }}{{ end }}</span></dd>
         </dl>
       </div>
-      {{- with $s.Parent }}{{ $others := where .Sections "RelPermalink" "ne" $s.RelPermalink }}{{ with $others }}
+      {{- with $s.Parent }}{{ $others := cond .IsHome (slice) (where .Sections "RelPermalink" "ne" $s.RelPermalink) }}{{ with $others }}
       <div>
-        <div class="lab"><b>Also in {{ partial "site/nice-title.html" $s.Parent.Title }}</b></div>
+        {{- $pt := partial "site/nice-title.html" $s.Parent.Title }}
+        <div class="lab"><b>{{ partial "site/tr.html" (slice (printf "Also in %s" $pt) (printf "%s的其他课程" (partial "site/zh.html" $pt))) }}</b></div>
         <nav class="sibs">
           {{- range sort . "Title" }}
             {{- $c := . }}{{ $cn2 := partial "site/nice-title.html" .Title }}
             {{- with .File }}{{ range $nb.sources }}{{ if eq (printf "%s/" .dir) $c.File.Dir }}{{ $cn2 = .name }}{{ end }}{{ end }}{{ end }}
-          <a href="{{ .RelPermalink }}">{{ $cn2 }}<span>{{ len .RegularPagesRecursive }}</span></a>
+          <a href="{{ .RelPermalink }}"><span>{{ partial "site/tr.html" $cn2 }}</span><em>{{ len .RegularPagesRecursive }}</em></a>
           {{- end }}
         </nav>
       </div>
@@ -222,7 +228,7 @@
     </aside>
   </div>
   {{- else }}{{ if not $ordered }}
-  <p class="empty">Nothing here yet.</p>
+  <p class="empty">{{ partial "site/tr.html" (slice "Nothing here yet." "这里还没有内容。") }}</p>
   {{- end }}{{ end }}
 </main>
 

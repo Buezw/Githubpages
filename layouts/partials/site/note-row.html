@@ -18,24 +18,23 @@
   {{- $t := trim (. | plainify | htmlUnescape) " " -}}
   {{- if and $t (not (findRE `[$\\]` $t)) (ne (replaceRE `[^a-z0-9]` "" (lower $t)) $norm) -}}{{- $hs = $hs | append $t -}}{{- end -}}
 {{- end -}}
-{{- /* 语言：正文里中文字多就标 CN */ -}}
-{{- $cjk := len (findRE `\p{Han}` $p.RawContent) -}}
 {{- $color := "#999" -}}
 {{- range $k, $v := $nb.areas -}}{{- if eq (lower $k) (lower $it.area) -}}{{- $color = $v -}}{{- end -}}{{- end -}}
-{{- $lang := cond (gt $cjk 200) "CN" "EN" -}}
+{{- /* 语言：正文里中文字多就标 CN。行上带 data-l，外面的 .lf 列表按当前界面语言筛选 */ -}}
+{{- $lang := $it.lang | default (partialCached "site/lang.html" $p $p.RelPermalink) -}}
 {{- if .compact -}}
 {{- /* 紧凑版（课程页里用）：课程和领域已在标题里，只留标题、日期、摘要、语言 */ -}}
-<a class="rs" href="{{ $p.RelPermalink }}">
-  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span><i class="lang">{{ $lang }}</i> {{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
+<a class="rs" href="{{ $p.RelPermalink }}" data-l="{{ $lang }}">
+  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span><i class="lang">{{ partial "site/tr.html" $lang }}</i> {{ if not $p.Date.IsZero }}{{ partial "site/date.html" (dict "d" $p.Date) }}{{ end }}</span></div>
   {{- with $p.Params.summary }}<p>{{ . }}</p>{{ else }}{{ with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}{{ end }}
 </a>
 {{- else -}}
-<a class="rs" href="{{ $p.RelPermalink }}">
-  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span>{{ if not $p.Date.IsZero }}{{ $p.Date.Format "Jan 2, 2006" }}{{ end }}</span></div>
+<a class="rs" href="{{ $p.RelPermalink }}" data-l="{{ $lang }}">
+  <div class="t"><b>{{ partial "site/nice-title.html" $p.Title }}</b><span>{{ if not $p.Date.IsZero }}{{ partial "site/date.html" (dict "d" $p.Date) }}{{ end }}</span></div>
   {{- with $p.Params.summary }}<p>{{ . }}</p>{{ else }}{{ with $hs }}<p>{{ delimit (first 4 .) " · " }}</p>{{ end }}{{ end }}
   <div class="mrow">
-    <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ $it.area }}</i><span>{{ $it.name }}</span></span>
-    <i class="lang">{{ $lang }}</i>
+    <span class="m"><i class="area" style="{{ printf "--d:%s" $color | safeCSS }}">{{ with $it.area }}{{ partial "site/tr.html" . }}{{ end }}</i><span>{{ with $it.name }}{{ partial "site/tr.html" . }}{{ end }}</span></span>
+    <i class="lang">{{ partial "site/tr.html" $lang }}</i>
   </div>
 </a>
 {{- end -}}

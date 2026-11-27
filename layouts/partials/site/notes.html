@@ -2,7 +2,7 @@
   收集 content/docs 下所有发布的文章（有日期的），按日期从新到旧：最新发布的都上首页。
   属于某门课 / 某本书的（见 partials/site/sources.html）带上课程名和领域；
   其他的（Sample、Displays、Projects 等）用所在文件夹的标题，没有领域（灰点）。
-  返回：slice of dict{ page, name, area, dir }
+  返回：slice of dict{ page, name, area, dir, lang }（lang：CN / EN，见 partials/site/lang.html）
 */ -}}
 {{- $sources := partialCached "site/sources.html" . "all" -}}
 {{- $pages := slice -}}
@@ -18,11 +18,11 @@
     {{- if hasPrefix $p.File.Dir (printf "%s/" .dir) -}}{{- $src = . -}}{{- end -}}
   {{- end -}}
   {{- if $src -}}
-    {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area "dir" $src.dir) -}}
+    {{- $items = $items | append (dict "page" $p "name" $src.name "area" $src.area "dir" $src.dir "lang" (partialCached "site/lang.html" $p $p.RelPermalink)) -}}
   {{- else -}}
     {{- $name := "" -}}
     {{- with $p.CurrentSection -}}{{- if ne .RelPermalink "/docs/" -}}{{- $name = partial "site/nice-title.html" .Title -}}{{- end -}}{{- end -}}
-    {{- $items = $items | append (dict "page" $p "name" $name "area" "" "dir" "") -}}
+    {{- $items = $items | append (dict "page" $p "name" $name "area" "" "dir" "" "lang" (partialCached "site/lang.html" $p $p.RelPermalink)) -}}
   {{- end -}}
 {{- end -}}
 {{- return $items -}}

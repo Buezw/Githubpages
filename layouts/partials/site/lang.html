@@ -1,0 +1,2 @@
+{{- /* 一篇文章的语言：正文里中文字超过 200 个算 CN，否则 EN。传入页面。 */ -}}
+{{- return cond (gt (len (findRE `\p{Han}` .RawContent)) 200) "CN" "EN" -}}

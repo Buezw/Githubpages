@@ -1,0 +1,6 @@
+{{- /*
+  双语数量：传入 slice 数量 英文单数 英文复数 中文量词名词
+  例：(slice 3 "note" "notes" "篇笔记") → "3 notes" / "3 篇笔记"
+*/ -}}
+{{- $n := index . 0 -}}
+<span class="L-en">{{ $n }} {{ cond (eq $n 1) (index . 1) (index . 2) }}</span><span class="L-zh">{{ $n }} {{ index . 3 }}</span>

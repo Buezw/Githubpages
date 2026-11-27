@@ -1,0 +1,13 @@
+{{- /*
+  双语日期。传入 dict "d" 时间 "f" 格式：
+    long  —— Jan 2, 2006 / 2006年1月2日（默认）
+    short —— Jan 2 / 1月2日
+    month —— Jan 2006 / 2006年1月
+*/ -}}
+{{- $d := .d -}}{{- $f := .f | default "long" -}}
+{{- $en := "" -}}{{- $zh := "" -}}
+{{- if eq $f "short" -}}{{- $en = $d.Format "Jan 2" -}}{{- $zh = printf "%d月%d日" (int $d.Month) $d.Day -}}
+{{- else if eq $f "month" -}}{{- $en = $d.Format "Jan 2006" -}}{{- $zh = printf "%d年%d月" $d.Year (int $d.Month) -}}
+{{- else -}}{{- $en = $d.Format "Jan 2, 2006" -}}{{- $zh = printf "%d年%d月%d日" $d.Year (int $d.Month) $d.Day -}}
+{{- end -}}
+<span class="L-en">{{ $en }}</span><span class="L-zh">{{ $zh }}</span>

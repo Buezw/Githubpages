@@ -1,0 +1,9 @@
+{{- /*
+  中英双语文字：网页按右上角的 EN / 中 只显示其中一种（见 head.html 的 .L-en / .L-zh）。
+  传入：
+    "英文"                —— 中文从 data/zh.yaml 查（查不到就只输出英文）
+    (slice "英文" "中文")  —— 直接给出两种
+*/ -}}
+{{- $en := . -}}{{- $zh := "" -}}
+{{- if reflect.IsSlice . -}}{{- $en = index . 0 -}}{{- $zh = index . 1 -}}{{- else -}}{{- $zh = partial "site/zh.html" . -}}{{- end -}}
+{{- if eq $en $zh -}}{{ $en }}{{- else -}}<span class="L-en">{{ $en }}</span><span class="L-zh">{{ $zh }}</span>{{- end -}}

@@ -7,24 +7,53 @@
 {{- /* 搜索结果里显示的课程名：文件夹网址前缀 → 显示名 */ -}}
 {{- $names := dict -}}
 {{- range $src := $nb.sources -}}
-  {{- with site.GetPage (printf "/%s" $src.dir) -}}{{- if .RelPermalink -}}{{- $names = merge $names (dict .RelPermalink $src.name) -}}{{- end -}}{{- end -}}
+  {{- with site.GetPage (printf "/%s" $src.dir) -}}{{- if .RelPermalink -}}{{- $names = merge $names (dict .RelPermalink (dict "en" $src.name "zh" (partial "site/zh.html" $src.name))) -}}{{- end -}}{{- end -}}
 {{- end -}}
 <header class="topnav">
   <a href="/" class="brand"><b class="serif">JH</b><span>buezw.github.io</span></a>
   <div class="search">
-    <label class="sbox"><span aria-hidden="true">⌕</span><input id="q" type="search" autocomplete="off" placeholder="Search {{ len $items }} notes and {{ len $reports }} reports" aria-label="Search notes"><kbd>/</kbd></label>
+    <label class="sbox"><span aria-hidden="true">⌕</span><input id="q" type="search" autocomplete="off" placeholder="Search {{ len $items }} notes and {{ len $reports }} reports" data-en-ph="Search {{ len $items }} notes and {{ len $reports }} reports" data-zh-ph="搜索 {{ len $items }} 篇笔记和 {{ len $reports }} 篇报告" aria-label="Search notes"><kbd>/</kbd></label>
     <div class="sres" id="sres" role="listbox"></div>
   </div>
   <nav>
-    <a href="/docs/"{{ if eq .active "notebook" }} class="on"{{ end }}>Notebook</a>
-    <a href="/utefa/"{{ if eq .active "research" }} class="on"{{ end }}>Research</a>
-    <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">Zhihu</a>
+    <a href="/docs/"{{ if eq .active "notebook" }} class="on"{{ end }}>{{ partial "site/tr.html" "Notebook" }}</a>
+    <a href="/utefa/"{{ if eq .active "research" }} class="on"{{ end }}>{{ partial "site/tr.html" "Research" }}</a>
+    <a href="https://www.zhihu.com/people/ting-wen-jun-heng-xiu" target="_blank" rel="noopener">{{ partial "site/tr.html" "Zhihu" }}</a>
     <a href="https://github.com/Buezw" target="_blank" rel="noopener">GitHub ↗</a>
     {{- if fileExists "static/cv.pdf" }}
     <a href="/cv.pdf">CV</a>
     {{- end }}
+    <span class="lsw" role="group" aria-label="Language"><button type="button" data-setlang="en">EN</button>/<button type="button" data-setlang="zh">中</button></span>
   </nav>
 </header>
+<script>
+/* 界面语言：EN / 中 切换。head.html 已经在 <html data-lang> 上设好当前语言；
+   这里负责按钮、记住选择，以及换掉 placeholder、title 这些 CSS 管不到的文字。
+   其他脚本用 SiteLang.on(fn) 在语言变化时收到通知。 */
+window.SiteLang=(function(){
+  var fns=[], root=document.documentElement;
+  function cur(){ return root.getAttribute('data-lang')==='zh'?'zh':'en'; }
+  function apply(){
+    var l=cur();
+    root.lang = l==='zh'?'zh-CN':'en';
+    document.querySelectorAll('[data-zh-ph]').forEach(function(e){ e.placeholder=e.getAttribute('data-'+l+'-ph'); });
+    document.querySelectorAll('[data-zh-title]').forEach(function(e){
+      if(!e.hasAttribute('data-en-title')) e.setAttribute('data-en-title',e.title);
+      e.title=e.getAttribute('data-'+l+'-title');
+    });
+    var t=document.querySelector('title');
+    if(t&&t.getAttribute('data-zh')){ if(!t.hasAttribute('data-en')) t.setAttribute('data-en',document.title); document.title=t.getAttribute('data-'+l); }
+    fns.forEach(function(f){ try{f(l);}catch(e){} });
+  }
+  function set(l){ root.setAttribute('data-lang',l); try{localStorage.setItem('lang',l);}catch(e){} apply(); }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-setlang]'); if(b){ set(b.getAttribute('data-setlang')); return; }
+    var m=e.target.closest('.more'); if(m){ var c=m.closest('.lf'); if(c) c.classList.add('all'); }
+  });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply); else apply();
+  return {get:cur,set:set,on:function(f){fns.push(f); f(cur());}};
+})();
+</script>
 <script>
 /* 首页搜索：第一次用到时加载站点的 /index.json（Hugo 自动生成），只在本地浏览器里搜 */
 (function(){
@@ -60,9 +89,10 @@
     return (a?'… ':'')+c.slice(a,a+150);
   }
   function where(p){
-    for(var k in NAMES){ if(p.indexOf(k)===0) return NAMES[k]; }
+    var zh=SiteLang.get()==='zh';
+    for(var k in NAMES){ if(p.indexOf(k)===0) return NAMES[k][zh?'zh':'en']; }
     p=decodeURIComponent(p).replace(/^\/|\/$/g,'').split('/');
-    if(p[0]==='finance') return 'Research';
+    if(p[0]==='finance') return zh?'研究':'Research';
     if(p[0]==='docs'&&p[1]==='uoft'&&p[3]) return p[3].replace(/-+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
     return p.length>1 ? p[1].replace(/-+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}) : '';
   }
@@ -79,7 +109,7 @@
       return {x:x,s:s};
     }).filter(Boolean).sort(function(a,b){return b.s-a.s;}).slice(0,8);
     sel=-1;
-    if(!hits.length){ box.innerHTML='<div class="none">No matches for “'+esc(q.value.trim())+'”</div>'; box.classList.add('open'); return; }
+    if(!hits.length){ box.innerHTML='<div class="none">'+(SiteLang.get()==='zh'?'没有找到“'+esc(q.value.trim())+'”':'No matches for “'+esc(q.value.trim())+'”')+'</div>'; box.classList.add('open'); return; }
     box.innerHTML=hits.map(function(h){
       var x=h.x;
       return '<a href="'+x.permalink+'"><div class="srt"><b>'+hl(x.title,terms)+'</b><span>'+esc(where(x.permalink))+(x.date?' · '+esc(x.date):'')+'</span></div><p>'+hl(snippet(x.content,terms[0]),terms)+'</p></a>';
