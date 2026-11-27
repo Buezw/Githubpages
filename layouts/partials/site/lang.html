@@ -1,2 +1,12 @@
-{{- /* 一篇文章的语言：正文里中文字超过 200 个算 CN，否则 EN。传入页面。 */ -}}
-{{- return cond (gt (len (findRE `\p{Han}` .RawContent)) 200) "CN" "EN" -}}
+{{- /*
+  一篇文章的语言，返回 "CN" 或 "EN"。传入页面。
+  · 文章开头写了 lang: zh 或 lang: en，就按写的算
+  · 没写的自动判断：正文里中文字超过 200 个算中文，否则算英文
+*/ -}}
+{{- $l := lower (printf "%v" (.Params.lang | default "")) -}}
+{{- $out := "" -}}
+{{- if in (slice "zh" "cn" "zh-cn" "zh-hans" "中文") $l -}}{{- $out = "CN" -}}
+{{- else if in (slice "en" "english" "英文") $l -}}{{- $out = "EN" -}}
+{{- else -}}{{- $out = cond (gt (len (findRE `\p{Han}` .RawContent)) 200) "CN" "EN" -}}
+{{- end -}}
+{{- return $out -}}
